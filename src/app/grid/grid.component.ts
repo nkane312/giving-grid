@@ -42,8 +42,8 @@ export class GridComponent {
 
     private initGrid() {
         this.svg = d3.select(this.htmlElement).append('svg')
-            .attr('preserveAspectRatio', 'xMinYMin meet')
-            .attr('viewBox', '0 0 700 500');
+            .attr('preserveAspectRatio', 'xMidYMid meet')
+            .attr('viewBox', '0 0 600 400');
         this.g = this.svg.append('g');
         this.cells = this.g.selectAll('.data')
             .data(this.cellData)
@@ -59,6 +59,7 @@ export class GridComponent {
                 })
                 .style('fill', '#a61d26')
                 .classed('open', true)
+                .classed('svg-content-responsive', true)
                 .text((d, i) => {
                     return this.cellData.dollarValue;
                 })
@@ -101,7 +102,8 @@ export class GridComponent {
                 .text((d, i) => {
                     console.log(this.cellData[i].dollarValue);
                     return this.cellData[i].dollarValue;
-                }); 
+                })
+            .classed('svg-content-responsive', true); 
     }
     ngOnInit() {
     }
