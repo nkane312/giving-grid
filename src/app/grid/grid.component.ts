@@ -24,6 +24,7 @@ export class GridComponent {
 
     constructor(private http: Http, private el: ElementRef) {
         this.htmlElement = this.el.nativeElement;
+        console.log('/assets/data.json');
         this.http.get('/assets/data.json')
             .map(this.extractData)
             .subscribe(data => {
