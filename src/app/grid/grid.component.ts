@@ -59,9 +59,7 @@ export class GridComponent {
     }
 
     
-    private initGrid() {
-<<<<<<< HEAD
-        
+    private initGrid() {     
         this.svgContainer = d3.select('div')
             .style('width', '50%')
             .style('padding-bottom','100%')
@@ -100,13 +98,6 @@ export class GridComponent {
         this.g = this.svg.append('g')
         
         this.tempRects = this.g.selectAll('.data')
-=======
-        this.svg = d3.select(this.htmlElement).append('svg')
-            .attr('preserveAspectRatio', 'xMidYMid meet')
-            .attr('viewBox', '0 0 600 400');
-        this.g = this.svg.append('g');
-        this.cells = this.g.selectAll('.data')
->>>>>>> 0b5598c9b8e76da54a0d01d143b8bec2d0bbbbc8
             .data(this.cellData)
             .enter()
             .append('rect')
@@ -119,12 +110,8 @@ export class GridComponent {
                     return Math.floor(i / this.gridCols) * this.rectSpacing + this.gridPadding;
                 })
                 .classed('open', true)
-<<<<<<< HEAD
                 .classed('cell', true)
                 .attr('id', function(d, i) { return 'rect' + (i + 1) })
-=======
-                .classed('svg-content-responsive', true)
->>>>>>> 0b5598c9b8e76da54a0d01d143b8bec2d0bbbbc8
                 .text((d, i) => {
                     return this.cellData.dollarValue;
                 })
