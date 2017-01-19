@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 .selected {
     fill: #42efef;
     display: none;
 }
 .selectedText {
     fill: #000000;
+=======
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+>>>>>>> 0b5598c9b8e76da54a0d01d143b8bec2d0bbbbc8
 }
