@@ -1,0 +1,9 @@
+.text {
+    fill: #fff;
+}
+.cell {
+    fill: #a61d26;
+}
+.selected {
+    fill: #42efef;
+}

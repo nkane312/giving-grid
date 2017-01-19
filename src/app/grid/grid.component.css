@@ -1,0 +1,7 @@
+.selected {
+    fill: #42efef;
+    display: none;
+}
+.selectedText {
+    fill: #000000;
+}
