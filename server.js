@@ -1,16 +1,16 @@
 var express = require('express');
+var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+var http = require('http');
 var path = require('path');
 var fs = require('fs');
-var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-
-var app = express();
+var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-//var io = require('socket.io')(app);
-
-
+// Routes to webpack bundles
 app.get('/styles.bundle.css', function(req, res){
     res.sendFile(path.join(__dirname + '/dist/styles.bundle.css'));
 });
@@ -33,6 +33,13 @@ app.get('/', function(req, res){
 
 app.listen(3001, function(){
     console.log('Listening on port 3001');
+});
+
+io.on('connection', function(socket){
+    socket.emit('confirmConnection', 'Connected');
+});
+server.listen(5001, () => {
+    console.log('Listening on port 5001');
 });
 
 module.exports = app;
