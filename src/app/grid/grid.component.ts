@@ -12,7 +12,7 @@ import 'rxjs/Rx';
 export class GridComponent {
     private cellData;
     private gridData;
-    private gridPadding = 25;
+    private cellPadding = 25;
     private rectSize = 50;
     private gridCols;
     private rectSpacing;
@@ -24,7 +24,9 @@ export class GridComponent {
     private backgroundImage;
     private imageLink = '../assets/death-star.jpg';
     private lineFunction;
-
+    private max_x = 0;
+    private max_y = 0;
+    
 
     private cells:Array<any> = [];
     private tempRects: any;
@@ -32,7 +34,6 @@ export class GridComponent {
 
     constructor(private http: Http, private el: ElementRef) {
         this.htmlElement = this.el.nativeElement;
-        console.log('/assets/data.json');
         this.http.get('/assets/data.json')
             .map(this.extractData)
             .subscribe(data => {
@@ -48,9 +49,8 @@ export class GridComponent {
                 this.tempValues._groups[0].forEach((v, i) => {
                     this.cells[i].value = v;
                 });
-
+            
             });
-        console.log(this.cells);
     }
 
     private extractData(res: Response) {
@@ -59,23 +59,19 @@ export class GridComponent {
     }
 
     
-    private initGrid() {     
-        this.svgContainer = d3.select('div')
-            .style('width', '50%')
+    private initGrid() {
+        /*this.svgContainer = d3.select('div')
+            .style('width', '100%')
             .style('padding-bottom','100%')
             .style('overflow', 'hidden')
-            .style('position', 'relative');
-        this.svg = this.svgContainer.append('svg')
-            .attr('preserveAspectRatio', 'xMaxYMax meet')
-            .attr('viewBox', '0 0 285 300')
-            .style('position', 'absolute')
-            .style('top', 0)
-            .style('left', 0);
+            .style('position', 'relative');*/
+        console.log(window.innerWidth);
+        this.svg = this.setArea(this.cellData, 'div');
         this.image = d3.select('svg').append('svg:defs')
             .append('svg:pattern')
             .attr('id', 'image')
-            .attr('x', this.gridPadding)
-            .attr('y', this.gridPadding)
+            .attr('x', 0)
+            .attr('y', 0)
             .attr('patternUnits', 'userSpaceOnUse')
             .attr('height', this.gridCols * this.rectSize)
             .attr('width', this.gridCols * this.rectSize)
@@ -90,12 +86,12 @@ export class GridComponent {
             //.attr('d', (d) => {
             //    self.pathFunction(this.cellData);
             //})
-            .attr('d', 'M 25 25, L 25 275, L 275 275, L 275 25 z')
+            .attr('d', 'M 0 0, L 0 250, L 250 250, L 250 0 z')
             .attr('fill', 'url(#image)');
         this.backgroundImage.transition().attrTween('transform', function(d, i, a) {
             return d3.interpolateString(a, 'scale(1)');
         });
-        this.g = this.svg.append('g')
+        this.g = this.svg.append('g');
         
         this.tempRects = this.g.selectAll('.data')
             .data(this.cellData)
@@ -104,10 +100,10 @@ export class GridComponent {
                 .attr('height', this.rectSize)
                 .attr('width', this.rectSize)
                 .attr('x', (d, i) => {
-                    return (this.rectSpacing * (i % this.gridCols)) + this.gridPadding;
+                    return (this.rectSpacing * (i % this.gridCols));
                 })
                 .attr('y',(d, i) => {
-                    return Math.floor(i / this.gridCols) * this.rectSpacing + this.gridPadding;
+                    return Math.floor(i / this.gridCols) * this.rectSpacing;
                 })
                 .classed('open', true)
                 .classed('cell', true)
@@ -130,10 +126,10 @@ export class GridComponent {
             .enter()
             .append('text')
                 .attr("x", (d, i) => {
-                        return (this.rectSpacing * (i % this.gridCols)) + this.gridPadding * 2;
+                        return (this.rectSpacing * (i % this.gridCols)) + this.cellPadding;
                     })
                 .attr("y", (d, i) => {
-                        return Math.floor(i / this.gridCols) * this.rectSpacing + this.gridPadding * 2.25;
+                return Math.floor(i / this.gridCols) * this.rectSpacing + this.cellPadding * 1.25;
                     })
                 .attr('id', function(d, i) { return 'text' + (i + 1) })
                 .classed('open', true)
@@ -153,7 +149,7 @@ export class GridComponent {
             .classed('svg-content-responsive', true); 
     }
     ngOnInit() {
-
+        
     }
     /*gridButton(Id) {
         var rectId = document.getElementById('rect' + Id);
@@ -175,21 +171,13 @@ export class GridComponent {
             })
             .classed('open', (d, i) => {
                 return !d3.select(cell.value).classed('open');
-            });
-        console.log
-        console.log(cell.rect);
-        console.log(cell.value);
-        
+            });        
     }
     gridButton2() {
         var x = document.getElementsByClassName('selected');
-        //console.log(x);
         var y = document.getElementsByClassName('selectedText');
-        //console.log(y);
         var selectedArray = Array.prototype.slice.call(x);
-        //console.log(selectedArray);
         var selectedTextArray = Array.prototype.slice.call(y);
-        //console.log(selectedTextArray);
         var i;
         for (i = 0; i < x.length; i++){
             selectedArray[i].style.fill = 'transparent';
@@ -198,12 +186,30 @@ export class GridComponent {
     }
     pathFunction(pathData) {
         d3.area()
-            .x0(this.gridPadding)
+            .x0(this.cellPadding)
             .x1(function(d) { return this.gridCols * this.rectSize; })
-            .y0(this.gridPadding)
+            .y0(this.cellPadding)
             .y1(function(d) { return this.gridCols * this.rectSize; }) 
     }
+    setArea(areaData, container) {
+        /*for (var i = 0; i < areaData.length; i++) {
+            var temp_x, temp_y;
+            var temp_x = areaData[i].x_axis + areaData[i].width;
+            var temp_y = areaData[i].y_axis + areaData[i].height;
 
+            if ( temp_x >= this.max_x ) { this.max_x = temp_x; }
+
+            if ( temp_y >= this.max_y ) { this.max_y = temp_y; }
+        }*/
+        return d3.select(container).append('svg')
+            .attr('width', window.innerWidth)
+            .attr('height', window.innerHeight)
+            .attr('preserveAspectRatio', 'xMinYMin meet')
+            .attr('viewBox', '0 0 500 275')
+            .style('position', 'absolute')
+            .style('top', 0)
+            .style('left', 0);
+    }
     /*update() {
         var self = this;
         this.cells = this.g.selectAll('.data')
@@ -213,10 +219,10 @@ export class GridComponent {
             .attr('height', this.rectSize)
             .attr('width', this.rectSize)
             .attr('x', (d, i) => {
-                return (this.rectSpacing * (i % this.gridCols)) + this.gridPadding;
+                return (this.rectSpacing * (i % this.gridCols)) + this.cellPadding;
             })
             .attr('y',(d, i) => {
-                return Math.floor(i / this.gridCols) * this.rectSpacing + this.gridPadding;
+                return Math.floor(i / this.gridCols) * this.rectSpacing + this.cellPadding;
             })
             .style('fill', '#a61d26')
             .classed('open', true)
