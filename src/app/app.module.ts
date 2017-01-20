@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { SocketService } from './services/socket.service';
+
 import { AppComponent } from './app.component';
 import { GridComponent } from './grid/grid.component';
 
@@ -16,7 +18,9 @@ import { GridComponent } from './grid/grid.component';
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [
+    SocketService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -61,7 +61,7 @@ export class GridComponent {
     
     private initGrid() {     
         this.svgContainer = d3.select('div')
-            .style('width', '50%')
+            .style('width', '100%')
             .style('padding-bottom','100%')
             .style('overflow', 'hidden')
             .style('position', 'relative');
