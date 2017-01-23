@@ -23,6 +23,7 @@ export class GridComponent {
     private image;
     private imagePath;
     private imageLink = '../assets/death-star.jpg';
+    private filter;
     private grid = {
         svg : undefined,
         image : undefined,
@@ -38,15 +39,15 @@ export class GridComponent {
             .map(this.extractData)
             .subscribe(data => {
                 window.onresize = () => {
-                    this.rectSize = this.fillArea(this.getWindowSize(), 5);
+                    this.rectSize = this.fillArea(this.getWindowSize(), 10);
                     this.textPadding = this.rectSize / 2;
                     this.rectSpacing = this.rectSize;
                     this.adjustGrid(this.grid);
                 };
                 this.gridData = data[0];
                 this.cellData = this.gridData.grid.cells;
-                this.gridCols = this.cellData.length / 5;
-                this.rectSize = this.fillArea(this.getWindowSize(), 5);
+                this.gridCols = this.cellData.length / 10;
+                this.rectSize = this.fillArea(this.getWindowSize(), 10);
                 this.rectSpacing = this.rectSize;
                 this.textPadding = this.rectSize / 2;
                 this.initGrid(this.grid);
@@ -66,6 +67,7 @@ export class GridComponent {
         d3.select('#gridSvg').append('path')
         .attr('fill', 'url(#pattern)');
         grid.g = grid.svg.append('g');
+        this.createFilter(this.filter);
         var tempRects;
         var tempValues;
         tempRects = grid.g.selectAll()
@@ -73,6 +75,7 @@ export class GridComponent {
             .enter()
             .append('rect')
                 .attr('id', function(d, i) { return 'rect' + (i + 1) })
+                .style('filter', 'url(#drop-shadow)')
                 .classed('available', true)
                 .classed('cell', true)
                 .text((d, i) => {
@@ -138,10 +141,10 @@ export class GridComponent {
                 return Math.floor(i / this.gridCols) * this.rectSpacing;
             });
         d3.selectAll('text')
-            .attr("x", (d, i) => {
+            .attr('x', (d, i) => {
                 return (this.rectSpacing * (i % this.gridCols)) + this.textPadding;
             })
-            .attr("y", (d, i) => {
+            .attr('y', (d, i) => {
                 return Math.floor(i / this.gridCols) * this.rectSpacing + this.textPadding * 1.25;
             })
             .style('font-size', this.textPadding);
@@ -174,7 +177,9 @@ export class GridComponent {
         var i;
         for (i = 0; i < x.length; i++){
             selectedArray[i].style.fill = 'transparent';
-            selectedTextArray[i].style.display = 'none';
+            selectedArray[i].style.transition = '2s ease-in-out';
+            selectedTextArray[i].style.opacity = '0';
+            selectedTextArray[i].style.transition = '2s ease-in-out';
         }
     }
     /*
@@ -219,6 +224,25 @@ export class GridComponent {
         } else {
             return window.innerWidth;
         }
+    }
+    createFilter(filter){
+        filter = d3.select('defs').append('filter')
+            .attr('id', 'drop-shadow')
+            .attr('height', '130%');
+        filter.append('feGaussianBlur')
+            .attr('in', 'SourceAlpha')
+            .attr('stdDeviation', 3)
+            .attr('result', 'blur');
+        filter.append('feOffset')
+            .attr('in', 'blur')
+            .attr('dx', 2)
+            .attr('dy', 2)
+            .attr('result', 'offsetBlur');
+        var feMerge = filter.append('feMerge');
+        feMerge.append('feMergeNode')
+            .attr('in', 'offsetBlur')
+        feMerge.append('feMergeNode')
+            .attr('in', 'SourceGraphic');
     }
 }
 
