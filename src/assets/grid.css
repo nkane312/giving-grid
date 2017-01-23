@@ -17,7 +17,14 @@ button {
 }
 .cell {
     fill: #a61d26;
+    box-shadow: 10px 10px 5px #888888;
 }
 .selected {
     fill: #42efef;
+    /*-webkit-transition: .1s ease-in-out;
+    transition: .1s ease-in-out;*/
 }
+/*.available {
+    -webkit-transition: .1s ease-in-out;
+    transition: .1s ease-in-out;
+}*/
