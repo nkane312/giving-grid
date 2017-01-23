@@ -46,7 +46,7 @@ export class GridComponent {
                 this.gridData = data[0];
                 this.cellData = this.gridData.grid.cells;
                 this.gridCols = this.cellData.length / 5;
-                this.rectSize = this.fillArea(window.innerHeight, 5);
+                this.rectSize = this.fillArea(this.getWindowSize(), 5);
                 this.rectSpacing = this.rectSize;
                 this.textPadding = this.rectSize / 2;
                 this.initGrid(this.grid);
@@ -59,52 +59,12 @@ export class GridComponent {
         return body || {};
     }
 
-    /*
-    Rects:
-                .attr('height', this.rectSize)
-                .attr('width', this.rectSize)
-                .attr('x', (d, i) => {
-                    return (this.rectSpacing * (i % this.gridCols));
-                })
-                .attr('y',(d, i) => {
-                    return Math.floor(i / this.gridCols) * this.rectSpacing;
-                })
-
-
-        var grid = document.getElementById(container);
-        if (grid.hasChildNodes()) {
-            return d3.select('#gridSvg')
-                .attr('width', window.innerWidth)
-                .attr('height', window.innerHeight)
-                .attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
-        } else {       
-
-    */
-
-    /*
-    Text:
-
-        .attr("x", (d, i) => {
-                        return (this.rectSpacing * (i % this.gridCols)) + this.textPadding;
-                    })
-        .attr("y", (d, i) => {
-                return Math.floor(i / this.gridCols) * this.rectSpacing + this.textPadding * 1.25;
-                    })
-        .style('font-size', this.textPadding)
-
-     */
     private initGrid(grid) {
-        /*this.svgContainer = d3.select('div')
-            .style('width', '100%')
-            .style('padding-bottom','100%')
-            .style('overflow', 'hidden')
-            .style('position', 'relative');*/
         grid.svg = this.setArea('grid');
         grid.image = this.createImage(this.gridCols, this.rectSize, this.imageLink);
         var self = this;
         d3.select('#gridSvg').append('path')
         .attr('fill', 'url(#pattern)');
-        //grid.imagePath = this.createPath(this.gridCols, this.rectSize);
         grid.g = grid.svg.append('g');
         var tempRects;
         var tempValues;
@@ -161,7 +121,7 @@ export class GridComponent {
             .attr('width', window.innerWidth)
             .attr('height', window.innerHeight)
             .attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
-        d3.select('#image')
+        d3.select('#pattern')
             .attr('height', this.gridCols * this.rectSize)
             .attr('width', this.gridCols * this.rectSize);
         d3.select('#image')
@@ -217,29 +177,26 @@ export class GridComponent {
             selectedTextArray[i].style.display = 'none';
         }
     }
+    /*
+
+    */
     createImage(gridCols, rectSize, imageLink) {
-        /*var image = document.getElementsByTagName('image');
-        if (image !== null) {
-            return d3.select('svg:pattern')
+        return d3.select('#gridSvg')
+            .append('svg:defs')
+            .append('svg:pattern')
+                .attr('id', 'pattern')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('patternUnits', 'userSpaceOnUse')
+                .attr('height', gridCols * rectSize)
+                .attr('width', gridCols * rectSize) 
+            .append('svg:image')
+                .attr('id', 'image')
+                .attr('x', 0)
+                .attr('y', 0)
                 .attr('height', gridCols * rectSize)
                 .attr('width', gridCols * rectSize)
-                
-        }*/
-        return d3.select('#gridSvg').append('svg:defs')
-            .append('svg:pattern')
-            .attr('id', 'pattern')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('patternUnits', 'userSpaceOnUse')
-            .attr('height', gridCols * rectSize)
-            .attr('width', gridCols * rectSize)
-            .append('svg:image')
-            .attr('id', 'image')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('height', gridCols * rectSize)
-            .attr('width', gridCols * rectSize)
-            .attr('xlink:href', imageLink);
+                .attr('xlink:href', imageLink);
     }
     createPath(gridCols, rectSize) {
         return d3.select('path')
@@ -248,10 +205,7 @@ export class GridComponent {
     setArea(container) {
         return d3.select(`#${container}`).append('svg')
             .attr('id', 'gridSvg')
-            //.attr('width', window.innerWidth)
-            //.attr('height', window.innerHeight)
             .attr('preserveAspectRatio', 'xMinYMin meet')
-            //.attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`)
             .style('position', 'absolute')
             .style('top', 0)
             .style('left', 0);        
@@ -266,41 +220,5 @@ export class GridComponent {
             return window.innerWidth;
         }
     }
-    /*update() {
-        var self = this;
-        this.cells = this.g.selectAll('.data')
-        .data(this.cellData)
-        .enter()
-        .append('rect')
-            .attr('height', this.rectSize)
-            .attr('width', this.rectSize)
-            .attr('x', (d, i) => {
-                return (this.rectSpacing * (i % this.gridCols)) + this.textPadding;
-            })
-            .attr('y',(d, i) => {
-                return Math.floor(i / this.gridCols) * this.rectSpacing + this.textPadding;
-            })
-            .style('fill', '#a61d26')
-            .classed('available', true)
-            .attr('id', function(d, i) { return 'rect' + (i + 1) })
-            .text((d, i) => {
-                return this.cellData.dollarValue;
-            })
-            .on('click', function(d, i) {
-                self.cellToggle(i);
-
-            })
-            .on('mouseover', function(d) {
-                d3.select(this).style('cursor', 'pointer');
-            })
-            .on('mouseout', function(d) {
-                d3.select(this).style('cursor', '');
-            })
-            .on("click", function(e, i){
-                this.cellData.splice(i, 1);
-                this.update();
-        });
-    this.cells.exit()
-    }*/
 }
 
