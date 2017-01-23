@@ -21,14 +21,16 @@ export class GridComponent {
     private svg;
     private htmlElement;
     private image;
-    private backgroundImage;
+    private imagePath;
     private imageLink = '../assets/death-star.jpg';
-    private extraHeight;
-    
+    private grid = {
+        svg : undefined,
+        image : undefined,
+        imagePath : undefined,
+        g : undefined,
+        cells : [],
 
-    private cells:Array<any> = [];
-    private tempRects: any;
-    private tempValues: any;
+    };
 
     constructor(private http: Http, private el: ElementRef) {
         this.htmlElement = this.el.nativeElement;
@@ -36,24 +38,19 @@ export class GridComponent {
             .map(this.extractData)
             .subscribe(data => {
                 window.onresize = () => {
-                    this.rectSize = this.fillHeight(window.innerHeight, 5);
+                    this.rectSize = this.fillArea(this.getWindowSize(), 5);
                     this.textPadding = this.rectSize / 2;
-                    this.initGrid();
+                    this.rectSpacing = this.rectSize;
+                    this.adjustGrid(this.grid);
                 };
                 this.gridData = data[0];
                 this.cellData = this.gridData.grid.cells;
                 this.gridCols = this.cellData.length / 5;
-                this.rectSize = this.fillHeight(window.innerHeight, 5);
+                this.rectSize = this.fillArea(window.innerHeight, 5);
                 this.rectSpacing = this.rectSize;
                 this.textPadding = this.rectSize / 2;
-                this.initGrid();
-                this.tempRects._groups[0].forEach((r, i) => {
-                    this.cells.push({rect: r});
-                });
-                this.tempValues._groups[0].forEach((v, i) => {
-                    this.cells[i].value = v;
-                });
-            
+                this.initGrid(this.grid);
+                this.adjustGrid(this.grid);
             });
     }
 
@@ -62,26 +59,8 @@ export class GridComponent {
         return body || {};
     }
 
-    
-    private initGrid() {
-        /*this.svgContainer = d3.select('div')
-            .style('width', '100%')
-            .style('padding-bottom','100%')
-            .style('overflow', 'hidden')
-            .style('position', 'relative');*/
-        this.svg = this.setArea(this.cellData, 'div');
-        this.image = this.createImage(this.gridCols, this.rectSize, this.imageLink);
-        var self = this;
-        this.backgroundImage = this.createPath(this.gridCols, this.rectSize);
-        /*this.backgroundImage.transition().attrTween('transform', function(d, i, a) {
-            return d3.interpolateString(a, 'scale(1)');
-        });*/
-        this.g = this.svg.append('g');
-        
-        this.tempRects = this.g.selectAll('.data')
-            .data(this.cellData)
-            .enter()
-            .append('rect')
+    /*
+    Rects:
                 .attr('height', this.rectSize)
                 .attr('width', this.rectSize)
                 .attr('x', (d, i) => {
@@ -90,14 +69,57 @@ export class GridComponent {
                 .attr('y',(d, i) => {
                     return Math.floor(i / this.gridCols) * this.rectSpacing;
                 })
-                .classed('open', true)
-                .classed('cell', true)
+
+
+        var grid = document.getElementById(container);
+        if (grid.hasChildNodes()) {
+            return d3.select('#gridSvg')
+                .attr('width', window.innerWidth)
+                .attr('height', window.innerHeight)
+                .attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
+        } else {       
+
+    */
+
+    /*
+    Text:
+
+        .attr("x", (d, i) => {
+                        return (this.rectSpacing * (i % this.gridCols)) + this.textPadding;
+                    })
+        .attr("y", (d, i) => {
+                return Math.floor(i / this.gridCols) * this.rectSpacing + this.textPadding * 1.25;
+                    })
+        .style('font-size', this.textPadding)
+
+     */
+    private initGrid(grid) {
+        /*this.svgContainer = d3.select('div')
+            .style('width', '100%')
+            .style('padding-bottom','100%')
+            .style('overflow', 'hidden')
+            .style('position', 'relative');*/
+        grid.svg = this.setArea('grid');
+        grid.image = this.createImage(this.gridCols, this.rectSize, this.imageLink);
+        var self = this;
+        d3.select('#gridSvg').append('path')
+        .attr('fill', 'url(#pattern)');
+        //grid.imagePath = this.createPath(this.gridCols, this.rectSize);
+        grid.g = grid.svg.append('g');
+        var tempRects;
+        var tempValues;
+        tempRects = grid.g.selectAll()
+            .data(this.cellData)
+            .enter()
+            .append('rect')
                 .attr('id', function(d, i) { return 'rect' + (i + 1) })
+                .classed('available', true)
+                .classed('cell', true)
                 .text((d, i) => {
                     return this.cellData.dollarValue;
                 })
                 .on('click', (d, i) => {
-                    self.cellToggle(this.cells[i]);
+                    self.cellToggle(grid.cells[i]);
                 })
                 .on('mouseover', function(d) {
                     d3.select(this).style('cursor', 'pointer');
@@ -106,20 +128,13 @@ export class GridComponent {
                     d3.select(this).style('cursor', '');
                 });
         
-        this.tempValues = this.g.selectAll('.values')
+        tempValues = grid.g.selectAll('.values')
             .data(this.cellData)
             .enter()
             .append('text')
-                .attr("x", (d, i) => {
-                        return (this.rectSpacing * (i % this.gridCols)) + this.textPadding;
-                    })
-                .attr("y", (d, i) => {
-                return Math.floor(i / this.gridCols) * this.rectSpacing + this.textPadding * 1.25;
-                    })
                 .attr('id', function(d, i) { return 'text' + (i + 1) })
-                .classed('open', true)
+                .classed('available', true)
                 .classed('text', true)
-                .style('font-size', this.textPadding)
                 .style('z-index', '999999999')
                 .style('stroke-width', 0.25)
                 .style('stroke', '#505050')
@@ -132,7 +147,46 @@ export class GridComponent {
                     return this.cellData[i].dollarValue;
                 })
             .classed('svg-content-responsive', true); 
+            tempRects._groups[0].forEach((r, i) => {
+                grid.cells.push({rect: r});
+            });
+            tempValues._groups[0].forEach((v, i) => {
+                grid.cells[i].value = v;
+            });
+
     }
+
+    private adjustGrid(grid) {
+        d3.select('#gridSvg')
+            .attr('width', window.innerWidth)
+            .attr('height', window.innerHeight)
+            .attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
+        d3.select('#image')
+            .attr('height', this.gridCols * this.rectSize)
+            .attr('width', this.gridCols * this.rectSize);
+        d3.select('#image')
+            .attr('height', this.gridCols * this.rectSize)
+            .attr('width', this.gridCols * this.rectSize);
+        grid.imagePath = this.createPath(this.gridCols, this.rectSize);
+        d3.selectAll('rect')
+            .attr('height', this.rectSize)
+            .attr('width', this.rectSize)
+            .attr('x', (d, i) => {
+                return (this.rectSpacing * (i % this.gridCols));
+            })
+            .attr('y',(d, i) => {
+                return Math.floor(i / this.gridCols) * this.rectSpacing;
+            });
+        d3.selectAll('text')
+            .attr("x", (d, i) => {
+                return (this.rectSpacing * (i % this.gridCols)) + this.textPadding;
+            })
+            .attr("y", (d, i) => {
+                return Math.floor(i / this.gridCols) * this.rectSpacing + this.textPadding * 1.25;
+            })
+            .style('font-size', this.textPadding);
+    }
+
     ngOnInit() {
         
     }
@@ -141,15 +195,15 @@ export class GridComponent {
             .classed('selected', (d, i) => {
                 return !d3.select(cell.rect).classed('selected');
             })
-            .classed('open', (d, i) => {
-                return !d3.select(cell.rect).classed('open');
+            .classed('available', (d, i) => {
+                return !d3.select(cell.rect).classed('available');
             });
         d3.select(cell.value)
             .classed('selectedText', (d, i) => {
                 return !d3.select(cell.value).classed('selectedText');
             })
-            .classed('open', (d, i) => {
-                return !d3.select(cell.value).classed('open');
+            .classed('available', (d, i) => {
+                return !d3.select(cell.value).classed('available');
             });        
     }
     gridButton2() {
@@ -164,15 +218,23 @@ export class GridComponent {
         }
     }
     createImage(gridCols, rectSize, imageLink) {
-        return d3.select('svg').append('svg:defs')
+        /*var image = document.getElementsByTagName('image');
+        if (image !== null) {
+            return d3.select('svg:pattern')
+                .attr('height', gridCols * rectSize)
+                .attr('width', gridCols * rectSize)
+                
+        }*/
+        return d3.select('#gridSvg').append('svg:defs')
             .append('svg:pattern')
-            .attr('id', 'image')
+            .attr('id', 'pattern')
             .attr('x', 0)
             .attr('y', 0)
             .attr('patternUnits', 'userSpaceOnUse')
             .attr('height', gridCols * rectSize)
             .attr('width', gridCols * rectSize)
             .append('svg:image')
+            .attr('id', 'image')
             .attr('x', 0)
             .attr('y', 0)
             .attr('height', gridCols * rectSize)
@@ -180,25 +242,30 @@ export class GridComponent {
             .attr('xlink:href', imageLink);
     }
     createPath(gridCols, rectSize) {
-        return d3.select('svg').append('path')
-        .attr('d', `M 0 0, L 0 ${gridCols * rectSize}, L ${gridCols * rectSize} ${gridCols * rectSize}, L ${gridCols * rectSize} 0 z`)
-        .attr('fill', 'url(#image)'); 
+        return d3.select('path')
+        .attr('d', `M 0 0, L 0 ${gridCols * rectSize}, L ${gridCols * rectSize} ${gridCols * rectSize}, L ${gridCols * rectSize} 0 z`); 
     }
-    setArea(areaData, container) {
-        //this.extraHeight = window.outerHeight - window.innerHeight;
-        return d3.select(container).append('svg')
-            .attr('width', window.innerWidth)
-            .attr('height', window.innerHeight)
+    setArea(container) {
+        return d3.select(`#${container}`).append('svg')
+            .attr('id', 'gridSvg')
+            //.attr('width', window.innerWidth)
+            //.attr('height', window.innerHeight)
             .attr('preserveAspectRatio', 'xMinYMin meet')
-            .attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`)
+            //.attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`)
             .style('position', 'absolute')
             .style('top', 0)
-            .style('left', 0);
+            .style('left', 0);        
     }
-    fillHeight(height, squares) {
-        return height / squares
+    fillArea(area, squares) {
+        return area / squares
     }
-
+    getWindowSize() {
+        if (window.innerHeight < window.innerWidth) {
+            return window.innerHeight;
+        } else {
+            return window.innerWidth;
+        }
+    }
     /*update() {
         var self = this;
         this.cells = this.g.selectAll('.data')
@@ -214,7 +281,7 @@ export class GridComponent {
                 return Math.floor(i / this.gridCols) * this.rectSpacing + this.textPadding;
             })
             .style('fill', '#a61d26')
-            .classed('open', true)
+            .classed('available', true)
             .attr('id', function(d, i) { return 'rect' + (i + 1) })
             .text((d, i) => {
                 return this.cellData.dollarValue;
