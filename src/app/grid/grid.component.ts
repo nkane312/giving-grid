@@ -15,6 +15,7 @@ export class GridComponent {
     private textPadding;
     private rectSize;
     private gridCols;
+    private gridRows;
     private rectSpacing;
     private svgContainer;
     private g;
@@ -39,15 +40,16 @@ export class GridComponent {
             .map(this.extractData)
             .subscribe(data => {
                 window.onresize = () => {
-                    this.rectSize = this.fillArea(this.getWindowSize(), 10);
+                    this.rectSize = this.fillArea(this.getWindowSize(), 14);
                     this.textPadding = this.rectSize / 2;
                     this.rectSpacing = this.rectSize;
                     this.adjustGrid(this.grid);
                 };
                 this.gridData = data[0];
                 this.cellData = this.gridData.grid.cells;
-                this.gridCols = this.cellData.length / 10;
-                this.rectSize = this.fillArea(this.getWindowSize(), 10);
+                //this.gridCols = this.cellData.length / 15;
+                //this.gridRows = this.cellData.length / 10;
+                this.rectSize = this.fillArea(this.getWindowSize(), 14);
                 this.rectSpacing = this.rectSize;
                 this.textPadding = this.rectSize / 2;
                 this.initGrid(this.grid);
@@ -61,6 +63,7 @@ export class GridComponent {
     }
 
     private initGrid(grid) {
+        this.defineGridOrientation();
         grid.svg = this.setArea('grid');
         grid.image = this.createImage(this.gridCols, this.rectSize, this.imageLink);
         var self = this;
@@ -120,6 +123,7 @@ export class GridComponent {
     }
 
     private adjustGrid(grid) {
+        this.defineGridOrientation();
         d3.select('#gridSvg')
             .attr('width', window.innerWidth)
             .attr('height', window.innerHeight)
@@ -130,19 +134,23 @@ export class GridComponent {
         d3.select('#image')
             .attr('height', this.gridCols * this.rectSize)
             .attr('width', this.gridCols * this.rectSize);
+        console.log(this.defineGridOrientation());
+        console.log(this.gridCols);
+        console.log(this.rectSize);
+        console.log(this.gridCols * this.rectSize);
         grid.imagePath = this.createPath(this.gridCols, this.rectSize);
         d3.selectAll('rect')
             .attr('height', this.rectSize)
             .attr('width', this.rectSize)
             .attr('x', (d, i) => {
-                return (this.rectSpacing * (i % this.gridCols));
+                return (this.rectSpacing * Math.floor(i % this.gridCols));
             })
             .attr('y',(d, i) => {
                 return Math.floor(i / this.gridCols) * this.rectSpacing;
             });
         d3.selectAll('text')
             .attr('x', (d, i) => {
-                return (this.rectSpacing * (i % this.gridCols)) + this.textPadding;
+                return (this.rectSpacing * Math.floor(i % this.gridCols)) + this.textPadding;
             })
             .attr('y', (d, i) => {
                 return Math.floor(i / this.gridCols) * this.rectSpacing + this.textPadding * 1.25;
@@ -182,9 +190,6 @@ export class GridComponent {
             selectedTextArray[i].style.transition = '2s ease-in-out';
         }
     }
-    /*
-
-    */
     createImage(gridCols, rectSize, imageLink) {
         return d3.select('#gridSvg')
             .append('svg:defs')
@@ -205,7 +210,7 @@ export class GridComponent {
     }
     createPath(gridCols, rectSize) {
         return d3.select('path')
-        .attr('d', `M 0 0, L 0 ${gridCols * rectSize}, L ${gridCols * rectSize} ${gridCols * rectSize}, L ${gridCols * rectSize} 0 z`); 
+        .attr('d', `M 0 0, L 0 ${(gridCols * rectSize) * 2}, L ${gridCols * rectSize} ${(gridCols * rectSize) * 2}, L ${gridCols * rectSize} 0 z`); 
     }
     setArea(container) {
         return d3.select(`#${container}`).append('svg')
@@ -225,7 +230,7 @@ export class GridComponent {
             return window.innerWidth;
         }
     }
-    createFilter(filter){
+    createFilter(filter) {
         filter = d3.select('defs').append('filter')
             .attr('id', 'drop-shadow')
             .attr('height', '130%');
@@ -243,6 +248,13 @@ export class GridComponent {
             .attr('in', 'offsetBlur')
         feMerge.append('feMergeNode')
             .attr('in', 'SourceGraphic');
+    }
+    defineGridOrientation() {
+        if (this.getWindowSize() === window.innerHeight) {
+            return this.gridCols = Math.floor(this.cellData.length / 14);
+        } else {
+            return this.gridCols = Math.floor(this.cellData.length / 20);
+        }
     }
 }
 
