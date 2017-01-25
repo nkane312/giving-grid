@@ -21,10 +21,4 @@ button {
 }
 .selected {
     fill: #42efef;
-    /*-webkit-transition: .1s ease-in-out;
-    transition: .1s ease-in-out;*/
 }
-/*.available {
-    -webkit-transition: .1s ease-in-out;
-    transition: .1s ease-in-out;
-}*/
