@@ -804,6 +804,410 @@
 				{
 					"dollarValue": 200,
 					"class": "open"
+				},
+				{
+					"dollarValue": 100,
+					"class": "open"
+				},
+				{
+					"dollarValue": 101,
+					"class": "open"
+				},
+				{
+					"dollarValue": 102,
+					"class": "open"
+				},
+				{
+					"dollarValue": 103,
+					"class": "open"
+				},
+				{
+					"dollarValue": 104,
+					"class": "open"
+				},
+				{
+					"dollarValue": 105,
+					"class": "open"
+				},
+				{
+					"dollarValue": 106,
+					"class": "open"
+				},
+				{
+					"dollarValue": 107,
+					"class": "closed"
+				},
+				{
+					"dollarValue": 108,
+					"class": "open"
+				},
+				{
+					"dollarValue": 109,
+					"class": "open"
+				},
+				{
+					"dollarValue": 110,
+					"class": "open"
+				},
+				{
+					"dollarValue": 111,
+					"class": "open"
+				},
+				{
+					"dollarValue": 112,
+					"class": "closed"
+				},
+				{
+					"dollarValue": 113,
+					"class": "open"
+				},
+				{
+					"dollarValue": 114,
+					"class": "open"
+				},
+				{
+					"dollarValue": 115,
+					"class": "selected"
+				},
+				{
+					"dollarValue": 116,
+					"class": "open"
+				},
+				{
+					"dollarValue": 117,
+					"class": "closed"
+				},
+				{
+					"dollarValue": 118,
+					"class": "open"
+				},
+				{
+					"dollarValue": 119,
+					"class": "open"
+				},
+				{
+					"dollarValue": 120,
+					"class": "open"
+				},
+				{
+					"dollarValue": 121,
+					"class": "closed"
+				},
+				{
+					"dollarValue": 122,
+					"class": "open"
+				},
+				{
+					"dollarValue": 123,
+					"class": "open"
+				},
+				{
+					"dollarValue": 124,
+					"class": "open"
+				},
+				{
+					"dollarValue": 125,
+					"class": "open"
+				},
+				{
+					"dollarValue": 126,
+					"class": "open"
+				},
+				{
+					"dollarValue": 127,
+					"class": "open"
+				},
+				{
+					"dollarValue": 128,
+					"class": "open"
+				},
+				{
+					"dollarValue": 129,
+					"class": "open"
+				},
+				{
+					"dollarValue": 130,
+					"class": "open"
+				},
+				{
+					"dollarValue": 131,
+					"class": "open"
+				},
+				{
+					"dollarValue": 132,
+					"class": "open"
+				},
+				{
+					"dollarValue": 133,
+					"class": "open"
+				},
+				{
+					"dollarValue": 134,
+					"class": "open"
+				},
+				{
+					"dollarValue": 135,
+					"class": "open"
+				},
+				{
+					"dollarValue": 136,
+					"class": "open"
+				},
+				{
+					"dollarValue": 137,
+					"class": "open"
+				},
+				{
+					"dollarValue": 138,
+					"class": "open"
+				},
+				{
+					"dollarValue": 139,
+					"class": "open"
+				},
+				{
+					"dollarValue": 140,
+					"class": "open"
+				},
+				{
+					"dollarValue": 141,
+					"class": "open"
+				},
+				{
+					"dollarValue": 142,
+					"class": "open"
+				},
+				{
+					"dollarValue": 143,
+					"class": "open"
+				},
+				{
+					"dollarValue": 144,
+					"class": "open"
+				},
+				{
+					"dollarValue": 145,
+					"class": "open"
+				},
+				{
+					"dollarValue": 146,
+					"class": "open"
+				},
+				{
+					"dollarValue": 147,
+					"class": "open"
+				},
+				{
+					"dollarValue": 148,
+					"class": "open"
+				},
+				{
+					"dollarValue": 149,
+					"class": "open"
+				},
+				{
+					"dollarValue": 150,
+					"class": "open"
+				},
+				{
+					"dollarValue": 151,
+					"class": "open"
+				},
+				{
+					"dollarValue": 152,
+					"class": "open"
+				},
+				{
+					"dollarValue": 153,
+					"class": "open"
+				},
+				{
+					"dollarValue": 154,
+					"class": "open"
+				},
+				{
+					"dollarValue": 155,
+					"class": "open"
+				},
+				{
+					"dollarValue": 156,
+					"class": "open"
+				},
+				{
+					"dollarValue": 157,
+					"class": "closed"
+				},
+				{
+					"dollarValue": 158,
+					"class": "open"
+				},
+				{
+					"dollarValue": 159,
+					"class": "open"
+				},
+				{
+					"dollarValue": 160,
+					"class": "open"
+				},
+				{
+					"dollarValue": 161,
+					"class": "open"
+				},
+				{
+					"dollarValue": 162,
+					"class": "closed"
+				},
+				{
+					"dollarValue": 163,
+					"class": "open"
+				},
+				{
+					"dollarValue": 164,
+					"class": "open"
+				},
+				{
+					"dollarValue": 165,
+					"class": "selected"
+				},
+				{
+					"dollarValue": 166,
+					"class": "open"
+				},
+				{
+					"dollarValue": 167,
+					"class": "closed"
+				},
+				{
+					"dollarValue": 168,
+					"class": "open"
+				},
+				{
+					"dollarValue": 169,
+					"class": "open"
+				},
+				{
+					"dollarValue": 170,
+					"class": "open"
+				},
+				{
+					"dollarValue": 171,
+					"class": "closed"
+				},
+				{
+					"dollarValue": 172,
+					"class": "open"
+				},
+				{
+					"dollarValue": 173,
+					"class": "open"
+				},
+				{
+					"dollarValue": 174,
+					"class": "open"
+				},
+				{
+					"dollarValue": 175,
+					"class": "open"
+				},
+				{
+					"dollarValue": 176,
+					"class": "open"
+				},
+				{
+					"dollarValue": 177,
+					"class": "open"
+				},
+				{
+					"dollarValue": 178,
+					"class": "open"
+				},
+				{
+					"dollarValue": 179,
+					"class": "open"
+				},
+				{
+					"dollarValue": 180,
+					"class": "open"
+				},
+				{
+					"dollarValue": 181,
+					"class": "open"
+				},
+				{
+					"dollarValue": 182,
+					"class": "open"
+				},
+				{
+					"dollarValue": 183,
+					"class": "open"
+				},
+				{
+					"dollarValue": 184,
+					"class": "open"
+				},
+				{
+					"dollarValue": 185,
+					"class": "open"
+				},
+				{
+					"dollarValue": 186,
+					"class": "open"
+				},
+				{
+					"dollarValue": 187,
+					"class": "open"
+				},
+				{
+					"dollarValue": 188,
+					"class": "open"
+				},
+				{
+					"dollarValue": 189,
+					"class": "open"
+				},
+				{
+					"dollarValue": 190,
+					"class": "open"
+				},
+				{
+					"dollarValue": 191,
+					"class": "open"
+				},
+				{
+					"dollarValue": 192,
+					"class": "open"
+				},
+				{
+					"dollarValue": 193,
+					"class": "open"
+				},
+				{
+					"dollarValue": 194,
+					"class": "open"
+				},
+				{
+					"dollarValue": 195,
+					"class": "open"
+				},
+				{
+					"dollarValue": 196,
+					"class": "open"
+				},
+				{
+					"dollarValue": 197,
+					"class": "open"
+				},
+				{
+					"dollarValue": 198,
+					"class": "open"
+				},
+				{
+					"dollarValue": 199,
+					"class": "open"
+				},
+				{
+					"dollarValue": 200,
+					"class": "open"
 				}
 			]
 		}

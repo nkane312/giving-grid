@@ -5,3 +5,19 @@
 .selectedText {
     fill: #000000;
 }
+#donate-bar {
+    background:#fbef98;
+    position: fixed;
+    right: 0;
+    height: 100%;
+    width: 25%;
+    }
+@media screen and (max-width: 500px) {
+    #donate-bar {
+    background:#fbef98;
+    position: fixed;
+    bottom: 0;
+    height: 10%;
+    width: 100%;
+    }
+}

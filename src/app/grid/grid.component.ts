@@ -23,7 +23,8 @@ export class GridComponent {
     private htmlElement;
     private image;
     private imagePath;
-    private imageLink = '../assets/death-star.jpg';
+    private imageLink = '../assets/freedom-flight-3.jpg';
+    //private imageLink = '../assets/the-death-star.jpg';
     private filter;
     private grid = {
         svg : undefined,
@@ -40,18 +41,18 @@ export class GridComponent {
             .map(this.extractData)
             .subscribe(data => {
                 window.onresize = () => {
-                    this.rectSize = this.fillArea(this.getWindowSize(), 14);
-                    this.textPadding = this.rectSize / 2;
-                    this.rectSpacing = this.rectSize;
+                    this.rectSize = this.fillArea(14, 20);
+                    this.rectSpacing = this.rectSize.width;
+                    this.textPadding = this.rectSize.width / 2;
                     this.adjustGrid(this.grid);
                 };
                 this.gridData = data[0];
                 this.cellData = this.gridData.grid.cells;
                 //this.gridCols = this.cellData.length / 15;
                 //this.gridRows = this.cellData.length / 10;
-                this.rectSize = this.fillArea(this.getWindowSize(), 14);
-                this.rectSpacing = this.rectSize;
-                this.textPadding = this.rectSize / 2;
+                this.rectSize = this.fillArea(14, 20);
+                this.rectSpacing = this.rectSize.width;
+                this.textPadding = this.rectSize.width / 2;
                 this.initGrid(this.grid);
                 this.adjustGrid(this.grid);
             });
@@ -65,7 +66,7 @@ export class GridComponent {
     private initGrid(grid) {
         this.defineGridOrientation();
         grid.svg = this.setArea('grid');
-        grid.image = this.createImage(this.gridCols, this.rectSize, this.imageLink);
+        grid.image = this.createImage(this.gridCols, this.rectSize.width, this.rectSize.height, this.imageLink);
         var self = this;
         d3.select('#gridSvg').append('path')
         .attr('fill', 'url(#pattern)');
@@ -129,31 +130,28 @@ export class GridComponent {
             .attr('height', window.innerHeight)
             .attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
         d3.select('#pattern')
-            .attr('height', this.gridCols * this.rectSize)
-            .attr('width', this.gridCols * this.rectSize);
+            .attr('height', window.innerHeight)
+            .attr('width', (window.innerWidth * 0.75));
         d3.select('#image')
-            .attr('height', this.gridCols * this.rectSize)
-            .attr('width', this.gridCols * this.rectSize);
-        console.log(this.defineGridOrientation());
-        console.log(this.gridCols);
-        console.log(this.rectSize);
-        console.log(this.gridCols * this.rectSize);
-        grid.imagePath = this.createPath(this.gridCols, this.rectSize);
+            .attr('height', window.innerHeight) 
+            .attr('width', (window.innerWidth * 0.75));
+        //grid.imagePath = this.createPath(this.gridCols, this.rectSize.height, this.rectSize.width);
+        grid.imagePath = this.createPath(window.innerHeight, window.innerWidth);
         d3.selectAll('rect')
-            .attr('height', this.rectSize)
-            .attr('width', this.rectSize)
+            .attr('height', this.rectSize.height)
+            .attr('width', this.rectSize.width)
             .attr('x', (d, i) => {
-                return (this.rectSpacing * Math.floor(i % this.gridCols));
+                return (this.rectSize.width * Math.floor(i % this.gridCols));
             })
             .attr('y',(d, i) => {
-                return Math.floor(i / this.gridCols) * this.rectSpacing;
+            return Math.floor(i / this.gridCols) * this.rectSize.height;
             });
         d3.selectAll('text')
             .attr('x', (d, i) => {
-                return (this.rectSpacing * Math.floor(i % this.gridCols)) + this.textPadding;
+                return (this.rectSize.width * Math.floor(i % this.gridCols)) + this.textPadding;
             })
             .attr('y', (d, i) => {
-                return Math.floor(i / this.gridCols) * this.rectSpacing + this.textPadding * 1.25;
+                return Math.floor(i / this.gridCols) * this.rectSize.height + this.textPadding;
             })
             .style('font-size', this.textPadding);
     }
@@ -190,7 +188,7 @@ export class GridComponent {
             selectedTextArray[i].style.transition = '2s ease-in-out';
         }
     }
-    createImage(gridCols, rectSize, imageLink) {
+    createImage(gridCols, rectSizeWidth, rectSizeHeight, imageLink) {
         return d3.select('#gridSvg')
             .append('svg:defs')
             .append('svg:pattern')
@@ -198,19 +196,23 @@ export class GridComponent {
                 .attr('x', 0)
                 .attr('y', 0)
                 .attr('patternUnits', 'userSpaceOnUse')
-                .attr('height', gridCols * rectSize)
-                .attr('width', gridCols * rectSize) 
+                .attr('height', gridCols * rectSizeHeight)
+                .attr('width', gridCols * rectSizeWidth) 
             .append('svg:image')
                 .attr('id', 'image')
                 .attr('x', 0)
                 .attr('y', 0)
-                .attr('height', gridCols * rectSize)
-                .attr('width', gridCols * rectSize)
+                .attr('height', gridCols * rectSizeHeight)
+                .attr('width', gridCols * rectSizeWidth)
                 .attr('xlink:href', imageLink);
     }
-    createPath(gridCols, rectSize) {
+    /*createPath(gridCols, rectSizeHeight, rectSizeWidth) {
         return d3.select('path')
-        .attr('d', `M 0 0, L 0 ${(gridCols * rectSize) * 2}, L ${gridCols * rectSize} ${(gridCols * rectSize) * 2}, L ${gridCols * rectSize} 0 z`); 
+        .attr('d', `M 0 0, L 0 ${gridCols * rectSizeHeight}, L ${gridCols * rectSizeWidth} ${gridCols * rectSizeHeight}, L ${gridCols * rectSizeWidth} 0 z`); 
+    }*/
+    createPath(height, width) {
+        return d3.select('path')
+        .attr('d', `M 0 0, L 0 ${height}, L ${width} ${height}, L ${width} 0 z`);
     }
     setArea(container) {
         return d3.select(`#${container}`).append('svg')
@@ -220,8 +222,14 @@ export class GridComponent {
             .style('top', 0)
             .style('left', 0);        
     }
-    fillArea(area, squares) {
-        return area / squares
+    fillArea(rows, cols) {
+        var size = {
+            height: undefined,
+            width: undefined
+        };
+        size.height = window.innerHeight / rows;
+        size.width = (window.innerWidth * 0.75) / cols;
+        return size;
     }
     getWindowSize() {
         if (window.innerHeight < window.innerWidth) {
@@ -251,7 +259,7 @@ export class GridComponent {
     }
     defineGridOrientation() {
         if (this.getWindowSize() === window.innerHeight) {
-            return this.gridCols = Math.floor(this.cellData.length / 14);
+            return this.gridCols = Math.floor(this.cellData.length / 13);
         } else {
             return this.gridCols = Math.floor(this.cellData.length / 20);
         }
