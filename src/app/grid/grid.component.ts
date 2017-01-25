@@ -66,7 +66,7 @@ export class GridComponent {
     private initGrid(grid) {
         this.defineGridOrientation();
         grid.svg = this.setArea('grid');
-        grid.image = this.createImage(this.gridCols, this.rectSize.width, this.rectSize.height, this.imageLink);
+        grid.image = this.createImage(window.innerHeight, window.innerWidth, this.imageLink);
         var self = this;
         d3.select('#gridSvg').append('path')
         .attr('fill', 'url(#pattern)');
@@ -188,7 +188,7 @@ export class GridComponent {
             selectedTextArray[i].style.transition = '2s ease-in-out';
         }
     }
-    createImage(gridCols, rectSizeWidth, rectSizeHeight, imageLink) {
+    createImage(height, width, imageLink) {
         return d3.select('#gridSvg')
             .append('svg:defs')
             .append('svg:pattern')
@@ -196,14 +196,14 @@ export class GridComponent {
                 .attr('x', 0)
                 .attr('y', 0)
                 .attr('patternUnits', 'userSpaceOnUse')
-                .attr('height', gridCols * rectSizeHeight)
-                .attr('width', gridCols * rectSizeWidth) 
+                .attr('height', height)
+                .attr('width', width) 
             .append('svg:image')
                 .attr('id', 'image')
                 .attr('x', 0)
                 .attr('y', 0)
-                .attr('height', gridCols * rectSizeHeight)
-                .attr('width', gridCols * rectSizeWidth)
+                .attr('height', height)
+                .attr('width', width)
                 .attr('xlink:href', imageLink);
     }
     /*createPath(gridCols, rectSizeHeight, rectSizeWidth) {
