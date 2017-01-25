@@ -1,5 +1,7 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
+
+import { ApiService } from '../services/api.service';
 //import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import * as d3 from 'd3';
 import 'rxjs/Rx';
@@ -35,7 +37,8 @@ export class GridComponent {
 
     };
 
-    constructor(private http: Http, private el: ElementRef) {
+    constructor(private http: Http, private el: ElementRef, private apiService: ApiService) {
+        this.apiService.getGrid();
         this.htmlElement = this.el.nativeElement;
         this.http.get('/assets/data.json')
             .map(this.extractData)
