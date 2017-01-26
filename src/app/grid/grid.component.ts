@@ -38,7 +38,7 @@ export class GridComponent {
     private selectedCells = [];
 
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService) {
-        this.apiService.getGrid('588a3ba1ff2a0514087dbd14')
+        this.apiService.getGrid('WOE')
             .subscribe(data => {
                 console.log(data);
                 if (data){

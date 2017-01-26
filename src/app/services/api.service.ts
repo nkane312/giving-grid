@@ -10,8 +10,8 @@ export class ApiService {
 
   constructor(private http: Http) { }
 
-  getGrid(id){
-    var grid = this.http.get(`${this.baseApiUrl}grid?id=${id}`);
+  getGrid(campaign, version){
+    var grid = this.http.get(`${this.baseApiUrl}grid?campaign=${campaign}&version=${version}`);
     grid.subscribe(
       data => {
         this._grid$.next(data.json());

@@ -41,6 +41,8 @@ function generateCells(spread){
 var grid = new GridSchema({
     image: './assets/freedom-flight.jpg',
     dfId: 12345,
+    campaign: 'WOE',
+    version: 1,
     cells: generateCells(spread)
 });
 

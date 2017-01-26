@@ -9,6 +9,8 @@ import { ApiService } from './services/api.service';
 import { AppComponent } from './app.component';
 import { GridComponent } from './grid/grid.component';
 
+import { routing } from './app.routes';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,11 +19,12 @@ import { GridComponent } from './grid/grid.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    routing
   ],
   providers: [
     SocketService,
-    ApiService
+    ApiService,
   ],
   bootstrap: [AppComponent]
 })
