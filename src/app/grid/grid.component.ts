@@ -82,6 +82,7 @@ export class GridComponent {
             .enter()
             .append('rect')
                 .attr('id', function(d, i) { return 'rect' + (i + 1) })
+                //.attr('data-id', )
                 .style('filter', 'url(#drop-shadow)')
                 .classed('available', true)
                 .classed('cell', true)
@@ -139,7 +140,7 @@ export class GridComponent {
             .attr('height', window.innerHeight) 
             .attr('width', (window.innerWidth * 0.75));
         //grid.imagePath = this.createPath(this.gridCols, this.rectSize.height, this.rectSize.width);
-        grid.imagePath = this.createPath(window.innerHeight, window.innerWidth);
+        grid.imagePath = this.createPath(window.innerHeight, (window.innerWidth * 0.75));
         d3.selectAll('rect')
             .attr('height', this.rectSize.height)
             .attr('width', this.rectSize.width)
@@ -190,6 +191,10 @@ export class GridComponent {
             selectedTextArray[i].style.opacity = '0';
             selectedTextArray[i].style.transition = '2s ease-in-out';
         }
+        return selectedArray;
+    }
+    reveal(cells) {
+
     }
     createImage(height, width, imageLink) {
         return d3.select('#gridSvg')
@@ -262,7 +267,7 @@ export class GridComponent {
     }
     defineGridOrientation() {
         if (this.getWindowSize() === window.innerHeight) {
-            return this.gridCols = Math.floor(this.cellData.length / 13);
+            return this.gridCols = Math.floor(this.cellData.length / 15);
         } else {
             return this.gridCols = Math.floor(this.cellData.length / 20);
         }
