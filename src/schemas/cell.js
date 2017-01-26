@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var cellSchema = new Schema({
+var CellSchema = new Schema({
     dollarValue: { type: Number },
     class: { type: String }
 })
 
-module.exports = mongoose.model('Cell', cellSchema);
+module.exports = mongoose.model('Cell', CellSchema);

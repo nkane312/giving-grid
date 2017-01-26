@@ -2,12 +2,12 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 require('./cell');
 
-var cellSchema = mongoose.model('Cell').schema;
+var CellSchema = mongoose.model('Cell').schema;
 
-var gridSchema = new Schema({
+var GridSchema = new Schema({
     image: { type: String },
     dfId: { type: Number },
-    cells: [cellSchema]
+    cells: [CellSchema]
 });
 
-module.exports = mongoose.model('Grid', gridSchema);
+module.exports = mongoose.model('Grid', GridSchema);

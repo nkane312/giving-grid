@@ -34,12 +34,34 @@ export class GridComponent {
         imagePath : undefined,
         g : undefined,
         cells : [],
-
     };
+    private selectedCells = [];
 
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService) {
-        this.apiService.getGrid();
+        this.apiService.getGrid('588a3ba1ff2a0514087dbd14')
+            .subscribe(data => {
+                console.log(data);
+                if (data){
+                    window.onresize = () => {
+                        this.rectSize = this.fillArea(14, 20);
+                        this.rectSpacing = this.rectSize.width;
+                        this.textPadding = this.rectSize.width / 2;
+                        this.adjustGrid(this.grid);
+                    };
+                    this.gridData = data;
+                    this.cellData = this.gridData.cells;
+                    //this.gridCols = this.cellData.length / 15;
+                    //this.gridRows = this.cellData.length / 10;
+                    this.rectSize = this.fillArea(14, 20);
+                    this.rectSpacing = this.rectSize.width;
+                    this.textPadding = this.rectSize.width / 2;
+                    this.initGrid(this.grid);
+                    this.adjustGrid(this.grid);
+                }
+            });
+        
         this.htmlElement = this.el.nativeElement;
+        /*
         this.http.get('/assets/data.json')
             .map(this.extractData)
             .subscribe(data => {
@@ -59,6 +81,7 @@ export class GridComponent {
                 this.initGrid(this.grid);
                 this.adjustGrid(this.grid);
             });
+            */
     }
 
     private extractData(res: Response) {
@@ -137,7 +160,7 @@ export class GridComponent {
             .attr('height', window.innerHeight)
             .attr('width', (window.innerWidth * 0.75));
         d3.select('#image')
-            .attr('height', window.innerHeight) 
+            .attr('height', window.innerHeight)
             .attr('width', (window.innerWidth * 0.75));
         //grid.imagePath = this.createPath(this.gridCols, this.rectSize.height, this.rectSize.width);
         grid.imagePath = this.createPath(window.innerHeight, (window.innerWidth * 0.75));
