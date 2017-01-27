@@ -45,8 +45,9 @@ export class GridComponent {
         this.apiService.getGrid('WOE', 1)
             .subscribe(data => {
                 if (data){
+                    console.log(data);
                     window.onresize = () => {
-                        this.rectSize = this.fillArea(14, 20);
+                        this.rectSize = this.test(this.gridData.cells.length);
                         this.rectSpacing = this.rectSize.width;
                         this.textPadding = this.rectSize.width / 2;
                         this.adjustGrid(this.grid);
@@ -55,7 +56,7 @@ export class GridComponent {
                     this.cellData = this.gridData.cells;
                     //this.gridCols = this.cellData.length / 15;
                     //this.gridRows = this.cellData.length / 10;
-                    this.rectSize = this.fillArea(14, 20);
+                    this.rectSize = this.test(this.gridData.cells.length);
                     this.rectSpacing = this.rectSize.width;
                     this.textPadding = this.rectSize.width / 2;
                     this.initGrid(this.grid);
@@ -69,7 +70,7 @@ export class GridComponent {
             .map(this.extractData)
             .subscribe(data => {
                 window.onresize = () => {
-                    this.rectSize = this.fillArea(14, 20);
+                    this.rectSize = this.test();
                     this.rectSpacing = this.rectSize.width;
                     this.textPadding = this.rectSize.width / 2;
                     this.adjustGrid(this.grid);
@@ -78,7 +79,7 @@ export class GridComponent {
                 this.cellData = this.gridData.grid.cells;
                 //this.gridCols = this.cellData.length / 15;
                 //this.gridRows = this.cellData.length / 10;
-                this.rectSize = this.fillArea(14, 20);
+                this.rectSize = this.test();
                 this.rectSpacing = this.rectSize.width;
                 this.textPadding = this.rectSize.width / 2;
                 this.initGrid(this.grid);
@@ -93,7 +94,7 @@ export class GridComponent {
     }
 
     private initGrid(grid) {
-        this.defineGridOrientation();
+        //this.defineGridOrientation();
         grid.svg = this.setArea('grid');
         grid.image = this.createImage(window.innerHeight, window.innerWidth, this.imageLink);
         var self = this;
@@ -154,7 +155,7 @@ export class GridComponent {
     }
 
     private adjustGrid(grid) {
-        this.defineGridOrientation();
+        //this.defineGridOrientation();
         d3.select('#gridSvg')
             .attr('width', window.innerWidth)
             .attr('height', window.innerHeight)
@@ -291,12 +292,39 @@ export class GridComponent {
         feMerge.append('feMergeNode')
             .attr('in', 'SourceGraphic');
     }
+    /*
     defineGridOrientation() {
         if (this.getWindowSize() === window.innerHeight) {
             return this.gridCols = Math.floor(this.cellData.length / 15);
         } else {
             return this.gridCols = Math.floor(this.cellData.length / 20);
         }
+    }
+    */
+    test(cells){
+        cells = 200;
+        var height = window.innerHeight;
+        var width = window.innerWidth * 0.75;
+        var area = height * width;
+        var ratio = width / height;
+
+        var cellArea = area / cells;
+
+        var diag = Math.sqrt(cellArea*(ratio + 1/ratio));
+        var cellWidth = diag / (Math.sqrt((1/((ratio*ratio)) + 1)));
+        var cellHeight = diag / Math.sqrt(ratio*ratio+1);
+        console.log(`cols ${width/cellWidth} - rows ${height/cellHeight}`);
+        this.gridCols = Math.ceil(width / cellWidth);
+        this.gridRows = Math.ceil(height / cellHeight);
+        console.log(`height ${height} - width ${width} - cellWidth ${cellWidth} - cellHeight ${cellHeight}`);
+        console.log(`cols ${this.gridCols} - rows ${this.gridRows}`);
+        var size = {width: undefined, height: undefined};
+        size.width = width / this.gridCols;
+        size.height = height / this.gridRows;
+        console.log(size);
+        console.log(window.innerHeight);
+        console.log(window.innerWidth);
+        return size;
     }
 }
 
