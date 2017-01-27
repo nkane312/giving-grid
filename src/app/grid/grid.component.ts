@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../services/api.service';
 //import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import * as d3 from 'd3';
@@ -37,10 +37,13 @@ export class GridComponent {
     };
     private selectedCells = [];
 
-    constructor(private http: Http, private el: ElementRef, private apiService: ApiService) {
-        this.apiService.getGrid('WOE')
+    constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private route: ActivatedRoute) {
+        route.params.subscribe(queryString => {
+            console.log(queryString);
+        });
+        
+        this.apiService.getGrid('WOE', 1)
             .subscribe(data => {
-                console.log(data);
                 if (data){
                     window.onresize = () => {
                         this.rectSize = this.fillArea(14, 20);
