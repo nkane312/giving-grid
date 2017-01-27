@@ -25,6 +25,7 @@ export class GridComponent {
     private htmlElement;
     private image;
     private imagePath;
+    private imageSize;
     private imageLink = '../assets/freedom-flight-3.jpg';
     //private imageLink = '../assets/the-death-star.jpg';
     private filter;
@@ -44,18 +45,21 @@ export class GridComponent {
         
         this.apiService.getGrid('WOE', 1)
             .subscribe(data => {
+                console.log(data);
                 if (data){
                     window.onresize = () => {
-                        this.rectSize = this.fillArea(14, 20);
+                        this.rectSize = this.cellArea(14, 20);
                         this.rectSpacing = this.rectSize.width;
                         this.textPadding = this.rectSize.width / 2;
+                        this.imageSize = this.setImageSize(this.imageLink);
                         this.adjustGrid(this.grid);
                     };
                     this.gridData = data;
                     this.cellData = this.gridData.cells;
+                    this.imageSize = this.setImageSize(this.imageLink);
                     //this.gridCols = this.cellData.length / 15;
                     //this.gridRows = this.cellData.length / 10;
-                    this.rectSize = this.fillArea(14, 20);
+                    this.rectSize = this.cellArea(14, 20);
                     this.rectSpacing = this.rectSize.width;
                     this.textPadding = this.rectSize.width / 2;
                     this.initGrid(this.grid);
@@ -93,7 +97,7 @@ export class GridComponent {
     }
 
     private initGrid(grid) {
-        this.defineGridOrientation();
+        //this.isVertical();
         grid.svg = this.setArea('grid');
         grid.image = this.createImage(window.innerHeight, window.innerWidth, this.imageLink);
         var self = this;
@@ -154,17 +158,17 @@ export class GridComponent {
     }
 
     private adjustGrid(grid) {
-        this.defineGridOrientation();
+        //this.isVertical();
         d3.select('#gridSvg')
             .attr('width', window.innerWidth)
             .attr('height', window.innerHeight)
             .attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
         d3.select('#pattern')
-            .attr('height', window.innerHeight)
-            .attr('width', (window.innerWidth * 0.75));
+            .attr('height', this.imageSize.height)
+            .attr('width', this.imageSize.width);
         d3.select('#image')
-            .attr('height', window.innerHeight)
-            .attr('width', (window.innerWidth * 0.75));
+            .attr('height', this.imageSize.height)
+            .attr('width', this.imageSize.width);
         //grid.imagePath = this.createPath(this.gridCols, this.rectSize.height, this.rectSize.width);
         grid.imagePath = this.createPath(window.innerHeight, (window.innerWidth * 0.75));
         d3.selectAll('rect')
@@ -230,14 +234,14 @@ export class GridComponent {
                 .attr('x', 0)
                 .attr('y', 0)
                 .attr('patternUnits', 'userSpaceOnUse')
-                .attr('height', height)
-                .attr('width', width) 
+                .attr('height', this.imageSize.height)
+                .attr('width', this.imageSize.width) 
             .append('svg:image')
                 .attr('id', 'image')
                 .attr('x', 0)
                 .attr('y', 0)
-                .attr('height', height)
-                .attr('width', width)
+                .attr('height', this.imageSize.height)
+                .attr('width', this.imageSize.width)
                 .attr('xlink:href', imageLink);
     }
     /*createPath(gridCols, rectSizeHeight, rectSizeWidth) {
@@ -256,7 +260,7 @@ export class GridComponent {
             .style('top', 0)
             .style('left', 0);        
     }
-    fillArea(rows, cols) {
+    cellArea(rows, cols) {
         var size = {
             height: undefined,
             width: undefined
@@ -291,12 +295,76 @@ export class GridComponent {
         feMerge.append('feMergeNode')
             .attr('in', 'SourceGraphic');
     }
-    defineGridOrientation() {
-        if (this.getWindowSize() === window.innerHeight) {
+    isVertical() {
+        if (window.innerWidth < 800) {
+            return true
+        } else if (window.innerWidth < window.innerHeight) {
+            return true
+        } else {
+            return false
+        }
+        /*if (this.getWindowSize() === window.innerHeight) {
             return this.gridCols = Math.floor(this.cellData.length / 15);
         } else {
             return this.gridCols = Math.floor(this.cellData.length / 20);
+        }*/
+    }
+    fillArea(grid, cells) {
+        var width = window.innerWidth * 0.75;
+        var height = window.innerHeight;
+        var area = width * height;
+        var cellArea = area / cells;
+
+    }
+    setImageSize(imageLink){
+        var imageSize = {};
+        var naturalImage = new Image();
+        naturalImage.src = imageLink;
+        naturalImage.onload = function() {
+            var width = naturalImage.width;
+            var height = naturalImage.height;
         }
+        
+        var maxWidth = 1680; 
+        var maxHeight = 1050;
+        var ratio = 0;
+        var currentWidth = window.innerWidth * 0.75;
+        var currentHeight = window.innerHeight;
+        var adjustedWidth;
+        var adjustedHeight;
+
+        
+        if (currentWidth < maxWidth) {
+            ratio = maxWidth / currentWidth;    
+            adjustedHeight = currentHeight * ratio;   
+            adjustedWidth = currentWidth * ratio;    
+        }
+
+        
+        if(currentHeight < maxHeight){
+            ratio = maxHeight / currentHeight;
+            adjustedWidth = currentWidth * ratio;
+            adjustedHeight = currentHeight * ratio; 
+        }        
+
+        console.log(adjustedWidth);
+        console.log(adjustedHeight);
+
+        if (naturalImage.width > naturalImage.height) {
+            imageSize = { 
+                width: adjustedWidth,
+                height: window.innerHeight
+            };
+            return imageSize;
+        } else {
+            imageSize = { 
+                width: window.innerWidth * 0.75,
+                height: adjustedHeight
+            };
+            return imageSize;
+            
+        }
+        
     }
 }
 
