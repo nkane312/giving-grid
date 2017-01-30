@@ -23,8 +23,6 @@ export class GridComponent {
         cols: undefined,
         rows: undefined,
         rectSize: undefined,
-        rectSpacing: undefined,
-        textPadding: undefined
     };
 
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private route: ActivatedRoute) {
@@ -36,14 +34,10 @@ export class GridComponent {
                 if (data){
                     window.onresize = () => {
                         this.grid.rectSize = this.setRectSize(this.grid);
-                        this.grid.rectSpacing = this.grid.rectSize.width;
-                        this.grid.textPadding = this.grid.rectSize.width / 2;
                         this.adjustGrid(this.grid);
                     };
                     this.grid.cells = data.cells;
                     this.grid.rectSize = this.setRectSize(this.grid);
-                    this.grid.rectSpacing = this.grid.rectSize.width;
-                    this.grid.textPadding = this.grid.rectSize.width / 2;
                     this.grid = this.initGrid(this.grid);
                     this.adjustGrid(this.grid);
                 }
@@ -140,12 +134,13 @@ export class GridComponent {
             });
         d3.selectAll('text')
             .attr('x', (d, i) => {
-                return (grid.rectSize.width * Math.floor(i % grid.cols)) + grid.textPadding;
+                console.log(d, i);
+                return (grid.rectSize.width * Math.floor(i % grid.cols)) + grid.rectSize.width / 2;
             })
             .attr('y', (d, i) => {
-                return Math.floor(i / grid.cols) * grid.rectSize.height + grid.textPadding;
+            return (Math.floor(i / grid.cols) * grid.rectSize.height) + (grid.rectSize.height /1.6);
             })
-            .style('font-size', grid.textPadding);
+            .style('font-size', (grid.rectSize.width / 2));
     }
 
     ngOnInit() {
@@ -260,24 +255,67 @@ export class GridComponent {
             height = window.innerHeight * 0.9;
             width = window.innerWidth;
         }
-
-        area = height * width;
-        ratio = width / height;
-        cellArea = area / grid.cells.length;
-        diag = Math.sqrt(cellArea*(ratio + 1/ratio));
-
-        if(window.innerWidth >= 800){
-            cellWidth = diag / (Math.sqrt((1/(ratio*ratio) + 1)));
-            cellHeight = diag / Math.sqrt((ratio*ratio)+1);
+        if (window.innerWidth >= 800){
+            ratio = width / height;
         }
         else {
-            cellWidth = diag / Math.sqrt((ratio*ratio)+1);
-            cellHeight = diag / (Math.sqrt((1/(ratio*ratio) + 1)));
+            ratio = height / width;
         }
 
+        area = height * width;
+        
+        cellArea = area / grid.cells.length;
+
+        
+        
+        var c = Math.sqrt(grid.cells.length);
+        var r = Math.sqrt(grid.cells.length);
+        var diff, percentDiff;
+
+        if(width - height >=0){
+            diff = width - height;
+            percentDiff = (diff / width);
+            c = c + (c * percentDiff);
+            r = 200 / c;
+        }
+        else {
+            diff = height - width;
+            percentDiff = (diff / height);
+            r = r + (r * percentDiff);
+            c = 200 / r;
+        }
+        
+        /*
+        c = c + (c * percentDiff);
+        r = 200 / c;
+        */
+        console.log(`C: ${c} * R: ${r} = ${c*r}`); 
+
+/*
+        diag = Math.sqrt(cellArea*(ratio + 1/ratio));
+        
+        cellWidth = diag / (Math.sqrt((1/(ratio*ratio) + 1)));
+        cellHeight = diag / (Math.sqrt((ratio*ratio)+1));
+        
         grid.cols = Math.ceil(width / cellWidth);
         grid.rows = Math.ceil(height / cellHeight);
-
+*/
+        if ((Math.floor(c)*Math.floor(r)) > 200){
+            grid.cols = Math.floor(c);
+            grid.rows = Math.floor(r);
+        }
+        else if ((Math.ceil(c)*Math.floor(r)) > 200){
+            grid.cols = Math.ceil(c);
+            grid.rows = Math.floor(r);
+        }
+        else if ((Math.floor(c)*Math.ceil(r))>200){
+            grid.cols = Math.floor(c);
+            grid.rows = Math.ceil(r);
+        }
+        else {
+            grid.cols = Math.ceil(c);
+            grid.rows = Math.ceil(r);
+        }
         var size = {width: undefined, height: undefined};
         size.width = width / grid.cols;
         size.height = height / grid.rows;
