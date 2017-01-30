@@ -12,80 +12,44 @@ import 'rxjs/Rx';
     styleUrls: ['./grid.component.css']
 })
 export class GridComponent {
-    private cellData;
-    private gridData;
-    private textPadding;
-    private rectSize;
-    private gridCols;
-    private gridRows;
-    private rectSpacing;
-    private svgContainer;
-    private g;
-    private svg;
-    private htmlElement;
-    private image;
-    private imagePath;
-    private imageLink = '../assets/freedom-flight-3.jpg';
-    //private imageLink = '../assets/the-death-star.jpg';
-    private filter;
     private grid = {
         svg : undefined,
         image : undefined,
         imagePath : undefined,
+        imageLink: '../assets/freedom-flight-3.jpg',
         g : undefined,
         cells : [],
+        selectedCells: [],
+        cols: undefined,
+        rows: undefined,
+        rectSize: undefined,
+        rectSpacing: undefined,
+        textPadding: undefined
     };
-    private selectedCells = [];
 
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private route: ActivatedRoute) {
         route.params.subscribe(queryString => {
-            console.log(queryString);
         });
         
-        this.apiService.getGrid('WOE', 1)
+        this.apiService.getGrid('WOE', 2)
             .subscribe(data => {
                 if (data){
-                    console.log(data);
                     window.onresize = () => {
-                        this.rectSize = this.test(this.gridData.cells.length);
-                        this.rectSpacing = this.rectSize.width;
-                        this.textPadding = this.rectSize.width / 2;
+                        this.grid.rectSize = this.setRectSize(this.grid);
+                        this.grid.rectSpacing = this.grid.rectSize.width;
+                        this.grid.textPadding = this.grid.rectSize.width / 2;
                         this.adjustGrid(this.grid);
                     };
-                    this.gridData = data;
-                    this.cellData = this.gridData.cells;
-                    //this.gridCols = this.cellData.length / 15;
-                    //this.gridRows = this.cellData.length / 10;
-                    this.rectSize = this.test(this.gridData.cells.length);
-                    this.rectSpacing = this.rectSize.width;
-                    this.textPadding = this.rectSize.width / 2;
-                    this.initGrid(this.grid);
+                    this.grid.cells = data.cells;
+                    this.grid.rectSize = this.setRectSize(this.grid);
+                    this.grid.rectSpacing = this.grid.rectSize.width;
+                    this.grid.textPadding = this.grid.rectSize.width / 2;
+                    this.grid = this.initGrid(this.grid);
                     this.adjustGrid(this.grid);
                 }
             });
         
-        this.htmlElement = this.el.nativeElement;
-        /*
-        this.http.get('/assets/data.json')
-            .map(this.extractData)
-            .subscribe(data => {
-                window.onresize = () => {
-                    this.rectSize = this.test();
-                    this.rectSpacing = this.rectSize.width;
-                    this.textPadding = this.rectSize.width / 2;
-                    this.adjustGrid(this.grid);
-                };
-                this.gridData = data[0];
-                this.cellData = this.gridData.grid.cells;
-                //this.gridCols = this.cellData.length / 15;
-                //this.gridRows = this.cellData.length / 10;
-                this.rectSize = this.test();
-                this.rectSpacing = this.rectSize.width;
-                this.textPadding = this.rectSize.width / 2;
-                this.initGrid(this.grid);
-                this.adjustGrid(this.grid);
-            });
-            */
+        
     }
 
     private extractData(res: Response) {
@@ -94,18 +58,17 @@ export class GridComponent {
     }
 
     private initGrid(grid) {
-        //this.defineGridOrientation();
         grid.svg = this.setArea('grid');
-        grid.image = this.createImage(window.innerHeight, window.innerWidth, this.imageLink);
+        grid.image = this.createImage(window.innerHeight, window.innerWidth, grid.imageLink);
         var self = this;
         d3.select('#gridSvg').append('path')
         .attr('fill', 'url(#pattern)');
         grid.g = grid.svg.append('g');
-        this.createFilter(this.filter);
+        this.createShadow();
         var tempRects;
         var tempValues;
         tempRects = grid.g.selectAll()
-            .data(this.cellData)
+            .data(grid.cells)
             .enter()
             .append('rect')
                 .attr('id', function(d, i) { return 'rect' + (i + 1) })
@@ -114,7 +77,7 @@ export class GridComponent {
                 .classed('available', true)
                 .classed('cell', true)
                 .text((d, i) => {
-                    return this.cellData.dollarValue;
+                    return grid.cells[i].dollarValue;
                 })
                 .on('click', (d, i) => {
                     self.cellToggle(grid.cells[i]);
@@ -127,7 +90,7 @@ export class GridComponent {
                 });
         
         tempValues = grid.g.selectAll('.values')
-            .data(this.cellData)
+            .data(grid.cells)
             .enter()
             .append('text')
                 .attr('id', function(d, i) { return 'text' + (i + 1) })
@@ -142,20 +105,19 @@ export class GridComponent {
                 .style('pointer-events', 'none')
                 .style('background', 'none')
                 .text((d, i) => {
-                    return this.cellData[i].dollarValue;
+                    return grid.cells[i].dollarValue;
                 })
             .classed('svg-content-responsive', true); 
             tempRects._groups[0].forEach((r, i) => {
-                grid.cells.push({rect: r});
+                grid.cells[i].rect = r;
             });
             tempValues._groups[0].forEach((v, i) => {
                 grid.cells[i].value = v;
             });
-
+        return grid;
     }
 
     private adjustGrid(grid) {
-        //this.defineGridOrientation();
         d3.select('#gridSvg')
             .attr('width', window.innerWidth)
             .attr('height', window.innerHeight)
@@ -166,25 +128,24 @@ export class GridComponent {
         d3.select('#image')
             .attr('height', window.innerHeight)
             .attr('width', (window.innerWidth * 0.75));
-        //grid.imagePath = this.createPath(this.gridCols, this.rectSize.height, this.rectSize.width);
         grid.imagePath = this.createPath(window.innerHeight, (window.innerWidth * 0.75));
         d3.selectAll('rect')
-            .attr('height', this.rectSize.height)
-            .attr('width', this.rectSize.width)
+            .attr('height', grid.rectSize.height)
+            .attr('width', grid.rectSize.width)
             .attr('x', (d, i) => {
-                return (this.rectSize.width * Math.floor(i % this.gridCols));
+                return (grid.rectSize.width * Math.floor(i % grid.cols));
             })
             .attr('y',(d, i) => {
-            return Math.floor(i / this.gridCols) * this.rectSize.height;
+                return Math.floor(i / grid.cols) * grid.rectSize.height;
             });
         d3.selectAll('text')
             .attr('x', (d, i) => {
-                return (this.rectSize.width * Math.floor(i % this.gridCols)) + this.textPadding;
+                return (grid.rectSize.width * Math.floor(i % grid.cols)) + grid.textPadding;
             })
             .attr('y', (d, i) => {
-                return Math.floor(i / this.gridCols) * this.rectSize.height + this.textPadding;
+                return Math.floor(i / grid.cols) * grid.rectSize.height + grid.textPadding;
             })
-            .style('font-size', this.textPadding);
+            .style('font-size', grid.textPadding);
     }
 
     ngOnInit() {
@@ -204,7 +165,7 @@ export class GridComponent {
             })
             .classed('available', (d, i) => {
                 return !d3.select(cell.value).classed('available');
-            });        
+            });
     }
     gridButton2() {
         var x = document.getElementsByClassName('selected');
@@ -241,10 +202,6 @@ export class GridComponent {
                 .attr('width', width)
                 .attr('xlink:href', imageLink);
     }
-    /*createPath(gridCols, rectSizeHeight, rectSizeWidth) {
-        return d3.select('path')
-        .attr('d', `M 0 0, L 0 ${gridCols * rectSizeHeight}, L ${gridCols * rectSizeWidth} ${gridCols * rectSizeHeight}, L ${gridCols * rectSizeWidth} 0 z`); 
-    }*/
     createPath(height, width) {
         return d3.select('path')
         .attr('d', `M 0 0, L 0 ${height}, L ${width} ${height}, L ${width} 0 z`);
@@ -273,8 +230,8 @@ export class GridComponent {
             return window.innerWidth;
         }
     }
-    createFilter(filter) {
-        filter = d3.select('defs').append('filter')
+    createShadow() {
+        var filter = d3.select('defs').append('filter')
             .attr('id', 'drop-shadow')
             .attr('height', '130%');
         filter.append('feGaussianBlur')
@@ -292,38 +249,38 @@ export class GridComponent {
         feMerge.append('feMergeNode')
             .attr('in', 'SourceGraphic');
     }
-    /*
-    defineGridOrientation() {
-        if (this.getWindowSize() === window.innerHeight) {
-            return this.gridCols = Math.floor(this.cellData.length / 15);
+
+    setRectSize(grid){
+        var height, width, area, ratio, cellArea, diag, cellWidth, cellHeight;
+
+        if(window.innerWidth >= 800){
+            height = window.innerHeight;
+            width = window.innerWidth * 0.75;
         } else {
-            return this.gridCols = Math.floor(this.cellData.length / 20);
+            height = window.innerHeight * 0.9;
+            width = window.innerWidth;
         }
-    }
-    */
-    test(cells){
-        cells = 200;
-        var height = window.innerHeight;
-        var width = window.innerWidth * 0.75;
-        var area = height * width;
-        var ratio = width / height;
 
-        var cellArea = area / cells;
+        area = height * width;
+        ratio = width / height;
+        cellArea = area / grid.cells.length;
+        diag = Math.sqrt(cellArea*(ratio + 1/ratio));
 
-        var diag = Math.sqrt(cellArea*(ratio + 1/ratio));
-        var cellWidth = diag / (Math.sqrt((1/((ratio*ratio)) + 1)));
-        var cellHeight = diag / Math.sqrt(ratio*ratio+1);
-        console.log(`cols ${width/cellWidth} - rows ${height/cellHeight}`);
-        this.gridCols = Math.ceil(width / cellWidth);
-        this.gridRows = Math.ceil(height / cellHeight);
-        console.log(`height ${height} - width ${width} - cellWidth ${cellWidth} - cellHeight ${cellHeight}`);
-        console.log(`cols ${this.gridCols} - rows ${this.gridRows}`);
+        if(window.innerWidth >= 800){
+            cellWidth = diag / (Math.sqrt((1/(ratio*ratio) + 1)));
+            cellHeight = diag / Math.sqrt((ratio*ratio)+1);
+        }
+        else {
+            cellWidth = diag / Math.sqrt((ratio*ratio)+1);
+            cellHeight = diag / (Math.sqrt((1/(ratio*ratio) + 1)));
+        }
+
+        grid.cols = Math.ceil(width / cellWidth);
+        grid.rows = Math.ceil(height / cellHeight);
+
         var size = {width: undefined, height: undefined};
-        size.width = width / this.gridCols;
-        size.height = height / this.gridRows;
-        console.log(size);
-        console.log(window.innerHeight);
-        console.log(window.innerWidth);
+        size.width = width / grid.cols;
+        size.height = height / grid.rows;
         return size;
     }
 }

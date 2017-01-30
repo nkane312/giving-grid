@@ -24,7 +24,6 @@ export class ApiService {
   }
 
   updateGrid(square){
-    console.log(square);
     var grid = this.http.post(`${this.baseApiUrl}grid`, square);
     grid.subscribe(
       data => {
