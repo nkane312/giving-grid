@@ -15,6 +15,7 @@ export class GridComponent {
     private grid = {
         svg : undefined,
         image : undefined,
+        imageSize: undefined,
         imagePath : undefined,
         imageLink: '../assets/freedom-flight-3.jpg',
         g : undefined,
@@ -42,6 +43,7 @@ export class GridComponent {
         
         this.apiService.getGrid('WOE', 2)
             .subscribe(data => {
+                console.log(data);
                 if (data){
                     window.onresize = () => {
                         this.grid.setSize();
@@ -239,10 +241,53 @@ export class GridComponent {
         feMerge.append('feMergeNode')
             .attr('in', 'SourceGraphic');
     }
+    isVertical() {
+        if (window.innerWidth < 800) {
+            return true
+        } else if (window.innerWidth < window.innerHeight) {
+            return true
+        } else {
+            return false
+        }
+    }
+    fillArea(grid, cells) {
+        var width = window.innerWidth * 0.75;
+        var height = window.innerHeight;
+        var area = width * height;
+        var cellArea = area / cells;
 
+    }
+    setImageSize(imageLink){
+        var imageSize = {};
+        var naturalImage = new Image();
+        naturalImage.src = imageLink;
+        naturalImage.onload = function() {
+            var width = naturalImage.width;
+            var height = naturalImage.height;
+        }
+        
+        var currentWidth, currentHeight, adjustedWidth, adjustedHeight;
+        if (window.innerWidth >= 800) {
+            if (window.innerWidth > window.innerHeight) {
+                currentWidth = window.innerWidth * 0.75;
+                currentHeight = window.innerHeight;
+            }
+        } else {
+            if (window.innerHeight > window.innerWidth) {
+                currentHeight = window.innerHeight * 0.9;
+                currentWidth = window.innerWidth;
+            }
+        }
+
+        imageSize = { 
+            width: currentWidth,
+            height: currentHeight
+        };
+
+        return imageSize;
+    }  
     private setRectSize(grid){
         var area, ratio, cellArea, diag, cellWidth, cellHeight;
-
 
         if (window.innerWidth >= 800){
             ratio = grid.width / grid.height;
