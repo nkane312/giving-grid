@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../services/api.service';
-//import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import * as d3 from 'd3';
 import 'rxjs/Rx';
 
@@ -14,10 +14,32 @@ import 'rxjs/Rx';
 export class GridComponent {
     private grid = {
         svg : undefined,
-        image : undefined,
-        imageSize: undefined,
-        imagePath : undefined,
-        imageLink: '../assets/freedom-flight-3.jpg',
+        image : {
+            size: {
+                height: undefined,
+                width: undefined
+            },
+            link: '../assets/freedom-flight-3.jpg',
+            naturalSize: function() {
+                return Observable.create((observer) => {
+                    var naturalImage = new Image();
+                    naturalImage.src = this.link;
+                    var size = {
+                        width: undefined,
+                        height: undefined
+                    }
+                    naturalImage.onload = function() {
+                        size.width = naturalImage.width;
+                        size.height = naturalImage.height;
+                        observer.next(size);
+                        observer.complete();
+                    }
+                    naturalImage.onerror = function(err){
+                        observer.error(err);
+                    }
+                });
+            }
+        },
         g : undefined,
         cells : [],
         selectedCells: [],
@@ -43,7 +65,6 @@ export class GridComponent {
         
         this.apiService.getGrid('WOE', 2)
             .subscribe(data => {
-                console.log(data);
                 if (data){
                     window.onresize = () => {
                         this.grid.setSize();
@@ -70,7 +91,7 @@ export class GridComponent {
 
     private initGrid(grid) {
         grid.svg = this.setArea('grid');
-        grid.image = this.createImage(grid.imageLink);
+        this.createImage(grid.image.link);
         var self = this;
         d3.select('#gridSvg').append('path')
             .attr('fill', 'url(#pattern)');
@@ -152,16 +173,49 @@ export class GridComponent {
             .style('font-size', (grid.rectSize.width / 2));
     }
     private adjustImage(grid){
-        if (grid.height > grid.width) {
+        var natSize, xOffset, yOffset;
+        grid.image.naturalSize().subscribe(data => {
+            natSize = data;
+            var ratio = natSize.width / natSize.height;
+            var height, width;
+            if (grid.width > grid.height) {
+                height = grid.height;
+                width = height * ratio;
+                xOffset = -1 * ((width - grid.width) / 2);
+                yOffset = 0;
+                if (grid.width > width) {
+                    width = grid.width;
+                    height = width / ratio;
+                    xOffset = 0;
+                    yOffset = -1 * ((height - grid.height) / 2);
+                } 
+            } else {
+                width = grid.width;
+                height = width / ratio;
+                xOffset = 0;
+                yOffset = -1 * ((height - grid.height) / 2);
+                if (grid.height > height) {
+                    height = grid.height;
+                    width = height * ratio;
+                    xOffset = -1 * ((width - grid.width) / 2);
+                    yOffset = 0;
+                }
+            }
+            grid.image.size.height = height;
+            grid.image.size.width = width;
+            d3.select('#pattern')
+                //.attr('x', xOffset)
+                //.attr('y', yOffset)
+                .attr('height', grid.image.size.height)
+                .attr('width', grid.image.size.width);
+            d3.select('#image')
+                .attr('x', xOffset)
+                .attr('y', yOffset)
+                .attr('height', grid.image.size.height)
+                .attr('width', grid.image.size.width);
+            this.createPath(grid.height, grid.width);    
 
-        } else {}
-        d3.select('#pattern')
-            .attr('height', grid.height)
-            .attr('width', grid.width);
-        d3.select('#image')
-            .attr('height', grid.height)
-            .attr('width', grid.width);
-        grid.imagePath = this.createPath(grid.height, grid.width);    
+        });
     }
 
     private ngOnInit() {
@@ -241,35 +295,6 @@ export class GridComponent {
         feMerge.append('feMergeNode')
             .attr('in', 'SourceGraphic');
     }
-    private setImageSize(imageLink){
-        var imageSize = {};
-        var naturalImage = new Image();
-        naturalImage.src = imageLink;
-        naturalImage.onload = function() {
-            var width = naturalImage.width;
-            var height = naturalImage.height;
-        }
-        
-        var currentWidth, currentHeight, adjustedWidth, adjustedHeight;
-        if (window.innerWidth >= 800) {
-            if (window.innerWidth > window.innerHeight) {
-                currentWidth = window.innerWidth * 0.75;
-                currentHeight = window.innerHeight;
-            }
-        } else {
-            if (window.innerHeight > window.innerWidth) {
-                currentHeight = window.innerHeight * 0.9;
-                currentWidth = window.innerWidth;
-            }
-        }
-
-        imageSize = { 
-            width: currentWidth,
-            height: currentHeight
-        };
-
-        return imageSize;
-    }  
     private setRectSize(grid){
         var area, ratio, cellArea, diag, cellWidth, cellHeight;
 
