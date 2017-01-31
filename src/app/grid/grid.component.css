@@ -18,15 +18,17 @@ body {
     background:#fbef98;
     position: fixed;
     right: 0;
+    top:0;
     height: 100%;
     width: 25%;
-    }
-@media screen and (max-width: 500px) {
+}
+@media screen and (max-width: 799px) {
     #donate-bar {
-    background:#fbef98;
-    position: fixed;
-    bottom: 0;
-    height: 10%;
-    width: 100%;
+        background:#fbef98;
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        height: 10%;
+        width: 100%;
     }
 }

@@ -8,9 +8,9 @@ function getRandomInt(min, max) {
 }
 
 const spread = [
-    {value: 25, quantity: 40},
-    {value: 50, quantity: 20},
-    {value: 100, quantity: 10}
+    {value: 25, quantity: 100},
+    {value: 50, quantity: 50},
+    {value: 100, quantity: 50}
 ];
 
 function generateCells(spread){
@@ -42,7 +42,7 @@ var grid = new GridSchema({
     image: './assets/freedom-flight.jpg',
     dfId: 12345,
     campaign: 'WOE',
-    version: 1,
+    version: 2,
     cells: generateCells(spread)
 });
 
