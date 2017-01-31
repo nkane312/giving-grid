@@ -12,6 +12,8 @@ body {
 .selected {
     fill: #42efef;
 }
-/*g {
-    display: none;
-}*/
+.revealed {
+    fill: transparent;
+    opacity: 0;
+    transition: 2s ease-in-out;
+}

@@ -23,11 +23,10 @@ export class ApiService {
     return Observable.from(this._grid$);
   }
 
-  updateGrid(square){
-    var grid = this.http.post(`${this.baseApiUrl}grid`, square);
-    grid.subscribe(
+  updateGrid(_id, indexes){
+    this.http.post(`${this.baseApiUrl}grid`, {_id, indexes}).subscribe(
       data => {
-        console.log(data.json());
+        console.log(data);
       },
       error => {
         console.log(error);

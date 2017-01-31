@@ -1,3 +1,5 @@
 <div id="grid"></div>
 <div id="donate-bar"></div>
 <button (click)="gridButton2()">CLICK ME</button>
+<button (click)="reveal([1, 2, 3, 4, 5])">REVEAL</button>
+<button (click)="apiService.updateGrid(grid._id, [1,2,3,4,5])">POST</button>

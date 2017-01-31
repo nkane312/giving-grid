@@ -19,7 +19,7 @@ export class GridComponent {
                 height: undefined,
                 width: undefined
             },
-            link: '../assets/freedom-flight-3.jpg',
+            link: undefined,
             naturalSize: function() {
                 return Observable.create((observer) => {
                     var naturalImage = new Image();
@@ -56,14 +56,18 @@ export class GridComponent {
                 this.height = window.innerHeight * 0.9;
                 this.width = window.innerWidth;
             }
-        }
+        }, 
+        _id: undefined
     };
 
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private route: ActivatedRoute) {
+        var params;
         route.params.subscribe(queryString => {
+            params = queryString;
         });
+
         
-        this.apiService.getGrid('WOE', 2)
+        this.apiService.getGrid(params.campaign, params.version)
             .subscribe(data => {
                 if (data){
                     window.onresize = () => {
@@ -73,6 +77,8 @@ export class GridComponent {
                         this.adjustImage(this.grid);
                     };
                     this.grid.cells = data.cells;
+                    this.grid.image.link = data.image;
+                    this.grid._id = data._id;
                     this.grid.setSize();
                     this.grid.rectSize = this.setRectSize(this.grid);
                     this.grid = this.initGrid(this.grid);
@@ -104,7 +110,6 @@ export class GridComponent {
             .enter()
             .append('rect')
                 .attr('id', function(d, i) { return 'rect' + (i + 1) })
-                //.attr('data-id', )
                 .style('filter', 'url(#drop-shadow)')
                 .classed('available', true)
                 .classed('cell', true)
@@ -243,16 +248,26 @@ export class GridComponent {
         var selectedArray = Array.prototype.slice.call(x);
         var selectedTextArray = Array.prototype.slice.call(y);
         var i;
-        for (i = 0; i < x.length; i++){
-            selectedArray[i].style.fill = 'transparent';
-            selectedArray[i].style.transition = '2s ease-in-out';
-            selectedTextArray[i].style.opacity = '0';
-            selectedTextArray[i].style.transition = '2s ease-in-out';
+        
+        for (i = 0; i < selectedArray.length; i++){
+            console.log(`i: ${i}`);
+            console.log(`selectedArray.length: ${selectedArray.length}`);
+            console.log(`selectedTextArray.length: ${selectedTextArray.length}`);
+            selectedArray[i].classList.remove('selected');
+            selectedArray[i].classList.add('revealed');
+            selectedTextArray[i].classList.remove('selectedText');
+            selectedTextArray[i].classList.add('revealed');
         }
-        return selectedArray;
     }
-    private reveal(cells) {
-
+    private reveal(indexes) {
+        indexes.forEach((i) => {
+            if (this.grid.cells[i].rect.attributes.class.value !== 'cell selected') {
+                this.grid.cells[i].rect.classList.remove('available');
+                this.grid.cells[i].rect.classList.add('revealed');
+                this.grid.cells[i].value.classList.remove('available');
+                this.grid.cells[i].value.classList.add('revealed');
+            } 
+        });
     }
     private createImage(imageLink) {
         return d3.select('#gridSvg')
@@ -296,7 +311,10 @@ export class GridComponent {
             .attr('in', 'SourceGraphic');
     }
     private setRectSize(grid){
-        var area, ratio, cellArea, diag, cellWidth, cellHeight;
+        var ratio, diff, percentDiff;
+        var cellCount = grid.cells.length;
+        var c = Math.sqrt(cellCount);
+        var r = Math.sqrt(cellCount);
 
         if (window.innerWidth >= 800){
             ratio = grid.width / grid.height;
@@ -305,35 +323,27 @@ export class GridComponent {
             ratio = grid.height / grid.width;
         }
 
-        area = grid.height * grid.width;
-        
-        cellArea = area / grid.cells.length;
-        
-        var c = Math.sqrt(grid.cells.length);
-        var r = Math.sqrt(grid.cells.length);
-        var diff, percentDiff;
-
-        if(grid.width - grid.height >=0){
+        if(grid.width - grid.height >= 0){
             diff = grid.width - grid.height;
             percentDiff = (diff / grid.width);
             c = c + (c * percentDiff);
-            r = 200 / c;
+            r = cellCount / c;
         }
         else {
             diff = grid.height - grid.width;
             percentDiff = (diff / grid.height);
             r = r + (r * percentDiff);
-            c = 200 / r;
+            c = cellCount / r;
         }
-        if ((Math.floor(c)*Math.floor(r)) > 200){
+        if ((Math.floor(c)*Math.floor(r)) > cellCount){
             grid.cols = Math.floor(c);
             grid.rows = Math.floor(r);
         }
-        else if ((Math.ceil(c)*Math.floor(r)) > 200){
+        else if ((Math.ceil(c)*Math.floor(r)) > cellCount){
             grid.cols = Math.ceil(c);
             grid.rows = Math.floor(r);
         }
-        else if ((Math.floor(c)*Math.ceil(r))>200){
+        else if ((Math.floor(c)*Math.ceil(r)) > cellCount){
             grid.cols = Math.floor(c);
             grid.rows = Math.ceil(r);
         }
