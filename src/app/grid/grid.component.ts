@@ -23,6 +23,17 @@ export class GridComponent {
         cols: undefined,
         rows: undefined,
         rectSize: undefined,
+        height: undefined,
+        width: undefined,
+        setSize: function(){
+            if(window.innerWidth >= 800){
+                this.height = window.innerHeight;
+                this.width = window.innerWidth * 0.75;
+            } else {
+                this.height = window.innerHeight * 0.9;
+                this.width = window.innerWidth;
+            }
+        }
     };
 
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private route: ActivatedRoute) {
@@ -33,13 +44,17 @@ export class GridComponent {
             .subscribe(data => {
                 if (data){
                     window.onresize = () => {
+                        this.grid.setSize();
                         this.grid.rectSize = this.setRectSize(this.grid);
                         this.adjustGrid(this.grid);
+                        this.adjustImage(this.grid);
                     };
                     this.grid.cells = data.cells;
+                    this.grid.setSize();
                     this.grid.rectSize = this.setRectSize(this.grid);
                     this.grid = this.initGrid(this.grid);
                     this.adjustGrid(this.grid);
+                    this.adjustImage(this.grid);
                 }
             });
         
@@ -53,10 +68,10 @@ export class GridComponent {
 
     private initGrid(grid) {
         grid.svg = this.setArea('grid');
-        grid.image = this.createImage(window.innerHeight, window.innerWidth, grid.imageLink);
+        grid.image = this.createImage(grid.imageLink);
         var self = this;
         d3.select('#gridSvg').append('path')
-        .attr('fill', 'url(#pattern)');
+            .attr('fill', 'url(#pattern)');
         grid.g = grid.svg.append('g');
         this.createShadow();
         var tempRects;
@@ -116,13 +131,6 @@ export class GridComponent {
             .attr('width', window.innerWidth)
             .attr('height', window.innerHeight)
             .attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
-        d3.select('#pattern')
-            .attr('height', window.innerHeight)
-            .attr('width', (window.innerWidth * 0.75));
-        d3.select('#image')
-            .attr('height', window.innerHeight)
-            .attr('width', (window.innerWidth * 0.75));
-        grid.imagePath = this.createPath(window.innerHeight, (window.innerWidth * 0.75));
         d3.selectAll('rect')
             .attr('height', grid.rectSize.height)
             .attr('width', grid.rectSize.width)
@@ -134,19 +142,30 @@ export class GridComponent {
             });
         d3.selectAll('text')
             .attr('x', (d, i) => {
-                console.log(d, i);
                 return (grid.rectSize.width * Math.floor(i % grid.cols)) + grid.rectSize.width / 2;
             })
             .attr('y', (d, i) => {
-            return (Math.floor(i / grid.cols) * grid.rectSize.height) + (grid.rectSize.height /1.6);
+                return (Math.floor(i / grid.cols) * grid.rectSize.height) + (grid.rectSize.height /1.6);
             })
             .style('font-size', (grid.rectSize.width / 2));
     }
+    private adjustImage(grid){
+        if (grid.height > grid.width) {
 
-    ngOnInit() {
+        } else {}
+        d3.select('#pattern')
+            .attr('height', grid.height)
+            .attr('width', grid.width);
+        d3.select('#image')
+            .attr('height', grid.height)
+            .attr('width', grid.width);
+        grid.imagePath = this.createPath(grid.height, grid.width);    
+    }
+
+    private ngOnInit() {
         
     }
-    cellToggle(cell){
+    private cellToggle(cell){
         d3.select(cell.rect)
             .classed('selected', (d, i) => {
                 return !d3.select(cell.rect).classed('selected');
@@ -162,7 +181,7 @@ export class GridComponent {
                 return !d3.select(cell.value).classed('available');
             });
     }
-    gridButton2() {
+    private gridButton2() {
         var x = document.getElementsByClassName('selected');
         var y = document.getElementsByClassName('selectedText');
         var selectedArray = Array.prototype.slice.call(x);
@@ -176,56 +195,32 @@ export class GridComponent {
         }
         return selectedArray;
     }
-    reveal(cells) {
+    private reveal(cells) {
 
     }
-    createImage(height, width, imageLink) {
+    private createImage(imageLink) {
         return d3.select('#gridSvg')
             .append('svg:defs')
             .append('svg:pattern')
                 .attr('id', 'pattern')
-                .attr('x', 0)
-                .attr('y', 0)
                 .attr('patternUnits', 'userSpaceOnUse')
-                .attr('height', height)
-                .attr('width', width) 
             .append('svg:image')
                 .attr('id', 'image')
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr('height', height)
-                .attr('width', width)
+                .attr('preserveAspectRatio', 'none')
                 .attr('xlink:href', imageLink);
     }
-    createPath(height, width) {
+    private createPath(height, width) {
         return d3.select('path')
         .attr('d', `M 0 0, L 0 ${height}, L ${width} ${height}, L ${width} 0 z`);
     }
-    setArea(container) {
+    private setArea(container) {
         return d3.select(`#${container}`).append('svg')
             .attr('id', 'gridSvg')
-            .attr('preserveAspectRatio', 'xMinYMin meet')
             .style('position', 'absolute')
             .style('top', 0)
             .style('left', 0);        
     }
-    fillArea(rows, cols) {
-        var size = {
-            height: undefined,
-            width: undefined
-        };
-        size.height = window.innerHeight / rows;
-        size.width = (window.innerWidth * 0.75) / cols;
-        return size;
-    }
-    getWindowSize() {
-        if (window.innerHeight < window.innerWidth) {
-            return window.innerHeight;
-        } else {
-            return window.innerWidth;
-        }
-    }
-    createShadow() {
+    private createShadow() {
         var filter = d3.select('defs').append('filter')
             .attr('id', 'drop-shadow')
             .attr('height', '130%');
@@ -245,61 +240,37 @@ export class GridComponent {
             .attr('in', 'SourceGraphic');
     }
 
-    setRectSize(grid){
-        var height, width, area, ratio, cellArea, diag, cellWidth, cellHeight;
+    private setRectSize(grid){
+        var area, ratio, cellArea, diag, cellWidth, cellHeight;
 
-        if(window.innerWidth >= 800){
-            height = window.innerHeight;
-            width = window.innerWidth * 0.75;
-        } else {
-            height = window.innerHeight * 0.9;
-            width = window.innerWidth;
-        }
+
         if (window.innerWidth >= 800){
-            ratio = width / height;
+            ratio = grid.width / grid.height;
         }
         else {
-            ratio = height / width;
+            ratio = grid.height / grid.width;
         }
 
-        area = height * width;
+        area = grid.height * grid.width;
         
         cellArea = area / grid.cells.length;
-
-        
         
         var c = Math.sqrt(grid.cells.length);
         var r = Math.sqrt(grid.cells.length);
         var diff, percentDiff;
 
-        if(width - height >=0){
-            diff = width - height;
-            percentDiff = (diff / width);
+        if(grid.width - grid.height >=0){
+            diff = grid.width - grid.height;
+            percentDiff = (diff / grid.width);
             c = c + (c * percentDiff);
             r = 200 / c;
         }
         else {
-            diff = height - width;
-            percentDiff = (diff / height);
+            diff = grid.height - grid.width;
+            percentDiff = (diff / grid.height);
             r = r + (r * percentDiff);
             c = 200 / r;
         }
-        
-        /*
-        c = c + (c * percentDiff);
-        r = 200 / c;
-        */
-        console.log(`C: ${c} * R: ${r} = ${c*r}`); 
-
-/*
-        diag = Math.sqrt(cellArea*(ratio + 1/ratio));
-        
-        cellWidth = diag / (Math.sqrt((1/(ratio*ratio) + 1)));
-        cellHeight = diag / (Math.sqrt((ratio*ratio)+1));
-        
-        grid.cols = Math.ceil(width / cellWidth);
-        grid.rows = Math.ceil(height / cellHeight);
-*/
         if ((Math.floor(c)*Math.floor(r)) > 200){
             grid.cols = Math.floor(c);
             grid.rows = Math.floor(r);
@@ -317,8 +288,8 @@ export class GridComponent {
             grid.rows = Math.ceil(r);
         }
         var size = {width: undefined, height: undefined};
-        size.width = width / grid.cols;
-        size.height = height / grid.rows;
+        size.width = grid.width / grid.cols;
+        size.height = grid.height / grid.rows;
         return size;
     }
 }
