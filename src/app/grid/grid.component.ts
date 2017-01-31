@@ -241,23 +241,7 @@ export class GridComponent {
         feMerge.append('feMergeNode')
             .attr('in', 'SourceGraphic');
     }
-    isVertical() {
-        if (window.innerWidth < 800) {
-            return true
-        } else if (window.innerWidth < window.innerHeight) {
-            return true
-        } else {
-            return false
-        }
-    }
-    fillArea(grid, cells) {
-        var width = window.innerWidth * 0.75;
-        var height = window.innerHeight;
-        var area = width * height;
-        var cellArea = area / cells;
-
-    }
-    setImageSize(imageLink){
+    private setImageSize(imageLink){
         var imageSize = {};
         var naturalImage = new Image();
         naturalImage.src = imageLink;
