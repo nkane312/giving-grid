@@ -58,13 +58,25 @@ module.exports = function(app){
         });*/
     });
     app.post('/api/grid', function(req, res){
-        console.log(req.body);
         Grid.findById(req.body._id, function(err, grid){
             if (err) {
                 console.log(err);
             }
-            console.log(grid);
-        })
-        res.send('Success');
+            else {
+                console.log('Found grid.');
+                req.body.indexes.forEach(function(i){
+                    grid.cells[i].class = 'revealed';
+                });
+                grid.save(function(err, updatedGrid){
+                    if (err){
+                        console.log(err);
+                    }
+                    else {
+                        console.log('Saved.');
+                    }
+                });
+            }
+        });
+        res.send('POST successful');
     });
 }

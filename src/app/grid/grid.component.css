@@ -2,12 +2,16 @@ button {
     position:absolute;
     z-index: 6;
     right:0;
+    top:0;
 }
 button + button {
     top: 20px;
 }
 button + button + button {
     top: 40px;
+}
+button + button + button + button {
+    top: 60px;
 }
 body {
     margin: 0;

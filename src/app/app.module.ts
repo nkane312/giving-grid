@@ -10,11 +10,13 @@ import { AppComponent } from './app.component';
 import { GridComponent } from './grid/grid.component';
 
 import { routing } from './app.routes';
+import { ThankYouModalComponent } from './thank-you-modal/thank-you-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GridComponent
+    GridComponent,
+    ThankYouModalComponent
   ],
   imports: [
     BrowserModule,

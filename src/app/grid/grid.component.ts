@@ -1,10 +1,14 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
-import { ApiService } from '../services/api.service';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
+
+import { Observable, Subscription } from 'rxjs/Rx';
 import * as d3 from 'd3';
 import 'rxjs/Rx';
+
+import { ApiService } from '../services/api.service';
+
+import { ThankYouModalComponent } from '../thank-you-modal/thank-you-modal.component';
 
 @Component({
     selector: 'app-grid',
@@ -60,12 +64,19 @@ export class GridComponent {
         _id: undefined
     };
 
+    private modalState = false;
+    private showModal(){
+        this.modalState = true;
+    }
+    private modalClosed(e){
+        console.log(e);
+    }
+    
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private route: ActivatedRoute) {
         var params;
         route.params.subscribe(queryString => {
             params = queryString;
         });
-
         
         this.apiService.getGrid(params.campaign, params.version)
             .subscribe(data => {
@@ -84,10 +95,13 @@ export class GridComponent {
                     this.grid = this.initGrid(this.grid);
                     this.adjustGrid(this.grid);
                     this.adjustImage(this.grid);
+                    this.grid.cells.forEach((cell, i) => {
+                        if (cell.class === 'revealed'){
+                            this.reveal([i]);
+                        }
+                    });
                 }
             });
-        
-        
     }
 
     private extractData(res: Response) {
@@ -223,9 +237,6 @@ export class GridComponent {
         });
     }
 
-    private ngOnInit() {
-        
-    }
     private cellToggle(cell){
         d3.select(cell.rect)
             .classed('selected', (d, i) => {
@@ -247,26 +258,25 @@ export class GridComponent {
         var y = document.getElementsByClassName('selectedText');
         var selectedArray = Array.prototype.slice.call(x);
         var selectedTextArray = Array.prototype.slice.call(y);
-        var i;
-        
-        for (i = 0; i < selectedArray.length; i++){
-            console.log(`i: ${i}`);
-            console.log(`selectedArray.length: ${selectedArray.length}`);
-            console.log(`selectedTextArray.length: ${selectedTextArray.length}`);
-            selectedArray[i].classList.remove('selected');
-            selectedArray[i].classList.add('revealed');
-            selectedTextArray[i].classList.remove('selectedText');
-            selectedTextArray[i].classList.add('revealed');
-        }
+        selectedArray.forEach (function(s, i){
+            setTimeout(() => {
+                selectedArray[i].classList.remove('selected');
+                selectedArray[i].classList.add('revealed');
+                selectedTextArray[i].classList.remove('selectedText');
+                selectedTextArray[i].classList.add('revealed');
+            }, i * 100);
+        });
     }
     private reveal(indexes) {
         indexes.forEach((i) => {
-            if (this.grid.cells[i].rect.attributes.class.value !== 'cell selected') {
-                this.grid.cells[i].rect.classList.remove('available');
-                this.grid.cells[i].rect.classList.add('revealed');
-                this.grid.cells[i].value.classList.remove('available');
-                this.grid.cells[i].value.classList.add('revealed');
-            } 
+            setTimeout(()=>{
+                if (this.grid.cells[i].rect.attributes.class.value !== 'cell selected') {
+                    this.grid.cells[i].rect.classList.remove('available');
+                    this.grid.cells[i].rect.classList.add('revealed');
+                    this.grid.cells[i].value.classList.remove('available');
+                    this.grid.cells[i].value.classList.add('revealed');
+                } 
+            }, i * 100);
         });
     }
     private createImage(imageLink) {
