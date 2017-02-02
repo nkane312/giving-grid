@@ -1,23 +1,20 @@
-/*#ty-modal {
-    display: none;
-}*/
 .modal {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1010;
-    width: 80%;
+    width: 90%;
     height: auto;
     background-color: rgb(0,0,0); 
     background-color: rgba(0,0,0,0.4);
 }
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 90%;
 }
 .close {
     color: #aaa;
@@ -30,4 +27,11 @@
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+.modal-footer button {
+    margin: auto;
+    display: block;
+}
+.modal-title {
+    text-align: center;
 }
