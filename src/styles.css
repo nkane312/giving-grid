@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~https://fonts.googleapis.com/icon?family=Material+Icons';
+@font-face {
+    font-family: 'Raleway';
+    src: url('./assets/fonts/Raleway-Regular.ttf');
+}
+@font-face {
+    font-family: 'Oswald-Light';
+    src: url('./assets/fonts/Oswald-Light.ttf');
+} 

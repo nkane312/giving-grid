@@ -1,0 +1,54 @@
+<div id="donate-wrapper">
+    <md-card>
+      <h1>Giving Grid</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer scelerisque, lacus sed dictum volutpat, nisl augue elementum nisi, at sollicitudin turpis felis id leo. Curabitur placerat malesuada dignissim. Nullam placerat risus ac sagittis faucibus. Proin condimentum semper egestas. Vivamus quis metus eget tellus egestas faucibus sed nec lectus. </p>
+    </md-card>
+    <md-card>
+      <form>
+        <md-input-container>
+          <input md-input placeholder="First name" required>
+        </md-input-container>
+
+        <md-input-container>
+          <input md-input placeholder="Last name" required>
+        </md-input-container>
+
+        <md-input-container class="full-width">
+          <input md-input placeholder="Street" required>
+        </md-input-container>
+
+        <md-input-container>
+          <input md-input placeholder="City" required>
+        </md-input-container>
+
+        <div class="select-container">
+          <md-select placeholder="State" required>
+            <md-option *ngFor="let state of states" [value]="state.value">{{state.viewValue}}</md-option>
+          </md-select>
+        </div>
+
+        <md-input-container>
+          <input md-input placeholder="Zip code" required>
+        </md-input-container>
+
+        <md-select placeholder="Country" class="select-container" required>
+          <md-option *ngFor="let country of countries" [value]="country.value" required>{{country.viewValue}}</md-option>
+        </md-select>
+        
+        <md-input-container>
+          <input md-input placeholder="Phone number" required>
+        </md-input-container>
+
+        <md-input-container>
+          <input md-input type="email" placeholder="Email address" required>
+        </md-input-container>
+
+        <button md-raised-button color="accent">Donate Now!</button>
+      </form>
+    </md-card>
+</div>
+<div id="mobile-donate-wrapper">
+  <form>
+    <button md-raised-button color="accent">Donate Now!</button>
+  </form>
+</div>
