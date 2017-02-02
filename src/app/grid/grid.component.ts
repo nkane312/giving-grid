@@ -9,6 +9,7 @@ import 'rxjs/Rx';
 import { ApiService } from '../services/api.service';
 
 import { ThankYouModalComponent } from '../thank-you-modal/thank-you-modal.component';
+import { DonateComponent } from '../donate/donate.component';
 
 @Component({
     selector: 'app-grid',
@@ -71,7 +72,7 @@ export class GridComponent {
     private modalClosed(e){
         console.log(e);
     }
-    
+
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private route: ActivatedRoute) {
         var params;
         route.params.subscribe(queryString => {
