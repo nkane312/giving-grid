@@ -1,6 +1,7 @@
 body {
     margin: 0;
     padding: 0;
+    background-color: #ffffff;
 }
 .text {
     fill: #fff;
@@ -16,4 +17,30 @@ body {
     fill: transparent;
     opacity: 0;
     transition: 2s ease-in-out;
+}
+.loading-logo {
+    width:50%;
+    height: auto;
+    display:block;
+    margin: 50px auto;
+}
+.loading-gif {
+    margin:auto;
+    position:absolute;
+    width:25%;
+    height: 25%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+@media screen and (max-width:799px){
+    .loading-logo {
+        width:90%; 
+    }
+    .loading-gif {
+        width:50%;
+        height:50%;
+    }
 }

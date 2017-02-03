@@ -3,35 +3,49 @@ h1 {
     color: #00305d;
     text-align: center;
 }
+h2 {
+    font:300 2em/1.1 'Oswald-Light', sans-serif;
+    color: #00305d;
+    text-align: center;
+}
 p {
     color: #000000;
     font-size: 16px;
     font-family: Raleway, sans-serif;
     line-height: 28px;
 }
-button {
-    font-family: Raleway, sans-serif;
-    font-size: 20px;
-    font-weight: 800;
-    margin: auto;
-    display:block;
-}
-button:hover {
-    background-color: #a61d26;
-}
 md-card + md-card {
     margin-top:10px;
 }
+.donate-button {
+    font-family: Raleway, sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin: 8px auto;
+    display:block;
+}
+.donate-button:hover {
+    background-color: #a61d26;
+}
+.payment-info {
+    text-align:center;
+}
+.payment-info button {
+    font-family: Raleway, sans-serif;
+    font-size:20px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+.payment-info button.selected {
+    background-color: #e48c1b;
+    color:#ffffff;
+}
+.bank-type md-radio-button {
+    display: inline-block;
+    margin: auto;
+}
 .full-width {
     width:100%;
-}
-.select-margin {
-    margin: 16px 0;
-}
-.select-container {
-    display: inline-block;
-    position: relative;
-    top: -2px;
 }
 #donate-wrapper {
     background:#00529c;
@@ -64,4 +78,17 @@ md-card + md-card {
         height: 10%;
         width: 100%;
     }
+}
+
+/* Fix for Material Design select boxes */
+.select-container {
+    display: inline-block;
+    position: relative;
+    top: -2px;
+    margin: 16px 0;
+}
+.md-select-placeholder.md-floating-placeholder {
+    top: 0;
+    left: 0;
+    transform: translateY(-100%) scale(.75);
 }
