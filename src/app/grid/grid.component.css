@@ -5,13 +5,13 @@ button {
     top:0;
 }
 button + button {
-    top: 20px;
+    top: 30px;
 }
 button + button + button {
-    top: 40px;
+    top: 60px;
 }
 button + button + button + button {
-    top: 60px;
+    top: 90px;
 }
 body {
     margin: 0;

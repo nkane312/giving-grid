@@ -1,10 +1,10 @@
-<!-- Modal Thank You -->
+<div *ngIf="state" class="overlay" (click)="close()"></div>
 <div *ngIf="state" id="ty-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
 
-    <!-- Modal content-->
+  <div class="modal-dialog">
+
     <div class="modal-content">
-      <button type="button" class="close" (click)="modalClosed(ty-modal)">&times;</button>
+      <button type="button" class="close" (click)="close()">&times;</button>
       <div class="modal-header">
         <h4 class="modal-title">Thank You!</h4>
       </div>
@@ -14,7 +14,9 @@
         <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" (click)="modalClosed(ty-modal)">Reveal My Squares</button>
+      <button _ngcontent-xsj-43="" color="accent" md-raised-button="" class="md-accent" ng-reflect-color="accent" type="button" class="btn btn-default" (click)="close()"><span class="md-button-wrapper">Reveal My Squares!</span><!--template bindings={
+  "ng-reflect-ng-if": "true"
+}--><div class="md-button-ripple" md-ripple="" mdripplebackgroundcolor="rgba(0, 0, 0, 0)" ng-reflect-trigger="[object HTMLButtonElement]" ng-reflect-background-color="rgba(0, 0, 0, 0)"><div class="md-ripple-background"></div></div><div class="md-button-focus-overlay"></div></button>
       </div>
     </div>
   </div>

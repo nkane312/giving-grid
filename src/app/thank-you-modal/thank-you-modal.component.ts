@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
+import { Custombox } from 'custombox/src';
 
 @Component({
   selector: 'thank-you-modal',
@@ -12,20 +12,31 @@ export class ThankYouModalComponent implements OnInit {
   @Input()
   set show(value) {
     this.state = value;
-    console.log(value);
+    if (this.state === true) {
+      modal.open();
+    } else {
+      modal.close();
+    }
   }
   get show() {
     return this.state;
   }
   private close() {
-    this.state = false;
+    this.show = false;
     this.closed.emit(this.state);
   }
 
+  private modal = new Custombox.modal({
+    content: {
+        effect: 'fadein',
+        target: '#modal'
+    }
+  });
+
+  
   constructor() { }
 
   ngOnInit() {
   }
 
 }
-

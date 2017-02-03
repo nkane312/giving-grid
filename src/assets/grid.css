@@ -17,3 +17,72 @@ body {
     opacity: 0;
     transition: 2s ease-in-out;
 }
+h1, h4 {
+    font:300 3em/1.1 'Oswald-Light', sans-serif;
+    color: #00305d;
+    text-align: center;
+    cursor: default;
+}
+p {
+    color: #000000;
+    font-size: 16px;
+    font-family: Raleway, sans-serif;
+    line-height: 28px;
+    cursor: default;
+}
+button {
+    font-family: Raleway, sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin: auto;
+    display:block;
+}
+button:hover {
+    background-color: #a61d26;
+}
+md-card + md-card {
+    margin-top:10px;
+}
+.full-width {
+    width:100%;
+}
+.select-margin {
+    margin: 16px 0;
+}
+.select-container {
+    display: inline-block;
+    position: relative;
+    top: -2px;
+}
+#donate-wrapper {
+    background:#00529c;
+    position: fixed;
+    overflow-y:auto;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 24%;
+    padding: 0.5%;
+}
+#mobile-donate-wrapper {
+    display: none;
+}
+@media screen and (min-width: 800px) and (max-width:1200px){
+    p {
+        font-size:13px;
+        line-height: 1.75em;
+    }
+}
+@media screen and (max-width: 799px) {
+    #donate-wrapper {
+        display:none;
+    }
+    #mobile-donate-wrapper {
+        background:#ffffff;
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        height: 10%;
+        width: 100%;
+    }
+}

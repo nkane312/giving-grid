@@ -1,37 +1,47 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 10;
+    cursor: pointer;
+}
 .modal {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1010;
+    z-index: 11;
+    text-align: center;
     width: 90%;
-    height: auto;
-    background-color: rgb(0,0,0); 
-    background-color: rgba(0,0,0,0.4);
 }
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 90%;
 }
 .close {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: bold;
+    text-decoration: none;
 }
 .close:hover,
 .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
+    -webkit-animation:spin .25s linear;
+    -moz-animation:spin .25s linear;
+    animation:spin .25s linear;
 }
 .modal-footer button {
     margin: auto;
     display: block;
 }
-.modal-title {
-    text-align: center;
-}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

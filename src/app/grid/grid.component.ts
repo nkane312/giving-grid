@@ -68,9 +68,10 @@ export class GridComponent {
     private modalState = false;
     private showModal(){
         this.modalState = true;
+        
     }
     private modalClosed(e){
-        console.log(e);
+        this.modalState = e;
     }
 
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private route: ActivatedRoute) {
