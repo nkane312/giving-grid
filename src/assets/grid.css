@@ -1,6 +1,7 @@
 body {
     margin: 0;
     padding: 0;
+    background-color: #ffffff;
 }
 .text {
     fill: #fff;
@@ -40,49 +41,30 @@ button {
 button:hover {
     background-color: #a61d26;
 }
-md-card + md-card {
-    margin-top:10px;
+
+.loading-logo {
+    width:50%;
+    height: auto;
+    display:block;
+    margin: 50px auto;
 }
-.full-width {
-    width:100%;
-}
-.select-margin {
-    margin: 16px 0;
-}
-.select-container {
-    display: inline-block;
-    position: relative;
-    top: -2px;
-}
-#donate-wrapper {
-    background:#00529c;
-    position: fixed;
-    overflow-y:auto;
-    right: 0;
+.loading-gif {
+    margin:auto;
+    position:absolute;
+    width:25%;
+    height: 25%;
     top: 0;
-    height: 100%;
-    width: 24%;
-    padding: 0.5%;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
-#mobile-donate-wrapper {
-    display: none;
-}
-@media screen and (min-width: 800px) and (max-width:1200px){
-    p {
-        font-size:13px;
-        line-height: 1.75em;
+
+@media screen and (max-width:799px){
+    .loading-logo {
+        width:90%; 
     }
-}
-@media screen and (max-width: 799px) {
-    #donate-wrapper {
-        display:none;
-    }
-    #mobile-donate-wrapper {
-        background:#ffffff;
-        position: fixed;
-        bottom: 0;
-        top: auto;
-        height: 10%;
-        width: 100%;
+    .loading-gif {
+        width:50%;
+        height:50%;
     }
 }
