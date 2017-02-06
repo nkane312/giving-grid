@@ -31,15 +31,24 @@ p {
     line-height: 28px;
     cursor: default;
 }
-button {
+button.btn-lg {
     font-family: Raleway, sans-serif;
     font-size: 20px;
     font-weight: 800;
     margin: auto;
-    display:block;
+    display:inline-block;
 }
-button:hover {
+button.btn-lg:hover {
     background-color: #a61d26;
+    color:#ffffff;
+}
+button.btn-lg.orange {
+    background-color: #e48c1b;
+    color:#ffffff;
+}
+button.btn-lg.orange:hover {
+    background-color: #a61d26;
+    color:#ffffff;
 }
 
 .loading-logo {

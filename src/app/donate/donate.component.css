@@ -18,27 +18,14 @@ md-card + md-card {
     margin-top:10px;
 }
 .donate-button {
-    font-family: Raleway, sans-serif;
-    font-size: 20px;
-    font-weight: 800;
     margin: 8px auto;
     display:block;
-}
-.donate-button:hover {
-    background-color: #a61d26;
 }
 .payment-info {
     text-align:center;
 }
 .payment-info button {
-    font-family: Raleway, sans-serif;
-    font-size:20px;
-    font-weight:800;
     margin-bottom:8px;
-}
-.payment-info button.selected {
-    background-color: #e48c1b;
-    color:#ffffff;
 }
 .bank-type md-radio-button {
     display: inline-block;

@@ -46,9 +46,9 @@
   <md-card>
     <h2>Payment Information</h2>
     <div class="payment-info">
-      <button [ngClass]="{'selected': getPaymentMethod() === 'card'}" (click)="setPaymentMethod('card')" md-raised-button>Credit card</button>
-      <button [ngClass]="{'selected': getPaymentMethod() === 'ach'}"  (click)="setPaymentMethod('ach')"  md-raised-button>Bank account</button>
-      <button [ngClass]="{'selected': getPaymentMethod() === 'paypal'}"  (click)="setPaymentMethod('paypal')"  md-raised-button>PayPal</button>
+      <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'card'}" (click)="setPaymentMethod('card')" md-raised-button>Credit card</button>
+      <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'ach'}"  (click)="setPaymentMethod('ach')"  md-raised-button>Bank account</button>
+      <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'paypal'}"  (click)="setPaymentMethod('paypal')"  md-raised-button>PayPal</button>
     </div>
     <md-card *ngIf="getPaymentMethod() === 'card'">
       <md-input-container>
@@ -70,7 +70,7 @@
           <md-option *ngFor="let year of years" [value]="year">{{year}}</md-option>
         </md-select>
       </div>
-      <button class="donate-button" md-raised-button color="accent">Donate Now!</button>
+      <button class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
     </md-card>
 
     <md-card *ngIf="getPaymentMethod() === 'ach'">
@@ -87,10 +87,10 @@
           <md-radio-button value="savings">Savings</md-radio-button>
         </md-radio-group>
       </div>
-      <button class="donate-button" md-raised-button color="accent">Donate Now!</button>
+      <button class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
     </md-card>
     <md-card *ngIf="getPaymentMethod() === 'paypal'">
-      <button class="donate-button" md-raised-button color="accent">Donate Now!</button>
+      <button class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
     </md-card>
     
     
