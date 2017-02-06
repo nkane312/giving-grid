@@ -19,7 +19,7 @@ body {
     transition: 2s ease-in-out;
 }
 h1, h2, h3, h4 {
-    font:300 3em/1.1 'Oswald-Light', sans-serif;
+    font: 300 3em/1.1 'Oswald-Light', sans-serif;
     color: #00305d;
     text-align: center;
     cursor: default;
@@ -130,4 +130,21 @@ button.btn-lg.orange:hover {
 @keyframes spin { 100% {
      -webkit-transform: rotate(180deg); 
      transform:rotate(180deg); } 
+}
+@media screen and (max-width:799px){
+    h1, h2, h3, h4 {
+        font: 300 2.75em/0.75 'Oswald-Light', sans-serif;
+    }
+    p {
+        line-height: 20px;
+    }
+    .modal {
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        margin: 0;
+        transform: translate(0,0);
+        overflow-y: auto;
+    }
 }
