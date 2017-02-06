@@ -33,7 +33,7 @@ export class DonateComponent implements OnInit {
     {value: '10', viewValue: '10: October'},
     {value: '11', viewValue: '11: November'},
     {value: '12', viewValue: '12: December'}
-  ]
+  ];
   private years;
   private setYears = function(){
     var y = []; 
@@ -70,6 +70,10 @@ export class DonateComponent implements OnInit {
 
   private getPaymentMethod(){
     return this._paymentMethod;
+  }
+  private _isMobile: boolean;
+  private showMobile(show: boolean){
+    this._isMobile = show;
   }
 
   ngOnInit() {

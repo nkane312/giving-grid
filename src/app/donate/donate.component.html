@@ -70,7 +70,6 @@
           <md-option *ngFor="let year of years" [value]="year">{{year}}</md-option>
         </md-select>
       </div>
-      <button class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
     </md-card>
 
     <md-card *ngIf="getPaymentMethod() === 'ach'">
@@ -87,15 +86,36 @@
           <md-radio-button value="savings">Savings</md-radio-button>
         </md-radio-group>
       </div>
-      <button class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
     </md-card>
     <md-card *ngIf="getPaymentMethod() === 'paypal'">
-      <button class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
+      <p>Your donation will be completed using PayPal.</p>
     </md-card>
-    
+    <button class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
     
   </md-card>
 </div>
+
 <div id="mobile-donate-wrapper">
-    <button md-raised-button color="accent">Donate Now!</button>
+  <h2>Giving Grid</h2>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer scelerisque, lacus sed dictum volutpat, nisl augue elementum nisi, at sollicitudin turpis felis id leo. Curabitur placerat malesuada dignissim. Nullam placerat risus ac sagittis faucibus. Proin condimentum semper egestas. Vivamus quis metus eget tellus egestas faucibus sed nec lectus. </p>
+  <button class="btn-lg" color="accent" md-raised-button (click)="showMobile(true)">Donate Now!</button>
+</div>
+<div class="overlay" *ngIf="_isMobile"></div>
+<div class="modal" *ngIf="_isMobile">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <button type="button" class="close" (click)="close()">&times;</button>
+      <div class="modal-header">
+        <h3 class="modal-title">Your Details</h3>
+      </div>
+      <div class="modal-body">
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+          
+        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-lg" color="accent" md-raised-button type="button" (click)="close()">Reveal My Squares!</button>
+      </div>
+    </div>
+  </div>
 </div>

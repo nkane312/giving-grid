@@ -1,19 +1,4 @@
-h1 {
-    font:300 3em/1.1 'Oswald-Light', sans-serif;
-    color: #00305d;
-    text-align: center;
-}
-h2 {
-    font:300 2em/1.1 'Oswald-Light', sans-serif;
-    color: #00305d;
-    text-align: center;
-}
-p {
-    color: #000000;
-    font-size: 16px;
-    font-family: Raleway, sans-serif;
-    line-height: 28px;
-}
+/* General donation form styles */
 md-card + md-card {
     margin-top:10px;
 }
@@ -34,6 +19,8 @@ md-card + md-card {
 .full-width {
     width:100%;
 }
+
+/* Donation form wrappers */
 #donate-wrapper {
     background:#00529c;
     position: fixed;
@@ -47,6 +34,8 @@ md-card + md-card {
 #mobile-donate-wrapper {
     display: none;
 }
+
+/* Media query to show and hide the mobile donation form and to adjust text size for mobile. */
 @media screen and (min-width: 800px) and (max-width:1200px){
     p {
         font-size:13px;
@@ -58,6 +47,7 @@ md-card + md-card {
         display:none;
     }
     #mobile-donate-wrapper {
+        display:block;
         background:#ffffff;
         position: fixed;
         bottom: 0;
@@ -65,6 +55,16 @@ md-card + md-card {
         height: 10%;
         width: 100%;
     }
+}
+
+/* Mobile donation form styles */
+#mobile-donate-wrapper h2 {
+    font-size:18px;
+    margin:auto;
+    display:block;
+}
+.btn-lg {
+    float:right;
 }
 
 /* Fix for Material Design select boxes */
