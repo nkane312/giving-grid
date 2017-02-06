@@ -63,9 +63,6 @@ md-card + md-card {
     margin:auto;
     display:block;
 }
-.btn-lg {
-    float:right;
-}
 
 /* Fix for Material Design select boxes */
 .select-container {

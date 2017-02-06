@@ -171,25 +171,43 @@ export class GridComponent {
     }
 
     private adjustGrid(grid) {
+        var spaces = (grid.cols * grid.rows) - grid.cells.length;
+        var between = Math.floor(grid.cells.length / spaces);
+        var cellSpaceCountX = 0;
+        var cellSpaceCountY = 0;
+        var textSpaceCountX = 0;
+        var textSpaceCountY = 0;
         d3.select('#gridSvg')
             .attr('width', window.innerWidth)
             .attr('height', window.innerHeight)
             .attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
-        d3.selectAll('rect')
+        d3.selectAll('.cell')
             .attr('height', grid.rectSize.height)
             .attr('width', grid.rectSize.width)
             .attr('x', (d, i) => {
-                return (grid.rectSize.width * Math.floor(i % grid.cols));
+                if (i % between === 0) {
+                    cellSpaceCountX += 1;
+                }
+                return (grid.rectSize.width * Math.floor((i + cellSpaceCountX) % grid.cols));
             })
             .attr('y',(d, i) => {
-                return Math.floor(i / grid.cols) * grid.rectSize.height;
+                if (i % between === 0) {
+                    cellSpaceCountY += 1;
+                }
+                return Math.floor((i + cellSpaceCountY) / grid.cols) * grid.rectSize.height;
             });
-        d3.selectAll('text')
+        d3.selectAll('.text')
             .attr('x', (d, i) => {
-                return (grid.rectSize.width * Math.floor(i % grid.cols)) + grid.rectSize.width / 2;
+                if (i % between === 0) {
+                    textSpaceCountX += 1;  
+                }
+                return (grid.rectSize.width * Math.floor((i + textSpaceCountX) % grid.cols)) + grid.rectSize.width / 2;
             })
             .attr('y', (d, i) => {
-                return (Math.floor(i / grid.cols) * grid.rectSize.height) + (grid.rectSize.height /1.6);
+                if (i % between === 0) {
+                    textSpaceCountY += 1;  
+                }
+                return (Math.floor((i + textSpaceCountY) / grid.cols) * grid.rectSize.height) + (grid.rectSize.height /1.6);
             })
             .style('font-size', (grid.rectSize.width / 2));
     }
