@@ -1,7 +1,7 @@
-<div *ngIf="state" class="overlay" (click)="close()"></div>
+<div *ngIf="state" [@fadeInOut]="'in'" class="overlay" (click)="close()"></div>
 <div *ngIf="state" id="ty-modal" class="modal" role="dialog">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div [@flyInOut]="'in'" class="modal-content">
       <button type="button" class="close" (click)="close()">&times;</button>
       <div class="modal-header">
         <h4 class="modal-title">Thank You!</h4>
