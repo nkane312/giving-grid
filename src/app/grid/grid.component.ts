@@ -103,7 +103,7 @@ export class GridComponent {
                     let revealCount = 0;
                     this.grid.cells.forEach((cell, i) => {
                         if (cell.class === 'revealed'){
-                            this.revealByIndex([i]);
+                            this.revealByIndex([i], (revealCount + spacerCount));
                             revealCount += 1;
                         }
                         if (i % between === 0 && i !== 0){
@@ -334,9 +334,8 @@ export class GridComponent {
             }, i * 100);
         });
     }
-    private revealByIndex(indexes) {
-        indexes.forEach((index, i) => {
-            console.log(i);
+    private revealByIndex(indexes, timing) {
+        indexes.forEach((index) => {
             setTimeout(()=>{
                 if (this.grid.cells[index].rect.attributes.class.value !== 'cell selected') {
                     this.grid.cells[index].rect.classList.remove('available');
@@ -344,7 +343,7 @@ export class GridComponent {
                     this.grid.cells[index].value.classList.remove('available');
                     this.grid.cells[index].value.classList.add('revealed');
                 } 
-            }, i * 100);
+            }, timing * 100);
         });
     }
     private revealSpacer(s, t){
