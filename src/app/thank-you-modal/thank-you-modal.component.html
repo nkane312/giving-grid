@@ -12,6 +12,21 @@
         <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
       </div>
       <div class="modal-footer">
+        <share-buttons 
+          [url]="url"
+          [shareTitle]="shareTitle"
+          [defaultStyle]="false"
+
+          [facebook]="fbInner"
+          [twitter]="twitterInner"
+
+          [pinterest]="false"
+          [linkedIn]="false"
+          [google]="false"
+          [tumblr]="false"
+          [reddit]="false"
+          [stumbleUpOn]="false"
+        ></share-buttons><br />
         <button class="btn-lg" color="accent" md-raised-button type="button" (click)="close()">Reveal My Squares!</button>
       </div>
     </div>

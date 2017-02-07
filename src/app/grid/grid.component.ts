@@ -182,9 +182,6 @@ export class GridComponent {
     private adjustGrid(grid) {
         var spaces = (grid.cols * grid.rows) - grid.cells.length;
         var between = Math.floor(grid.cells.length / spaces);
-        console.log('array length: ' + grid.cells.length);
-        console.log('spaces: ' + spaces);
-        console.log(`between: ${between}`);
         var cellSpaceCountX = 0;
         var cellSpaceCountY = 0;
         var textSpaceCountX = 0;
@@ -220,9 +217,6 @@ export class GridComponent {
                 if (i % between === 0 && i !== 0) {
                     d3.select('#spacer' + cellSpaceCountY)
                         .attr('y', () => {
-                            //console.log(i);
-                            //console.log(`cellSpaceY: ${cellSpaceCountY}`);
-                            //console.log('Math.floor: ' + Math.floor((i + cellSpaceCountY) / grid.cols) * grid.rectSize.height);
                             return Math.floor((i + cellSpaceCountY) / grid.cols) * grid.rectSize.height;
                     });
                     cellSpaceCountY += 1;

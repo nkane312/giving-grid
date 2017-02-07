@@ -1,5 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, trigger, state, style, animate, transition } from '@angular/core';
 
+import { ActivatedRoute, Router } from '@angular/router';
+
+import {ShareButtonsModule} from "ng2-sharebuttons";
+
 @Component({
   selector: 'thank-you-modal',
   templateUrl: './thank-you-modal.component.html',
@@ -25,9 +29,13 @@ import { Component, OnInit, Input, Output, EventEmitter, trigger, state, style, 
         animate(1000, style({opacity: 0}))
       ])
     ])
-  ]
+  ],
 })
 export class ThankYouModalComponent implements OnInit {
+  private shareTitle = 'Share your donation with others!';
+  private fbInner = "<img src='../assets/facebook.svg'>";
+  private twitterInner = "<img src='../assets/twitter.svg'>";
+  private url = window.location.href;
   private state;
   @Output() closed = new EventEmitter();
   @Input()
@@ -43,7 +51,8 @@ export class ThankYouModalComponent implements OnInit {
   }
 
 
-  constructor() { }
+  constructor() {
+   }
 
   ngOnInit() {
   }

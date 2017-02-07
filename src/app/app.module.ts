@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 
 import 'hammerjs';
+import { ShareButtonsModule } from 'ng2-sharebuttons';
 
 import { routing } from './app.routes';
 
@@ -21,14 +22,15 @@ import { DonateComponent } from './donate/donate.component';
     AppComponent,
     GridComponent,
     ThankYouModalComponent,
-    DonateComponent
+    DonateComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     MaterialModule.forRoot(),
-    routing
+    routing,
+    ShareButtonsModule
   ],
   providers: [
     SocketService,

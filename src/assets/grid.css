@@ -23,6 +23,7 @@ h1, h2, h3, h4 {
     color: #00305d;
     text-align: center;
     cursor: default;
+    margin: 15px auto;
 }
 p {
     color: #000000;
@@ -147,4 +148,17 @@ button.btn-lg.orange:hover {
         transform: translate(0,0);
         overflow-y: auto;
     }
+}
+
+/* Modal Social Share Styles */
+.sb-container h3 {
+    font: 300 2em/1 'Oswald-Light', sans-serif;
+}
+.sb-container .sb-buttons {
+    width: 30%;
+    margin: 0px auto !important;
+}
+
+.sb-button button:hover {
+    font-size: 0.4em;
 }
