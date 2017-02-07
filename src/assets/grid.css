@@ -166,3 +166,8 @@ button.btn-lg.orange:hover {
 .sb-button button:hover {
     font-size: 0.4em;
 }
+@media screen and (max-width:799px){
+    .sb-container .sb-buttons {
+        width: 100%;
+    }
+}
