@@ -335,16 +335,30 @@ export class GridComponent {
         });
     }
     private revealByIndex(indexes, timing) {
-        indexes.forEach((index) => {
-            setTimeout(()=>{
-                if (this.grid.cells[index].rect.attributes.class.value !== 'cell selected') {
-                    this.grid.cells[index].rect.classList.remove('available');
-                    this.grid.cells[index].rect.classList.add('revealed');
-                    this.grid.cells[index].value.classList.remove('available');
-                    this.grid.cells[index].value.classList.add('revealed');
-                } 
-            }, timing * 100);
-        });
+        if (!timing){
+            indexes.forEach((index, i) => {
+                setTimeout(()=>{
+                    if (this.grid.cells[index].rect.attributes.class.value !== 'cell selected') {
+                        this.grid.cells[index].rect.classList.remove('available');
+                        this.grid.cells[index].rect.classList.add('revealed');
+                        this.grid.cells[index].value.classList.remove('available');
+                        this.grid.cells[index].value.classList.add('revealed');
+                    } 
+                }, i * 100);
+            });        
+        }
+        else {
+            indexes.forEach((index) => {
+                setTimeout(()=>{
+                    if (this.grid.cells[index].rect.attributes.class.value !== 'cell selected') {
+                        this.grid.cells[index].rect.classList.remove('available');
+                        this.grid.cells[index].rect.classList.add('revealed');
+                        this.grid.cells[index].value.classList.remove('available');
+                        this.grid.cells[index].value.classList.add('revealed');
+                    } 
+                }, timing * 100);
+            });        
+        }
     }
     private revealSpacer(s, t){
         console.log(t + s);
