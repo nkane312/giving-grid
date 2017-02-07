@@ -184,8 +184,7 @@ export class GridComponent {
         while (i < spaces) {
             var t:any = d3.select('g').append('rect')
                 .attr('id', function() { return 'spacer' + i })
-                .classed('spacer', true)
-                .classed('cell', true);
+                .classed('spacer', true);
             tempSpacers.push(t._groups[0][0]);
             i += 1;
         }
@@ -204,7 +203,7 @@ export class GridComponent {
             .attr('width', window.innerWidth)
             .attr('height', window.innerHeight)
             .attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
-        d3.selectAll('.available')
+        d3.selectAll('.cell')
             .attr('height', grid.rectSize.height)
             .attr('width', grid.rectSize.width)
             .attr('x', (d, i) => {
