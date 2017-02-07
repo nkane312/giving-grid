@@ -47,6 +47,7 @@ export class GridComponent {
         },
         g : undefined,
         cells : [],
+        spacers: [],
         selectedCells: [],
         cols: undefined,
         rows: undefined,
@@ -97,9 +98,17 @@ export class GridComponent {
                     this.grid = this.initGrid(this.grid);
                     this.adjustGrid(this.grid);
                     this.adjustImage(this.grid);
+                    let between = Math.floor(this.grid.cells.length / ((this.grid.cols * this.grid.rows) - this.grid.cells.length));
+                    let spacerCount = 0;
+                    let revealCount = 0;
                     this.grid.cells.forEach((cell, i) => {
                         if (cell.class === 'revealed'){
-                            this.reveal([i]);
+                            this.revealByIndex([i]);
+                            revealCount += 1;
+                        }
+                        if (i % between === 0 && i !== 0){
+                            this.revealSpacer(spacerCount, revealCount);
+                            spacerCount += 1;
                         }
                     });
                 }
@@ -125,7 +134,9 @@ export class GridComponent {
             .data(grid.cells)
             .enter()
             .append('rect')
-                .attr('id', function(d, i) { return 'rect' + (i + 1) })
+                .attr('id', function(d, i) {
+                    return 'rect' + (i + 1);
+                })
                 .style('filter', 'url(#drop-shadow)')
                 .classed('available', true)
                 .classed('cell', true)
@@ -169,22 +180,22 @@ export class GridComponent {
             });
         var spaces = (grid.cols * grid.rows) - grid.cells.length;
         var i = 0;
+        var tempSpacers = [];
         while (i < spaces) {
-            d3.select('g').append('rect')
+            var t:any = d3.select('g').append('rect')
                 .attr('id', function() { return 'spacer' + i })
                 .classed('spacer', true)
                 .classed('cell', true);
+            tempSpacers.push(t._groups[0][0]);
             i += 1;
         }
+        grid.spacers = tempSpacers;
         return grid;
     }
 
     private adjustGrid(grid) {
         var spaces = (grid.cols * grid.rows) - grid.cells.length;
         var between = Math.floor(grid.cells.length / spaces);
-        console.log('array length: ' + grid.cells.length);
-        console.log('spaces: ' + spaces);
-        console.log(`between: ${between}`);
         var cellSpaceCountX = 0;
         var cellSpaceCountY = 0;
         var textSpaceCountX = 0;
@@ -220,9 +231,6 @@ export class GridComponent {
                 if (i % between === 0 && i !== 0) {
                     d3.select('#spacer' + cellSpaceCountY)
                         .attr('y', () => {
-                            //console.log(i);
-                            //console.log(`cellSpaceY: ${cellSpaceCountY}`);
-                            //console.log('Math.floor: ' + Math.floor((i + cellSpaceCountY) / grid.cols) * grid.rectSize.height);
                             return Math.floor((i + cellSpaceCountY) / grid.cols) * grid.rectSize.height;
                     });
                     cellSpaceCountY += 1;
@@ -326,17 +334,22 @@ export class GridComponent {
             }, i * 100);
         });
     }
-    private reveal(indexes) {
-        indexes.forEach((i) => {
+    private revealByIndex(indexes) {
+        indexes.forEach((index, i) => {
+            console.log(i);
             setTimeout(()=>{
-                if (this.grid.cells[i].rect.attributes.class.value !== 'cell selected') {
-                    this.grid.cells[i].rect.classList.remove('available');
-                    this.grid.cells[i].rect.classList.add('revealed');
-                    this.grid.cells[i].value.classList.remove('available');
-                    this.grid.cells[i].value.classList.add('revealed');
+                if (this.grid.cells[index].rect.attributes.class.value !== 'cell selected') {
+                    this.grid.cells[index].rect.classList.remove('available');
+                    this.grid.cells[index].rect.classList.add('revealed');
+                    this.grid.cells[index].value.classList.remove('available');
+                    this.grid.cells[index].value.classList.add('revealed');
                 } 
             }, i * 100);
         });
+    }
+    private revealSpacer(s, t){
+        console.log(t + s);
+        setTimeout(() => { this.grid.spacers[s].classList.add('revealed'); }, (t + s) * 100);
     }
     private createImage(imageLink) {
         return d3.select('#gridSvg')
