@@ -5,13 +5,25 @@ body {
 }
 .text {
     fill: #fff;
+    font-family:"Courier New";
+    -webkit-transition: all 1s;
+    transition: all 1s;
 }
 .cell, .spacer {
-    fill: #a61d26;
+    fill: #00529c;
     box-shadow: 10px 10px 5px #888888;
 }
+.cell:hover {
+    fill: #fbef98;
+    -webkit-transition: all 1s;
+    transition: all 1s;
+
+}
 .selected {
-    fill: #42efef;
+    fill: #f2b33d;
+}
+.selectedText {
+    fill: #00529c;
 }
 .revealed {
     fill: transparent;
@@ -19,6 +31,7 @@ body {
     transition: 2s ease-in-out;
 }
 h1, h2, h3, h4 {
+    opacity: 0.87;
     font: 300 3em/1.1 'Oswald-Light', sans-serif;
     color: #00305d;
     text-align: center;
@@ -26,6 +39,7 @@ h1, h2, h3, h4 {
     margin: 15px auto;
 }
 p {
+    opacity:0.87;
     color: #000000;
     font-size: 16px;
     font-family: Raleway, sans-serif;
