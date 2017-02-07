@@ -167,12 +167,24 @@ export class GridComponent {
             tempValues._groups[0].forEach((v, i) => {
                 grid.cells[i].value = v;
             });
+        var spaces = (grid.cols * grid.rows) - grid.cells.length;
+        var i = 0;
+        while (i < spaces) {
+            d3.select('g').append('rect')
+                .attr('id', function() { return 'spacer' + i })
+                .classed('spacer', true)
+                .classed('cell', true);
+            i += 1;
+        }
         return grid;
     }
 
     private adjustGrid(grid) {
         var spaces = (grid.cols * grid.rows) - grid.cells.length;
         var between = Math.floor(grid.cells.length / spaces);
+        console.log('array length: ' + grid.cells.length);
+        console.log('spaces: ' + spaces);
+        console.log(`between: ${between}`);
         var cellSpaceCountX = 0;
         var cellSpaceCountY = 0;
         var textSpaceCountX = 0;
@@ -181,30 +193,57 @@ export class GridComponent {
             .attr('width', window.innerWidth)
             .attr('height', window.innerHeight)
             .attr('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
-        d3.selectAll('.cell')
+        d3.selectAll('.available')
             .attr('height', grid.rectSize.height)
             .attr('width', grid.rectSize.width)
             .attr('x', (d, i) => {
-                if (i % between === 0) {
+                if (i % between === 0 && i !== 0) {
+                    d3.select('#spacer' + cellSpaceCountX)
+                        .attr('height', grid.rectSize.height)
+                        .attr('width', grid.rectSize.width)
+                        .attr('x', () => {
+                            return (grid.rectSize.width * Math.floor((i + cellSpaceCountX) % grid.cols));
+                        });
                     cellSpaceCountX += 1;
+                }
+                if ((i + 1) === grid.cells.length && (i + 1) % between === 0) {
+                    d3.select('#spacer' + cellSpaceCountX)
+                        .attr('height', grid.rectSize.height)
+                        .attr('width', grid.rectSize.width)
+                        .attr('x', () => {
+                            return (grid.rectSize.width * Math.floor(((i + 1) + cellSpaceCountX) % grid.cols));
+                        });
                 }
                 return (grid.rectSize.width * Math.floor((i + cellSpaceCountX) % grid.cols));
             })
             .attr('y',(d, i) => {
-                if (i % between === 0) {
+                if (i % between === 0 && i !== 0) {
+                    d3.select('#spacer' + cellSpaceCountY)
+                        .attr('y', () => {
+                            //console.log(i);
+                            //console.log(`cellSpaceY: ${cellSpaceCountY}`);
+                            //console.log('Math.floor: ' + Math.floor((i + cellSpaceCountY) / grid.cols) * grid.rectSize.height);
+                            return Math.floor((i + cellSpaceCountY) / grid.cols) * grid.rectSize.height;
+                    });
                     cellSpaceCountY += 1;
+                }
+                if ((i + 1) === grid.cells.length && (i + 1) % between === 0) {
+                    d3.select('#spacer' + cellSpaceCountY)
+                        .attr('y', () => {
+                            return Math.floor((i + cellSpaceCountY) / grid.cols) * grid.rectSize.height;
+                    });
                 }
                 return Math.floor((i + cellSpaceCountY) / grid.cols) * grid.rectSize.height;
             });
         d3.selectAll('.text')
             .attr('x', (d, i) => {
-                if (i % between === 0) {
+                if (i % between === 0 && i !== 0) {
                     textSpaceCountX += 1;  
                 }
                 return (grid.rectSize.width * Math.floor((i + textSpaceCountX) % grid.cols)) + grid.rectSize.width / 2;
             })
             .attr('y', (d, i) => {
-                if (i % between === 0) {
+                if (i % between === 0 && i !== 0) {
                     textSpaceCountY += 1;  
                 }
                 return (Math.floor((i + textSpaceCountY) / grid.cols) * grid.rectSize.height) + (grid.rectSize.height /1.6);
