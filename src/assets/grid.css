@@ -158,7 +158,11 @@ button.btn-lg.orange:hover {
     width: 30%;
     margin: 0px auto !important;
 }
-
+.sb-button button {
+    font-size: 1.2em;
+    -webkit-transition: 0.25s ease-in-out;
+    transition: 0.25s ease-in-out; 
+}
 .sb-button button:hover {
     font-size: 0.4em;
 }

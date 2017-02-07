@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, trigger, state, style, animate, transition } from '@angular/core';
 
-import { ActivatedRoute, Router } from '@angular/router';
-
 import {ShareButtonsModule} from "ng2-sharebuttons";
 
 @Component({
@@ -32,10 +30,12 @@ import {ShareButtonsModule} from "ng2-sharebuttons";
   ],
 })
 export class ThankYouModalComponent implements OnInit {
+  private title = 'Giving Grid';
+  private tags = 'ThisIsATag';
+  private description = 'This is a tweet and facebook description.';
   private shareTitle = 'Share your donation with others!';
   private fbInner = "<img src='../assets/facebook.svg'>";
   private twitterInner = "<img src='../assets/twitter.svg'>";
-  private url = window.location.href;
   private state;
   @Output() closed = new EventEmitter();
   @Input()
