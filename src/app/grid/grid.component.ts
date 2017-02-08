@@ -63,17 +63,26 @@ export class GridComponent {
                 this.width = window.innerWidth;
             }
         }, 
-        _id: undefined
+        _id: undefined,
+        selectTotal: 0,
     };
 
     private modalState = false;
     private showModal(){
         this.modalState = true;
-        
     }
     private modalClosed(e){
         this.modalState = e;
     }
+
+    private totalState = false;
+    private showTotal(){
+        this.totalState = true;
+    }
+    private totalClosed(e){
+        this.totalState = e;
+    }
+
 
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private route: ActivatedRoute) {
         var params;
@@ -140,7 +149,10 @@ export class GridComponent {
                 .style('filter', 'url(#drop-shadow)')
                 .classed('available', true)
                 .classed('cell', true)
-                .text((d, i) => {
+                /*.text((d, i) => {
+                    return grid.cells[i].dollarValue;
+                })*/
+                .attr('value', (d, i) => {
                     return grid.cells[i].dollarValue;
                 })
                 .on('click', (d, i) => {
@@ -302,7 +314,6 @@ export class GridComponent {
 
         });
     }
-
     private cellToggle(cell){
         d3.select(cell.rect)
             .classed('selected', (d, i) => {
@@ -318,6 +329,15 @@ export class GridComponent {
             .classed('available', (d, i) => {
                 return !d3.select(cell.value).classed('available');
             });
+        //console.log(`Before Total: ${this.grid.selectTotal}`);
+        this.bindEvent(document,'click', this.selectedTotal(event, this.grid));
+        //console.log(`After Total: ${this.grid.selectTotal}`);
+        var x = document.getElementsByClassName('selected');
+        var selectedRects = Array.prototype.slice.call(x);
+        if (selectedRects.length > 0) {
+            this.showTotal();
+        } else if (selectedRects.length < 1) {
+        }
     }
     private gridButton2() {
         var x = document.getElementsByClassName('selected');
@@ -449,6 +469,33 @@ export class GridComponent {
         size.width = grid.width / grid.cols;
         size.height = grid.height / grid.rows;
         return size;
+    }
+    private bindEvent(elem, evt, cb) {
+        //see if the addEventListener function exists on the element
+        if ( elem.addEventListener ) {
+            elem.addEventListener(evt,cb,false);
+        //if addEventListener is not present, see if this is an IE browser
+        } else if ( elem.attachEvent ) {
+            //prefix the event type with "on"
+            elem.attachEvent('on' + evt, function(){
+                /* use call to simulate addEventListener
+                * This will make sure the callback gets the element for "this"
+                * and will ensure the function's first argument is the event object
+                */
+                cb.call(event.srcElement,event);
+            });
+        }
+    }
+    private selectedTotal(event, grid) {
+        var target = event.target || event.srcElement;
+        var selectValue = parseInt(target.attributes.value.value, 10);
+        //console.log(`Cell Value: ${selectValue}`);
+        if (target.nodeName === 'rect' && target.attributes.class.value === 'cell selected') {
+            grid.selectTotal += selectValue;
+        }
+        if (target.nodeName === 'rect' && target.attributes.class.value !== 'cell selected') {
+            grid.selectTotal -= selectValue;
+        }
     }
 }
 

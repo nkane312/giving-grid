@@ -13,6 +13,9 @@ button + button + button {
 button + button + button + button {
     top: 90px;
 }
+button + button + button + button + button {
+    top: 120px;
+}
 body {
     margin: 0;
     padding: 0;
