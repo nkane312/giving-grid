@@ -7,7 +7,9 @@ body {
     fill: #fff;
     font-family:"Courier New";
     -webkit-transition: all 1s;
-    transition: all 1s;
+    transition: all 0.5s;
+    -webkit-transition: font-size 0s;
+    transition: font-size 0s;
 }
 .cell, .spacer {
     fill: #00529c;
@@ -15,8 +17,8 @@ body {
 }
 .cell:hover {
     fill: #fbef98;
-    -webkit-transition: all 1s;
-    transition: all 1s;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
 
 }
 .selected {
