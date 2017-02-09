@@ -10,6 +10,12 @@ export class DonateComponent implements OnInit {
   @Input() dfId;
   @Output() donating = new EventEmitter();
 
+  private donateApiEndpoint = "https://secure2.convio.net/ifcj/site/CRDonationAPI";
+  private apiKey = "convioAPIFromis7";
+  private v = "1.0";
+  private responseFormat = "json";
+
+
   private states = [
     {value: 'IL', viewValue: 'Illinois'},
     {value: 'NY', viewValue: 'New York'},
@@ -21,15 +27,15 @@ export class DonateComponent implements OnInit {
     {value: 'ETC', viewValue: 'Etc...'}
   ];
   private months = [
-    {value: '01', viewValue: ' 1: January'},
-    {value: '02', viewValue: ' 2: February'},
-    {value: '03', viewValue: ' 3: March'},
-    {value: '04', viewValue: ' 4: April'},
-    {value: '05', viewValue: ' 5: May'},
-    {value: '06', viewValue: ' 6: June'},
-    {value: '07', viewValue: ' 7: July'},
-    {value: '08', viewValue: ' 8: August'},
-    {value: '09', viewValue: ' 9: September'},
+    {value: '1', viewValue: ' 1: January'},
+    {value: '2', viewValue: ' 2: February'},
+    {value: '3', viewValue: ' 3: March'},
+    {value: '4', viewValue: ' 4: April'},
+    {value: '5', viewValue: ' 5: May'},
+    {value: '6', viewValue: ' 6: June'},
+    {value: '7', viewValue: ' 7: July'},
+    {value: '8', viewValue: ' 8: August'},
+    {value: '9', viewValue: ' 9: September'},
     {value: '10', viewValue: '10: October'},
     {value: '11', viewValue: '11: November'},
     {value: '12', viewValue: '12: December'}

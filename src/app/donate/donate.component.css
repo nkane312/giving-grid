@@ -22,7 +22,7 @@ md-card + md-card {
 
 /* Donation form wrappers */
 #donate-wrapper {
-    background:#00529c;
+    background:#dddddd;
     position: fixed;
     overflow-y:auto;
     right: 0;

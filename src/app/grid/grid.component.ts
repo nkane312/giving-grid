@@ -119,6 +119,10 @@ export class GridComponent {
                             this.revealSpacer(spacerCount, revealCount);
                             spacerCount += 1;
                         }
+                        if (i+1 === this.grid.cells.length && (i+1) % between === 0){
+                            this.revealSpacer(spacerCount, revealCount);
+                            spacerCount += 1;
+                        }
                     });
                 }
             });
@@ -265,7 +269,7 @@ export class GridComponent {
                 if (i % between === 0 && i !== 0) {
                     textSpaceCountY += 1;  
                 }
-                return (Math.floor((i + textSpaceCountY) / grid.cols) * grid.rectSize.height) + (grid.rectSize.height /1.6);
+                return (Math.floor((i + textSpaceCountY) / grid.cols) * grid.rectSize.height) + (grid.rectSize.height /1.5);
             })
             .style('font-size', `${(grid.rectSize.width / 2)}px`);
     }
@@ -380,7 +384,7 @@ export class GridComponent {
         }
     }
     private revealSpacer(s, t){
-        console.log(t + s);
+        console.log(this.grid.spacers[s]);
         setTimeout(() => { this.grid.spacers[s].classList.add('revealed'); }, (t + s) * 100);
     }
     private createImage(imageLink) {
