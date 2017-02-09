@@ -5,27 +5,29 @@ body {
 }
 .text {
     fill: #fff;
-    font-family:"Courier New";
+    font-family:'Oswald-Light';
     -webkit-transition: all 1s;
     transition: all 0.5s;
     -webkit-transition: font-size 0s;
     transition: font-size 0s;
 }
-.cell, .spacer {
+.cell, .spacer, .cell svg {
     fill: #00529c;
     box-shadow: 10px 10px 5px #888888;
 }
 .cell:hover {
-    fill: #fbef98;
+    fill: #00305d;
     -webkit-transition: all 0.5s;
     transition: all 0.5s;
-
 }
 .selected {
-    fill: #f2b33d;
+    fill: #60c1cc;
 }
 .selectedText {
     fill: #00529c;
+}
+.selected:hover{
+    fill:#60c1cc;
 }
 .revealed {
     fill: transparent;
