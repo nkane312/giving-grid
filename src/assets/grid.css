@@ -13,7 +13,6 @@ body {
 }
 .cell, .spacer {
     fill: #00529c;
-    box-shadow: 10px 10px 5px #888888;
 }
 .cell:hover {
     fill: #fbef98;

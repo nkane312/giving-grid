@@ -134,9 +134,9 @@ export class GridComponent {
         this.createImage(grid.image.link);
         var self = this;
         d3.select('#gridSvg').append('path')
-            .attr('fill', 'url(#pattern)');
-        grid.g = grid.svg.append('g');
+            .attr('fill', `url(${window.location.href}#pattern)`);
         this.createShadow();
+        grid.g = grid.svg.append('g');
         var tempRects;
         var tempValues;
         tempRects = grid.g.selectAll()
@@ -146,7 +146,7 @@ export class GridComponent {
                 .attr('id', function(d, i) {
                     return 'rect' + (i + 1);
                 })
-                .style('filter', 'url(#drop-shadow)')
+                .style('filter', `url(${window.location.href}#drop-shadow)`)
                 .classed('available', true)
                 .classed('cell', true)
                 /*.text((d, i) => {
@@ -267,7 +267,7 @@ export class GridComponent {
                 }
                 return (Math.floor((i + textSpaceCountY) / grid.cols) * grid.rectSize.height) + (grid.rectSize.height /1.6);
             })
-            .style('font-size', (grid.rectSize.width / 2));
+            .style('font-size', `${(grid.rectSize.width / 2)}px`);
     }
     private adjustImage(grid){
         var natSize, xOffset, yOffset;
