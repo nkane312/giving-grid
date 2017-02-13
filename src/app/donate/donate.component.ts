@@ -8,6 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class DonateComponent implements OnInit {
   @Input() total;
   @Input() dfId;
+  @Input() totalState;
   @Output() donating = new EventEmitter();
 
   private donateApiEndpoint = "https://secure2.convio.net/ifcj/site/CRDonationAPI";
