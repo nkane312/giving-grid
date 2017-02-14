@@ -132,7 +132,6 @@ export class GridComponent {
         this.createImage(grid.image.link);
         var self = this;
         d3.select('#gridSvg').append('path')
-            .style('fill', `url(${window.location.href}#pattern)`)
             .attr('fill', `url(${window.location.href}#pattern)`);
         this.createShadow();
         grid.g = grid.svg.append('g');
@@ -148,12 +147,6 @@ export class GridComponent {
                 .style('filter', `url(${window.location.href}#drop-shadow)`)
                 .classed('available', true)
                 .classed('cell', true)
-                /*.text((d, i) => {
-                    return grid.cells[i].dollarValue;
-                })*/
-                .attr('value', (d, i) => {
-                    return grid.cells[i].dollarValue;
-                })
                 .on('click', (d, i) => {
                     self.cellToggle(grid.cells[i]);
                 })
@@ -300,15 +293,13 @@ export class GridComponent {
             grid.image.size.height = height;
             grid.image.size.width = width;
             d3.select('#pattern')
-                //.attr('x', xOffset)
-                //.attr('y', yOffset)
-                .attr('height', grid.image.size.height)
-                .attr('width', grid.image.size.width);
+                .attr('height', grid.image.size.height + 'px')
+                .attr('width', grid.image.size.width + 'px');
             d3.select('#image')
                 .attr('x', xOffset)
                 .attr('y', yOffset)
-                .attr('height', grid.image.size.height)
-                .attr('width', grid.image.size.width);
+                .attr('height', grid.image.size.height + 'px')
+                .attr('width', grid.image.size.width + 'px');
             this.createPath(grid.height, grid.width);    
 
         });
@@ -383,24 +374,24 @@ export class GridComponent {
         }
     }
     private revealSpacer(s, t){
-        console.log(this.grid.spacers[s]);
         setTimeout(() => { this.grid.spacers[s].classList.add('revealed'); }, (t + s) * 100);
     }
     private createImage(imageLink) {
         return d3.select('#gridSvg')
-            .append('svg:defs')
-            .append('svg:pattern')
+            .append('defs')
+            .append('pattern')
                 .attr('id', 'pattern')
                 .attr('patternUnits', 'userSpaceOnUse')
-            .append('svg:image')
+            .append('image')
+                .attr('height', window.innerHeight + 'px')
+                .attr('width', window.innerWidth + 'px')
                 .attr('id', 'image')
                 .attr('preserveAspectRatio', 'none')
-                .attr('href', imageLink)
                 .attr('xlink:href', imageLink);
     }
     private createPath(height, width) {
         return d3.select('path')
-        .attr('d', `M 0 0, L 0 ${height}, L ${width} ${height}, L ${width} 0 z`);
+        .attr('d', `M0 0 L 0 ${height} L ${width} ${height} L ${width} 0 z`);
     }
     private setArea(container) {
         return d3.select(`#${container}`).append('svg')
