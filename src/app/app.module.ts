@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { GridComponent } from './grid/grid.component';
 import { ThankYouModalComponent } from './thank-you-modal/thank-you-modal.component';
 import { DonateComponent } from './donate/donate.component';
+import { DescriptionComponent } from './description/description.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { DonateComponent } from './donate/donate.component';
     GridComponent,
     ThankYouModalComponent,
     DonateComponent,
+    DescriptionComponent,
   ],
   imports: [
     BrowserModule,

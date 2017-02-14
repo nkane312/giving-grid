@@ -124,6 +124,9 @@ button.btn-lg.orange:hover {
     text-align: center;
     width: 90%;
 }
+.modal-header {
+    margin-top: 30px;
+}
 .modal-content {
     background-color: #fefefe;
     padding: 20px;
