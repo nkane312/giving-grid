@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
 import * as d3 from 'd3';
 import 'rxjs/Rx';
+import 'classlist-polyfill';
 
 import { ApiService } from '../services/api.service';
 
@@ -374,7 +375,7 @@ export class GridComponent {
         }
     }
     private revealSpacer(s, t){
-        setTimeout(() => { this.grid.spacers[s].classList.add('revealed'); }, (t + s) * 100);
+        setTimeout(() => { console.log(this.grid.spacers[s]); this.grid.spacers[s].classList.add('revealed'); }, (t + s) * 100);
     }
     private createImage(imageLink) {
         return d3.select('#gridSvg')

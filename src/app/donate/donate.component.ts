@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
+declare var luminateExtend:any;
+
 @Component({
   selector: 'donate',
   templateUrl: './donate.component.html',
