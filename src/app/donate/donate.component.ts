@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 declare var luminateExtend:any;
 
@@ -85,7 +86,83 @@ export class DonateComponent implements OnInit {
     this._isMobile = show;
   }
 
+  private creditCardPayment = new FormGroup({
+    number: new FormControl('', Validators.required),
+    cvv: new FormControl('', Validators.required),
+    expMonth: new FormControl('', Validators.required),
+    expYear: new FormControl('', Validators.required)
+  });
+  private achPayment = new FormGroup({
+    routing: new FormControl('', Validators.required),
+    account: new FormControl('', Validators.required)
+  });
+  
+  private details = new FormGroup({
+    name: new FormGroup({
+      first: new FormControl('', Validators.required),
+      last: new FormControl('', Validators.required)
+    }),
+    address: new FormGroup({
+      street: new FormControl('', Validators.required),
+      city: new FormControl('', Validators.required),
+      zip: new FormControl('', Validators.required),
+      state: new FormControl('', Validators.required),
+      country: new FormControl('', Validators.required)
+    }),
+    contact: new FormGroup({
+      phone: new FormControl(''),
+      email: new FormControl('', Validators.required)
+    })
+  });
+
+  private donate = new FormGroup({
+    details: this.details,
+    payment: new FormGroup({
+      credit: this.creditCardPayment,
+      ach: this.achPayment
+    })
+  });
+  
+  private onSubmit({value, valid}: {value: Donate, valid: boolean}){
+    console.log(value);
+    console.log(valid);
+  }
+
   ngOnInit() {
   }
 
+}
+export interface Donate {
+  details: ConsInfo;
+  payment: PaymentInfo;
+}
+export interface ConsInfo {
+  name: {
+    first: string;
+    last: string;
+  }
+  address: {
+    street: string;
+    city: string;
+    zip: number;
+    state: string;
+    country: string;
+  }
+  contact: {
+    phone: number;
+    email: string;
+  }
+}
+export interface PaymentInfo {
+  paymentType: string;
+  card: {
+    number: number;
+    cvv: number;
+    expMonth: number;
+    expYear: number;
+  }
+  ach: {
+    routing: number;
+    account: number;
+  }
 }
