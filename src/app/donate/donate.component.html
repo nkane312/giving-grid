@@ -1,97 +1,96 @@
 <div id="donate-wrapper">
   <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
   <description [totalState]="totalState" (done)="done($event)"></description>
-  <md-card>
-    <h2>Your Details</h2>
-      <md-input-container>
-        <input md-input placeholder="First name" name="billing.address.first" required>
-      </md-input-container>
-
-      <md-input-container>
-        <input md-input placeholder="Last name" name="billing.address.last" required>
-      </md-input-container>
-
-      <md-input-container class="full-width">
-        <input md-input placeholder="Street" name="billing.address.street1" required>
-      </md-input-container>
-
-      <md-input-container>
-        <input md-input placeholder="City" name="billing.address.city" required>
-      </md-input-container>
-
-      <div class="select-container">
-        <md-select placeholder="State" name="billing.address.state" required>
-          <md-option *ngFor="let state of states" [value]="state.value">{{state.viewValue}}</md-option>
-        </md-select>
-      </div>
-
-      <md-input-container>
-        <input md-input placeholder="Zip code" name="billing.address.zip" required>
-      </md-input-container>
-
-      <md-select placeholder="Country" class="select-container" name="billing.address.country" required>
-        <md-option *ngFor="let country of countries" [value]="country.value" required>{{country.viewValue}}</md-option>
-      </md-select>
-      
-      <md-input-container>
-        <input md-input placeholder="Phone number" name="donor.phone">
-      </md-input-container>
-
-      <md-input-container>
-        <input md-input type="email" placeholder="Email address" name="donor.email" required>
-      </md-input-container>
-  </md-card>
-  <md-card>
-    <h2>Payment Information</h2>
-    <div class="payment-info">
-      <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'card'}" (click)="setPaymentMethod('card')" md-raised-button>Credit card</button>
-      <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'ach'}"  (click)="setPaymentMethod('ach')"  md-raised-button>Bank account</button>
-      <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'paypal'}"  (click)="setPaymentMethod('paypal')"  md-raised-button>PayPal</button>
-    </div>
-    <md-card *ngIf="getPaymentMethod() === 'card'">
-      <md-input-container>
-        <input md-input type="number" placeholder="Card number" name="card_number" required>
-      </md-input-container>
-
-      <md-input-container>
-        <input md-input type="number" placeholder="CVV" name="card_cvv" required>
-      </md-input-container>
-
-      <div class="select-container">
-        <md-select placeholder="Month" name="card_exp_date_month" required>
-          <md-option *ngFor="let month of months" [value]="month.value">{{month.viewValue}}</md-option>
-        </md-select>
-      </div>
-
-      <div class="select-container">
-        <md-select placeholder="Year" name="card_exp_date_year" required>
-          <md-option *ngFor="let year of years" [value]="year">{{year}}</md-option>
-        </md-select>
-      </div>
+  <form [formGroup]="donate" (ngSubmit)="onSubmit(donate)" novalidate>
+    <md-card formGroupName="details">
+      <h2>Your Details</h2>
+        <div formGroupName="name">
+          <md-input-container>
+            <input md-input placeholder="First name" formControlName="first">
+          </md-input-container>
+          <md-input-container>
+            <input md-input placeholder="Last name" formControlName="last">
+          </md-input-container>
+        </div>
+        <div formGroupName="address">
+          <md-input-container class="full-width">
+            <input md-input placeholder="Street" formControlName="street">
+          </md-input-container>
+          <md-input-container>
+            <input md-input placeholder="City" formControlName="city">
+          </md-input-container>
+          <div class="select-container">
+            <md-select placeholder="State" formControlName="state">
+              <md-option *ngFor="let state of states" [value]="state.value">{{state.viewValue}}</md-option>
+            </md-select>
+          </div>
+          <md-input-container>
+            <input md-input placeholder="Zip code" formControlName="zip">
+          </md-input-container>
+          <md-select placeholder="Country" class="select-container" formControlName="country">
+            <md-option *ngFor="let country of countries" [value]="country.value">{{country.viewValue}}</md-option>
+          </md-select>
+        </div>
+        <div formGroupName="contact">
+          <md-input-container>
+            <input md-input placeholder="Phone number" formControlName="phone">
+          </md-input-container>
+          <md-input-container>
+            <input md-input type="email" placeholder="Email address" formControlName="email">
+          </md-input-container>
+        </div>
     </md-card>
-
-    <md-card *ngIf="getPaymentMethod() === 'ach'">
-      <md-input-container>
-        <input md-input type="number" placeholder="Routing number" name="ach_routing" required>
-      </md-input-container>
-
-      <md-input-container>
-        <input md-input type="number" placeholder="Account number" name="ach_account" required>
-      </md-input-container>
-      <div class="bank-type">
-        <md-radio-group>
-          <md-radio-button value="checking">Checking</md-radio-button>
-          <md-radio-button value="savings">Savings</md-radio-button>
-        </md-radio-group>
+    <md-card formGroupName="payment">
+      <h2>Payment Information</h2>
+      <div class="payment-info">
+        <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'card'}" (click)="setPaymentMethod('card')" md-raised-button>Credit card</button>
+        <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'ach'}"  (click)="setPaymentMethod('ach')"  md-raised-button>Bank account</button>
+        <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'paypal'}"  (click)="setPaymentMethod('paypal')"  md-raised-button>PayPal</button>
       </div>
+      <md-card formGroupName="credit" *ngIf="getPaymentMethod() === 'card'">
+        <md-input-container>
+          <input md-input type="number" placeholder="Card number" formControlName="number">
+        </md-input-container>
+
+        <md-input-container>
+          <input md-input type="number" placeholder="CVV" formControlName="cvv">
+        </md-input-container>
+
+        <div class="select-container">
+          <md-select placeholder="Month" formControlName="expMonth">
+            <md-option *ngFor="let month of months" [value]="month.value">{{month.viewValue}}</md-option>
+          </md-select>
+        </div>
+
+        <div class="select-container">
+          <md-select placeholder="Year" formControlName="expYear">
+            <md-option *ngFor="let year of years" [value]="year">{{year}}</md-option>
+          </md-select>
+        </div>
+      </md-card>
+
+      <md-card formGroupName="ach" *ngIf="getPaymentMethod() === 'ach'">
+        <md-input-container>
+          <input md-input type="number" placeholder="Routing number" formControlName="routing">
+        </md-input-container>
+
+        <md-input-container>
+          <input md-input type="number" placeholder="Account number" formControlName="account" required>
+        </md-input-container>
+        <div class="bank-type">
+          <md-radio-group>
+            <md-radio-button value="checking">Checking</md-radio-button>
+            <md-radio-button value="savings">Savings</md-radio-button>
+          </md-radio-group>
+        </div>
+      </md-card>
+      <md-card *ngIf="getPaymentMethod() === 'paypal'">
+        <p>Your donation will be completed using PayPal.</p>
+      </md-card>
+      <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
+      <button class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
     </md-card>
-    <md-card *ngIf="getPaymentMethod() === 'paypal'">
-      <p>Your donation will be completed using PayPal.</p>
-    </md-card>
-    <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
-    <button class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
-    
-  </md-card>
+  </form>
 </div>
 
 <div id="mobile-donate-wrapper">

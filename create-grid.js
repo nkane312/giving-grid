@@ -21,10 +21,18 @@ function setChances(spread, total){
 }
 
 const spread = [
-    {value: 25, quantity: 100, chance: undefined},
-    {value: 50, quantity: 50, chance: undefined},
-    {value: 100, quantity: 50, chance: undefined},
-    {value: 700, quantity: 2, chance: undefined}
+    {value: 25, quantity: 40, chance: undefined},
+    {value: 35, quantity: 60, chance: undefined},
+    {value: 50, quantity: 20, chance: undefined},
+    {value: 75, quantity: 10, chance: undefined},
+    {value: 100, quantity: 10, chance: undefined},
+    {value: 125, quantity: 20, chance: undefined},
+    {value: 150, quantity: 9, chance: undefined},
+    {value: 350, quantity: 11, chance: undefined},
+    {value: 700, quantity: 14, chance: undefined},
+    {value: 1050, quantity: 1, chance: undefined},
+    {value: 1400, quantity: 4, chance: undefined},
+    {value: 5000, quantity: 1, chance: undefined}
 ];
 
 function pickIndex(spread){
@@ -83,7 +91,7 @@ var grid = new GridSchema({
     image: './assets/freedom-flight.jpg',
     dfId: 12345,
     campaign: 'WOE',
-    version: 6,
+    version: 7,
     cells: generateCells(spread)
 });
 
