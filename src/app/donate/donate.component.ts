@@ -1,17 +1,40 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, trigger, state, style, animate, transition } from '@angular/core';
 
 declare var luminateExtend:any;
+
+declare var dataLayer: any;
 
 @Component({
   selector: 'donate',
   templateUrl: './donate.component.html',
-  styleUrls: ['./donate.component.css']
+  styleUrls: ['./donate.component.css'],
+  animations: [
+    trigger('flyInOut', [
+      state('in', style({transform: 'translateX(0)'})),
+      transition('void => *', [
+        style({transform: 'translateX(100%)'}),
+        animate('250ms')
+      ]),
+      transition('* => void', [
+        animate('250ms', style({transform: 'translateX(100%)'}))
+      ])
+    ]),
+  ],
 })
 export class DonateComponent implements OnInit {
   @Input() total;
   @Input() dfId;
   @Input() totalState;
   @Output() donating = new EventEmitter();
+
+  private finish = false;
+  private done() {
+    if (this.totalState === true) {
+      this.finish = true;
+    } else {
+      this.finish = false;
+    }
+  }
 
   private donateApiEndpoint = "https://secure2.convio.net/ifcj/site/CRDonationAPI";
   private apiKey = "convioAPIFromis7";

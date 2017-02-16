@@ -104,6 +104,10 @@ button.btn-lg.orange:hover {
     }
 }
 
+md-card {
+    margin-bottom: 10px;
+}
+
 /* Modal styles */
 .overlay {
     position: fixed;

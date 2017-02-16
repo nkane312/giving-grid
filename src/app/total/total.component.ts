@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, trigger, state, style, animate, transition } from '@angular/core';
 
 @Component({
-  selector: 'description',
-  templateUrl: './description.component.html',
-  styleUrls: ['./description.component.css'],
+  selector: 'total',
+  templateUrl: './total.component.html',
+  styleUrls: ['./total.component.css'],
   animations: [
     trigger('flyInOut', [
       state('in', style({transform: 'translateX(0)'})),
@@ -17,17 +17,20 @@ import { Component, OnInit, Input, Output, EventEmitter, trigger, state, style, 
     ]),
   ],
 })
-export class DescriptionComponent implements OnInit {
+export class TotalComponent implements OnInit {
+  @Input() total;
+  @Input() finish;
   @Input() totalState;
 
-  private finish = false;
-  private descriptionDone() {
-    this.finish = true;
-    this.done.emit(this.finish);
+  private done() {
+    if (this.totalState === true) {
+      this.finish = true;
+    } else {
+      this.finish = false;
+    }
   }
-  @Output() done = new EventEmitter();
 
-  
+
   constructor() { }
 
   ngOnInit() {

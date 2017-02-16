@@ -145,6 +145,14 @@ export class GridComponent {
                 .attr('id', function(d, i) {
                     return 'rect' + (i + 1);
                 })
+                .attr('data-action', 'click')
+                .attr('data-category', 'giving-grid-cell')
+                .attr('data-label', (d, i) => {
+                    return 'rect' + (i + 1) + ': $' + grid.cells[i].dollarValue;
+                })
+                .attr('data-value', (d, i) => {
+                    return grid.cells[i].dollarValue;
+                })
                 .style('filter', `url(${window.location.href}#drop-shadow)`)
                 .classed('available', true)
                 .classed('cell', true)

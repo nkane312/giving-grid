@@ -1,11 +1,6 @@
 <div id="donate-wrapper">
-  <md-card *ngIf="totalState" class="total">
-    <h2>Total: {{total | currency:'USD' :true}}</h2>
-  </md-card>
-  <md-card *ngIf="totalState !== true">
-    <h1>Giving Grid</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer scelerisque, lacus sed dictum volutpat, nisl augue elementum nisi, at sollicitudin turpis felis id leo. Curabitur placerat malesuada dignissim. Nullam placerat risus ac sagittis faucibus. Proin condimentum semper egestas. Vivamus quis metus eget tellus egestas faucibus sed nec lectus.</p>
-  </md-card>
+  <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
+  <description [totalState]="totalState" (done)="done($event)"></description>
   <md-card>
     <h2>Your Details</h2>
       <md-input-container>
@@ -93,9 +88,7 @@
     <md-card *ngIf="getPaymentMethod() === 'paypal'">
       <p>Your donation will be completed using PayPal.</p>
     </md-card>
-    <md-card *ngIf="totalState" class="total">
-      <h2>Total: {{total | currency:'USD' :true}}</h2>
-    </md-card>
+    <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
     <button class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
     
   </md-card>
@@ -103,7 +96,7 @@
 
 <div id="mobile-donate-wrapper">
   <h2>Giving Grid</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer scelerisque, lacus sed dictum volutpat, nisl augue elementum nisi, at sollicitudin turpis felis id leo. Curabitur placerat malesuada dignissim. Nullam placerat risus ac sagittis faucibus. Proin condimentum semper egestas. Vivamus quis metus eget tellus egestas faucibus sed nec lectus. </p>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer scelerisque, lacus sed dictum volutpat, nisl augue elementum nisi, at sollicitudin turpis felis id leo. Curabitur placerat malesuada dignissim. Nullam placerat risus ac sagittis faucibus. Proin condimentum semper egestas. Vivamus quis metus eget tellus egestas faucibus sed nec lectus.</p>
   <button class="btn-lg" color="accent" md-raised-button (click)="showMobile(true)">Donate Now!</button>
 </div>
 <div class="overlay" *ngIf="_isMobile"></div>
