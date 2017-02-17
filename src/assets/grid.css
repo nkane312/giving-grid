@@ -34,6 +34,7 @@ body {
     opacity: 0;
     transition: 2s ease-in-out;
     cursor: default !important;
+    pointer-events: none;
 }
 h1, h2, h3, h4 {
     opacity: 0.87;
@@ -106,6 +107,10 @@ button.btn-lg.orange:hover {
 
 md-card {
     margin-bottom: 10px;
+}
+.md-input-placeholder {
+    color: rgba(0, 0, 0, 0.75);
+    font-size: 115%;
 }
 
 /* Modal styles */

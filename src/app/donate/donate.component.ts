@@ -151,10 +151,57 @@ export class DonateComponent implements OnInit {
     console.log(valid);
   }
 
+  private pushGAData() {
+    // Send transaction data with a pageview if available
+    // when the page loads. Otherwise, use an event when the transaction
+    // data becomes available.
+    dataLayer.push({
+      'ecommerce': {
+        'purchase': {
+          'actionField': {
+            'id': '',   // Transaction ID. Required for purchases and refunds.
+            'affiliation': 'Giving Grid',
+            'total': this.total,
+            'dfId': this.dfId,
+            'campaign': '',
+            'verson': '',
+          },
+          'products': [{                            
+            'name': '',   // Name or ID is required.
+            'id': '',
+            'value': '',
+            'quantity': 1,
+          }]
+        }
+      }
+    });
+  }
+
   ngOnInit() {
   }
 
 }
+class EcommerceTransaction {
+  total: number;
+  constructor(private transaction: Transaction, private products: Array<Product>){
+    var productValues = products.values;
+    var valuesArray = Array.prototype.slice.call(productValues);
+    var sum = valuesArray.reduce(function(acc, val) {
+      return acc + val;
+    }, 0);
+  }
+}
+interface Transaction {
+  transactionId: string;
+  dfId: string;
+  campaign: string;
+  version: number;
+}
+interface Product {
+  cellId: string;
+  value: number;
+}
+
 export interface Donate {
   details: ConsInfo;
   payment: PaymentInfo;

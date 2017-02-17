@@ -1,0 +1,19 @@
+<div *ngIf="state" [@fadeInOut]="'in'" class="overlay" (click)="close()"></div>
+<div *ngIf="state" id="info-modal" class="modal" role="dialog">
+  <div class="modal-dialog">
+    <div [@flyInOut]="'in'" class="modal-content">
+      <button type="button" class="close" (click)="close()">&times;</button>
+      <div class="modal-header">
+        <h4 class="modal-title">Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+          
+        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-lg" color="accent" md-raised-button type="button" (click)="close()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

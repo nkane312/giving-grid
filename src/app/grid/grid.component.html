@@ -1,7 +1,9 @@
 <div id="grid"></div>
 <donate [totalState]="totalState" [total]="grid.selectTotal" [dfId]="grid.dfId"></donate>
-<button (click)="gridButton2()">CLICK ME</button>
+<button (click)="gridButton2(this.grid)">CLICK ME</button>
 <button (click)="revealByIndex([1, 2, 3, 4, 5])">REVEAL</button>
 <button (click)="apiService.updateGrid(grid._id, [10, 11])">POST</button>
 <button (click)="showModal()">SHOW MODAL</button>
+<button (click)="showInfo()">SHOW INFO</button>
 <thank-you-modal [show]="modalState" (closed)="modalClosed($event)"></thank-you-modal>
+<information [show]="infoState" (closed)="infoClosed($event)"></information>

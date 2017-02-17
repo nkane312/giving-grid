@@ -76,6 +76,14 @@ export class GridComponent {
         this.modalState = e;
     }
 
+    private infoState = false;
+    private showInfo(){
+        this.infoState = true;
+    }
+    private infoClosed(e){
+        this.infoState = e;
+    }
+
     private totalState = false;
 
 
@@ -182,7 +190,7 @@ export class GridComponent {
                 .style('pointer-events', 'none')
                 .style('background', 'none')
                 .text((d, i) => {
-                    return grid.cells[i].dollarValue;
+                    return '$' + grid.cells[i].dollarValue;
                 })
             .classed('svg-content-responsive', true); 
             tempRects._groups[0].forEach((r, i) => {
@@ -342,7 +350,7 @@ export class GridComponent {
             this.totalState = false;
         }
     }
-    private gridButton2() {
+    private gridButton2(grid) {
         var x = document.getElementsByClassName('selected');
         var y = document.getElementsByClassName('selectedText');
         var selectedArray = Array.prototype.slice.call(x);
@@ -355,6 +363,7 @@ export class GridComponent {
                 selectedTextArray[i].classList.add('revealed');
             }, i * 100);
         });
+        grid.selectTotal = 0;
     }
     private revealByIndex(indexes, timing) {
         if (!timing){
