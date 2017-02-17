@@ -10,16 +10,17 @@
     <md-card formGroupName="details">
       <h2>Your Details</h2>
         <div formGroupName="name">
-          <md-input-container>
-            <input md-input placeholder="First name" formControlName="first">
-          </md-input-container>
-          <md-input-container>
-            <input md-input placeholder="Last name" formControlName="last">
-          </md-input-container>
+          <md-input dividerColor="{{donateControls.details.first.valid || donateControls.details.first.pristine ? 'primary' : 'warn'}}" placeholder="First name" formControlName="first">
+            <md-hint *ngIf="!donateControls.details.first.valid && !donateControls.details.first.pristine">Enter your first name</md-hint>
+          </md-input>
+          <md-input dividerColor="{{details.controls.name.controls.last.valid || details.controls.name.controls.last.pristine ? 'primary' : 'warn'}}" md-input placeholder="Last name" formControlName="last">
+            <md-hint *ngIf="!details.controls.name.controls.last.valid && !details.controls.name.controls.last.pristine">Enter your last name</md-hint>
+          </md-input>
         </div>
         <div formGroupName="address">
-          <md-input-container class="full-width">
+          <md-input-container dividerColor="{{details.controls.address.controls.street.valid || details.controls.address.controls.street.pristine ? 'primary' : 'warn'}}" class="full-width">
             <input md-input placeholder="Street" formControlName="street">
+            <md-hint *ngIf="!details.controls.address.controls.street.valid && !details.controls.address.controls.street.pristine">Enter your street</md-hint>
           </md-input-container>
           <md-input-container>
             <input md-input placeholder="City" formControlName="city">
@@ -56,21 +57,22 @@
         <md-input-container>
           <input md-input type="number" placeholder="Card number" formControlName="number">
         </md-input-container>
-
+        <pre>CC Number : {{creditCardPayment.controls.number.errors | json}}</pre>
         <md-input-container>
           <input md-input type="number" placeholder="CVV" formControlName="cvv">
         </md-input-container>
+        <div>
+          <div class="select-container">
+            <md-select placeholder="Month" formControlName="expMonth">
+              <md-option *ngFor="let month of months" [value]="month.value">{{month.viewValue}}</md-option>
+            </md-select>
+          </div>
 
-        <div class="select-container">
-          <md-select placeholder="Month" formControlName="expMonth">
-            <md-option *ngFor="let month of months" [value]="month.value">{{month.viewValue}}</md-option>
-          </md-select>
-        </div>
-
-        <div class="select-container">
-          <md-select placeholder="Year" formControlName="expYear">
-            <md-option *ngFor="let year of years" [value]="year">{{year}}</md-option>
-          </md-select>
+          <div class="select-container">
+            <md-select placeholder="Year" formControlName="expYear">
+              <md-option *ngFor="let year of years" [value]="year">{{year}}</md-option>
+            </md-select>
+          </div>
         </div>
       </md-card>
 

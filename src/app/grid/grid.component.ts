@@ -375,7 +375,7 @@ export class GridComponent {
         }
     }
     private revealSpacer(s, t){
-        setTimeout(() => { console.log(this.grid.spacers[s]); this.grid.spacers[s].classList.add('revealed'); }, (t + s) * 100);
+        setTimeout(() => { this.grid.spacers[s].classList.add('revealed'); }, (t + s) * 100);
     }
     private createImage(imageLink) {
         return d3.select('#gridSvg')

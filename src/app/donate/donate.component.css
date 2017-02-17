@@ -19,6 +19,10 @@ md-card + md-card {
 .full-width {
     width:100%;
 }
+md-hint {
+    color: #f44336;
+    font-weight:bold;
+}
 
 /* Donation form wrappers */
 #donate-wrapper {

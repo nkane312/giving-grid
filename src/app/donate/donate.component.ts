@@ -86,35 +86,55 @@ export class DonateComponent implements OnInit {
     this._isMobile = show;
   }
 
-  private creditCardPayment = new FormGroup({
-    number: new FormControl('', Validators.required),
-    cvv: new FormControl('', Validators.required),
-    expMonth: new FormControl('', Validators.required),
-    expYear: new FormControl('', Validators.required)
-  });
-  private achPayment = new FormGroup({
-    routing: new FormControl('', Validators.required),
-    account: new FormControl('', Validators.required)
-  });
-  
-  private details = new FormGroup({
-    name: new FormGroup({
+  private donateControls = new Donate(
+    {
       first: new FormControl('', Validators.required),
-      last: new FormControl('', Validators.required)
-    }),
-    address: new FormGroup({
+      last: new FormControl('', Validators.required),
       street: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
-      zip: new FormControl('', Validators.required),
+      zip: new FormControl('', [Validators.required, Validators.pattern('[0\-9-\ ]')]),
       state: new FormControl('', Validators.required),
-      country: new FormControl('', Validators.required)
-    }),
-    contact: new FormGroup({
-      phone: new FormControl(''),
-      email: new FormControl('', Validators.required)
-    })
+      country: new FormControl('', Validators.required),
+      phone: new FormControl('', Validators.pattern('[0-9\-\ \(\)\.]')),
+      email: new FormControl('', [Validators.required, Validators.pattern('^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')])
+    },
+    {
+      paymentType: 'card',
+      card: {
+        number: new FormControl('', [Validators.required, Validators.pattern('[0-9\-\ ]')]),
+        cvv: new FormControl('', [Validators.required, Validators.pattern('[0-9\-\ ]')]),
+        expMonth: new FormControl('', Validators.required),
+        expYear: new FormControl('', Validators.required)
+      },
+      ach: {
+        routing: new FormControl('', [Validators.required, Validators.pattern('[0-9\-\ ]')]),
+        account: new FormControl('', [Validators.required, Validators.pattern('[0-9\-\ ]')])
+      }
+    }
+  );
+
+  private creditCardPayment = new FormGroup({
+    number: this.donateControls.payment.card.number,
+    cvv: this.donateControls.payment.card.cvv,
+    expMonth: this.donateControls.payment.card.expMonth,
+    expYear: this.donateControls.payment.card.expYear
+  });
+  private achPayment = new FormGroup({
+    routing: this.donateControls.payment.ach.routing,
+    account: this.donateControls.payment.ach.account
   });
 
+  private details = new FormGroup({
+    first: this.donateControls.details.first,
+    last: this.donateControls.details.last,
+    street: this.donateControls.details.street,
+    city: this.donateControls.details.city,
+    zip: this.donateControls.details.zip,
+    state: this.donateControls.details.state,
+    country: this.donateControls.details.country,
+    phone: this.donateControls.details.phone,
+    email: this.donateControls.details.email,
+  });
   private donate = new FormGroup({
     details: this.details,
     payment: new FormGroup({
@@ -122,35 +142,52 @@ export class DonateComponent implements OnInit {
       ach: this.achPayment
     })
   });
-  
+  private error = false;
   private onSubmit({value, valid}: {value: Donate, valid: boolean}){
     console.log(value);
     console.log(valid);
+    console.log(this.donateControls);
+    console.log(this.donateControls.validate());
   }
 
   ngOnInit() {
   }
 
 }
-export interface Donate {
-  details: ConsInfo;
-  payment: PaymentInfo;
-}
-export interface ConsInfo {
-  name: {
-    first: string;
-    last: string;
-  }
-  address: {
-    street: string;
-    city: string;
-    zip: number;
-    state: string;
-    country: string;
-  }
-  contact: {
-    phone: number;
-    email: string;
+export class Donate {
+  constructor(public details, public payment){}
+  public validate(): boolean{
+    var isValid = true;
+    for (let detail in this.details){
+      console.log(detail);
+      if(this.details.hasOwnProperty(detail)){
+        this.details[detail].markAsDirty();
+        if(!this.details[detail].valid){
+          isValid = false;
+        }
+      }
+    }
+    if (this.payment.type === 'card'){
+      for (let prop in this.payment.card){
+        if(this.payment.card.hasOwnProperty(prop)){
+          this.payment.card.prop.markAsDirty();
+          if(!this.payment.card.prop.valid){
+            isValid = false;
+          }
+        }
+      }
+    }
+    else if(this.payment.type === 'ach'){
+      for (let prop in this.payment.ach){
+        if(this.payment.ach.hasOwnProperty(prop)){
+          this.payment.ach.prop.markAsDirty();
+          if(!this.payment.ach.prop.valid){
+            isValid = false;
+          }
+        }
+      }
+    }
+    return isValid;
   }
 }
 export interface PaymentInfo {
