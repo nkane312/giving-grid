@@ -92,11 +92,11 @@ export class DonateComponent implements OnInit {
       last: new FormControl('', Validators.required),
       street: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
-      zip: new FormControl('', [Validators.required, Validators.pattern('[0\-9-\ ]')]),
+      zip: new FormControl('', [Validators.required, Validators.pattern('[0-9 -.]+')]),
       state: new FormControl('', Validators.required),
       country: new FormControl('', Validators.required),
-      phone: new FormControl('', Validators.pattern('[0-9\-\ \(\)\.]')),
-      email: new FormControl('', [Validators.required, Validators.pattern('^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')])
+      phone: new FormControl('', Validators.pattern('[0-9 ()-.]+')),
+      email: new FormControl('', [Validators.required, Validators.pattern('')])
     },
     {
       paymentType: 'card',
@@ -151,6 +151,7 @@ export class DonateComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setPaymentMethod('card');
   }
 
 }
@@ -162,6 +163,7 @@ export class Donate {
       console.log(detail);
       if(this.details.hasOwnProperty(detail)){
         this.details[detail].markAsDirty();
+        this.details[detail].markAsTouched();
         if(!this.details[detail].valid){
           isValid = false;
         }

@@ -69,14 +69,34 @@ md-hint {
 }
 
 /* Fix for Material Design select boxes */
+md-input-container {
+    width:49%;
+}
 .select-container {
+    width:49%;
     display: inline-block;
     position: relative;
-    top: -2px;
-    margin: 16px 0;
+    line-height:normal;
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    text-align:left;
 }
 .md-select-placeholder.md-floating-placeholder {
     top: 0;
     left: 0;
     transform: translateY(-100%) scale(.75);
+}
+md-select {
+    width:100%;
+    margin: 16px 0 16px 0;
+}
+.md-select-trigger {
+    padding-bottom:9px;
+}
+@media screen and (max-width: 1200px){
+    md-input-container {
+        width:100%;
+    }
+    .select-container {
+        width:100%;
+    }
 }

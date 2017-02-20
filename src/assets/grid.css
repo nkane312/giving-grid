@@ -199,3 +199,20 @@ button.btn-lg.orange:hover {
         width: 100%;
     }
 }
+
+/* Material Design override to keep fields with errors red */
+md-input-container label.md-input-placeholder.md-warn {
+    color: #f44336;
+}
+md-input-container.ng-dirty.ng-invalid.ng-touched .md-input-underline {
+    border-color: #f44336;
+}
+label.md-input-placeholder {
+    color: rgba(0, 0, 0, 0.87);
+}
+.md-select-placeholder {
+    color: rgba(0, 0, 0, 0.87);
+}
+md-select.ng-invalid.ng-touched .md-select-placeholder {
+    color: #f44336;
+}

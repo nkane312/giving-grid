@@ -9,55 +9,57 @@
   <form [formGroup]="donate" (ngSubmit)="onSubmit(donate)" novalidate>
     <md-card formGroupName="details">
       <h2>Your Details</h2>
-        <div formGroupName="name">
-          <md-input dividerColor="{{donateControls.details.first.valid || donateControls.details.first.pristine ? 'primary' : 'warn'}}" placeholder="First name" formControlName="first">
-            <md-hint *ngIf="!donateControls.details.first.valid && !donateControls.details.first.pristine">Enter your first name</md-hint>
-          </md-input>
-          <md-input dividerColor="{{details.controls.name.controls.last.valid || details.controls.name.controls.last.pristine ? 'primary' : 'warn'}}" md-input placeholder="Last name" formControlName="last">
-            <md-hint *ngIf="!details.controls.name.controls.last.valid && !details.controls.name.controls.last.pristine">Enter your last name</md-hint>
-          </md-input>
-        </div>
-        <div formGroupName="address">
-          <md-input-container dividerColor="{{details.controls.address.controls.street.valid || details.controls.address.controls.street.pristine ? 'primary' : 'warn'}}" class="full-width">
-            <input md-input placeholder="Street" formControlName="street">
-            <md-hint *ngIf="!details.controls.address.controls.street.valid && !details.controls.address.controls.street.pristine">Enter your street</md-hint>
-          </md-input-container>
-          <md-input-container>
-            <input md-input placeholder="City" formControlName="city">
-          </md-input-container>
-          <div class="select-container">
-            <md-select placeholder="State" formControlName="state">
-              <md-option *ngFor="let state of states" [value]="state.value">{{state.viewValue}}</md-option>
-            </md-select>
-          </div>
-          <md-input-container>
-            <input md-input placeholder="Zip code" formControlName="zip">
-          </md-input-container>
-          <md-select placeholder="Country" class="select-container" formControlName="country">
-            <md-option *ngFor="let country of countries" [value]="country.value">{{country.viewValue}}</md-option>
-          </md-select>
-        </div>
-        <div formGroupName="contact">
-          <md-input-container>
-            <input md-input placeholder="Phone number" formControlName="phone">
-          </md-input-container>
-          <md-input-container>
-            <input md-input type="email" placeholder="Email address" formControlName="email">
-          </md-input-container>
-        </div>
+      <md-input-container dividerColor="{{donateControls.details.first.valid || donateControls.details.first.pristine ? 'primary' : 'warn'}}">
+        <input md-input placeholder="First name" formControlName="first" required>
+        <md-hint *ngIf="!donateControls.details.first.valid && !donateControls.details.first.pristine">Enter your first name</md-hint>
+      </md-input-container>
+      <md-input-container dividerColor="{{donateControls.details.last.valid || donateControls.details.last.pristine ? 'primary' : 'warn'}}">
+        <input md-input placeholder="Last name" formControlName="last" required>
+        <md-hint *ngIf="!donateControls.details.last.valid && !donateControls.details.last.pristine">Enter your last name</md-hint>        
+      </md-input-container>
+      <md-input-container dividerColor="{{donateControls.details.street.valid || donateControls.details.street.pristine ? 'primary' : 'warn'}}" class="full-width">
+        <input md-input placeholder="Street" formControlName="street" required>
+        <md-hint *ngIf="!donateControls.details.street.valid && !donateControls.details.street.pristine">Enter your street</md-hint>
+      </md-input-container>
+      <md-input-container dividerColor="{{donateControls.details.city.valid || donateControls.details.city.pristine ? 'primary' : 'warn'}}">
+        <input md-input placeholder="City" formControlName="city" required>
+        <md-hint *ngIf="!donateControls.details.city.valid && !donateControls.details.city.pristine">Enter your city</md-hint>
+      </md-input-container>
+      <md-input-container dividerColor="{{donateControls.details.zip.valid || donateControls.details.zip.pristine ? 'primary' : 'warn'}}">
+        <input md-input placeholder="Zip code" formControlName="zip" required>
+        <md-hint *ngIf="!donateControls.details.zip.valid && !donateControls.details.zip.pristine">Enter your zip code</md-hint>
+      </md-input-container>
+      <div class="select-container">
+        <md-select placeholder="State" formControlName="state" required>
+          <md-option *ngFor="let state of states" [value]="state.value">{{state.viewValue}}</md-option>
+        </md-select>
+        <md-hint *ngIf="!donateControls.details.state.valid && !donateControls.details.state.pristine">Pick your state</md-hint>
+      </div>
+      <div class="select-container">
+        <md-select placeholder="Country" formControlName="country" required>
+          <md-option *ngFor="let country of countries" [value]="country.value">{{country.viewValue}}</md-option>
+        </md-select>
+        <md-hint *ngIf="!donateControls.details.country.valid && !donateControls.details.country.pristine">Pick your country</md-hint>
+      </div>
+      <md-input-container dividerColor="{{donateControls.details.phone.valid || donateControls.details.phone.pristine ? 'primary' : 'warn'}}">
+        <input md-input placeholder="Phone number" formControlName="phone">
+      </md-input-container>
+      <md-input-container dividerColor="{{donateControls.details.email.valid || donateControls.details.email.pristine ? 'primary' : 'warn'}}">
+        <input md-input type="email" placeholder="Email address" formControlName="email" required>
+        <md-hint *ngIf="!donateControls.details.email.valid && !donateControls.details.email.pristine">Enter your city</md-hint>
+      </md-input-container>
     </md-card>
     <md-card formGroupName="payment">
       <h2>Payment Information</h2>
       <div class="payment-info">
-        <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'card'}" (click)="setPaymentMethod('card')" md-raised-button>Credit card</button>
-        <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'ach'}"  (click)="setPaymentMethod('ach')"  md-raised-button>Bank account</button>
-        <button class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'paypal'}"  (click)="setPaymentMethod('paypal')"  md-raised-button>PayPal</button>
+        <button type="button" class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'card'}" (click)="setPaymentMethod('card')" md-raised-button>Credit card</button>
+        <button type="button" class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'ach'}"  (click)="setPaymentMethod('ach')"  md-raised-button>Bank account</button>
+        <button type="button" class="btn-lg" [ngClass]="{'orange': getPaymentMethod() === 'paypal'}"  (click)="setPaymentMethod('paypal')"  md-raised-button>PayPal</button>
       </div>
       <md-card formGroupName="credit" *ngIf="getPaymentMethod() === 'card'">
         <md-input-container>
           <input md-input type="number" placeholder="Card number" formControlName="number">
         </md-input-container>
-        <pre>CC Number : {{creditCardPayment.controls.number.errors | json}}</pre>
         <md-input-container>
           <input md-input type="number" placeholder="CVV" formControlName="cvv">
         </md-input-container>
@@ -97,7 +99,7 @@
       <md-card *ngIf="totalState" class="total">
         <h2>Total: {{total | currency:'USD' :true}}</h2>
       </md-card>
-      <button class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
+      <button type="submit" class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
     </md-card>
   </form>
 </div>
