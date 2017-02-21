@@ -12,9 +12,15 @@ md-card + md-card {
 .payment-info button {
     margin-bottom:8px;
 }
+.bank-type {
+    margin-top: 8px;
+}
 .bank-type md-radio-button {
     display: inline-block;
     margin: auto;
+}
+.bank-type md-hint {
+    position: static;
 }
 .full-width {
     width:100%;

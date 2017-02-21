@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
 declare var luminateExtend:any;
 
@@ -13,12 +15,6 @@ export class DonateComponent implements OnInit {
   @Input() dfId;
   @Input() totalState;
   @Output() donating = new EventEmitter();
-
-  private donateApiEndpoint = "https://secure2.convio.net/ifcj/site/CRDonationAPI";
-  private apiKey = "convioAPIFromis7";
-  private v = "1.0";
-  private responseFormat = "json";
-
 
   private states = [
     {value: 'IL', viewValue: 'Illinois'},
@@ -55,112 +51,155 @@ export class DonateComponent implements OnInit {
     }
     return y;
   };
-  
-  constructor() {
+  private donate: DonateForm;
+  constructor(private http: Http) {
+    this.donate = new DonateForm(
+      {
+        first: new FormControl('', Validators.required),
+        last: new FormControl('', Validators.required),
+        street: new FormControl('', Validators.required),
+        city: new FormControl('', Validators.required),
+        zip: new FormControl('', [Validators.required, Validators.pattern('[0-9 -.]+')]),
+        state: new FormControl('', Validators.required),
+        country: new FormControl('', Validators.required),
+        phone: new FormControl('', Validators.pattern('[0-9 ()-.]+')),
+        email: new FormControl('', [Validators.required, Validators.pattern('')])
+      },
+      {
+        paymentType: 'credit',
+        credit: {
+          number: new FormControl('', [Validators.required, Validators.pattern('[0-9 ()-.]+')]),
+          cvv: new FormControl('', [Validators.required, Validators.pattern('[0-9 ()-.]+')]),
+          expMonth: new FormControl('', Validators.required),
+          expYear: new FormControl('', Validators.required)
+        },
+        ach: {
+          routing: new FormControl('', [Validators.required, Validators.pattern('[0-9 ()-.]+')]),
+          account: new FormControl('', [Validators.required, Validators.pattern('[0-9 ()-.]+')]),
+          type: new FormControl('', Validators.required)
+        }
+      }
+    );
     this.years = this.setYears();
   }
-  private _paymentMethod = 'card';
 
-  private setPaymentMethod (type){
-    switch(type){
-      case 'card':
-        this._paymentMethod = type;
-        break;
-      case 'ach': 
-        this._paymentMethod = type;
-        break;
-      case 'paypal':
-        this._paymentMethod = type;
-        break;
-      default:
-        break;
-    }
-    
-  };
-
-  private getPaymentMethod(){
-    return this._paymentMethod;
-  }
   private _isMobile: boolean;
   private showMobile(show: boolean){
     this._isMobile = show;
   }
 
-  private donateControls = new Donate(
-    {
-      first: new FormControl('', Validators.required),
-      last: new FormControl('', Validators.required),
-      street: new FormControl('', Validators.required),
-      city: new FormControl('', Validators.required),
-      zip: new FormControl('', [Validators.required, Validators.pattern('[0-9 -.]+')]),
-      state: new FormControl('', Validators.required),
-      country: new FormControl('', Validators.required),
-      phone: new FormControl('', Validators.pattern('[0-9 ()-.]+')),
-      email: new FormControl('', [Validators.required, Validators.pattern('')])
-    },
-    {
-      paymentType: 'card',
-      card: {
-        number: new FormControl('', [Validators.required, Validators.pattern('[0-9\-\ ]')]),
-        cvv: new FormControl('', [Validators.required, Validators.pattern('[0-9\-\ ]')]),
-        expMonth: new FormControl('', Validators.required),
-        expYear: new FormControl('', Validators.required)
-      },
-      ach: {
-        routing: new FormControl('', [Validators.required, Validators.pattern('[0-9\-\ ]')]),
-        account: new FormControl('', [Validators.required, Validators.pattern('[0-9\-\ ]')])
-      }
-    }
-  );
-
-  private creditCardPayment = new FormGroup({
-    number: this.donateControls.payment.card.number,
-    cvv: this.donateControls.payment.card.cvv,
-    expMonth: this.donateControls.payment.card.expMonth,
-    expYear: this.donateControls.payment.card.expYear
-  });
-  private achPayment = new FormGroup({
-    routing: this.donateControls.payment.ach.routing,
-    account: this.donateControls.payment.ach.account
-  });
-
-  private details = new FormGroup({
-    first: this.donateControls.details.first,
-    last: this.donateControls.details.last,
-    street: this.donateControls.details.street,
-    city: this.donateControls.details.city,
-    zip: this.donateControls.details.zip,
-    state: this.donateControls.details.state,
-    country: this.donateControls.details.country,
-    phone: this.donateControls.details.phone,
-    email: this.donateControls.details.email,
-  });
-  private donate = new FormGroup({
-    details: this.details,
-    payment: new FormGroup({
-      credit: this.creditCardPayment,
-      ach: this.achPayment
-    })
-  });
   private error = false;
-  private onSubmit({value, valid}: {value: Donate, valid: boolean}){
-    console.log(value);
-    console.log(valid);
-    console.log(this.donateControls);
-    console.log(this.donateControls.validate());
+  private onSubmit({value, valid}: {value: DonateForm, valid: boolean}){
+    this.donate.validate();
+    if (valid){
+      var lumApi = new LuminateAPI(this.http);
+      lumApi.postDonate(value, this.donate.payment.paymentType);
+    }
   }
 
   ngOnInit() {
-    this.setPaymentMethod('card');
+    this.donate.setPaymentMethod('credit');
   }
 
 }
-export class Donate {
-  constructor(public details, public payment){}
+
+export class LuminateAPI {
+  private donateApiEndpoint = 'https://secure2.convio.net/ifcj/site/CRDonationAPI';
+  private apiKey = 'convioAPIFromis7';
+  private v = '1.0';
+  
+  private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
+  private donateFields = {
+    method: 'donate',
+    api_key: this.apiKey,
+    v: this.v,
+    response_format: 'json',
+    'billing.address.street': undefined,
+    'billing.address.city': undefined,
+    'billing.address.zip': undefined,
+    'billing.address.first': undefined,
+    'billing.address.last': undefined,
+    'donor.email': undefined,
+    form_id: undefined,
+    level_id: undefined,
+    card_cvv: undefined,
+    card_exp_date_month: undefined,
+    card_exp_date_year: undefined,
+    card_number: undefined
+  }
+  constructor(private http: Http){
+  }
+
+
+
+  public postDonate(data, type){
+    console.log(data);
+    var body;
+    switch (type) {
+      case 'credit':
+        data.
+        break;
+
+      case 'ach':
+        break;
+
+      case 'paypal':
+        break;
+
+      default:
+        break;
+    }
+    //return this.http.post(this.donateApiEndpoint, data, this.headers);
+  }
+  public postStartDonate(data){
+
+  }
+}
+
+export class DonateForm {
+  public master: FormGroup;
+  public creditGroup: FormGroup;
+  public achGroup: FormGroup;
+  public detailsGroup: FormGroup;
+
+  constructor(public details, public payment){
+
+    this.creditGroup = new FormGroup({
+      number: this.payment.credit.number,
+      cvv: this.payment.credit.cvv,
+      expMonth: this.payment.credit.expMonth,
+      expYear: this.payment.credit.expYear
+    });
+    this.achGroup = new FormGroup({
+      routing: this.payment.ach.routing,
+      account: this.payment.ach.account,
+      type: this.payment.ach.type
+    });
+
+    this.detailsGroup = new FormGroup({
+      first: this.details.first,
+      last: this.details.last,
+      street: this.details.street,
+      city: this.details.city,
+      zip: this.details.zip,
+      state: this.details.state,
+      country: this.details.country,
+      phone: this.details.phone,
+      email: this.details.email,
+    });
+
+    this.master = new FormGroup({
+      details: this.detailsGroup,
+      payment: new FormGroup({
+        credit: this.creditGroup,
+        ach: this.achGroup
+      })
+    });
+  }
+
   public validate(): boolean{
     var isValid = true;
     for (let detail in this.details){
-      console.log(detail);
       if(this.details.hasOwnProperty(detail)){
         this.details[detail].markAsDirty();
         this.details[detail].markAsTouched();
@@ -169,21 +208,23 @@ export class Donate {
         }
       }
     }
-    if (this.payment.type === 'card'){
-      for (let prop in this.payment.card){
-        if(this.payment.card.hasOwnProperty(prop)){
-          this.payment.card.prop.markAsDirty();
-          if(!this.payment.card.prop.valid){
+    if (this._paymentMethod === 'credit'){
+      for (let prop in this.payment.credit){
+        if(this.payment.credit.hasOwnProperty(prop)){
+          this.payment.credit[prop].markAsDirty();
+          this.payment.credit[prop].markAsTouched();
+          if(!this.payment.credit[prop].valid){
             isValid = false;
           }
         }
       }
     }
-    else if(this.payment.type === 'ach'){
+    else if(this._paymentMethod === 'ach'){
       for (let prop in this.payment.ach){
         if(this.payment.ach.hasOwnProperty(prop)){
-          this.payment.ach.prop.markAsDirty();
-          if(!this.payment.ach.prop.valid){
+          this.payment.ach[prop].markAsDirty();
+          this.payment.ach[prop].markAsTouched();
+          if(!this.payment.ach[prop].valid){
             isValid = false;
           }
         }
@@ -191,10 +232,37 @@ export class Donate {
     }
     return isValid;
   }
+
+  private _paymentMethod: string;
+  public setPaymentMethod (type){
+    switch(type){
+      case 'credit':
+        this._paymentMethod = type;
+        this.creditGroup.enable();
+        this.achGroup.disable();
+        break;
+      case 'ach': 
+        this._paymentMethod = type;
+        this.creditGroup.disable();
+        this.achGroup.enable();
+        break;
+      case 'paypal':
+        this.creditGroup.disable();
+        this.achGroup.disable();
+        this._paymentMethod = type;
+        break;
+      default:
+        break;
+    }
+  };
+
+  public getPaymentMethod(){
+    return this._paymentMethod;
+  }
 }
 export interface PaymentInfo {
   paymentType: string;
-  card: {
+  credit: {
     number: number;
     cvv: number;
     expMonth: number;
@@ -203,5 +271,6 @@ export interface PaymentInfo {
   ach: {
     routing: number;
     account: number;
+    type: string;
   }
 }
