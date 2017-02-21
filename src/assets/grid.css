@@ -4,13 +4,19 @@ body {
     background-color: #ffffff;
     overflow: hidden;
 }
+a {
+    color: #00529c;
+    text-decoration: none;
+    font-weight: bold;
+}
 .text {
-    fill: #fff;
+    fill: #ffffff;
     font-family:'Oswald-Light';
     -webkit-transition: all 1s;
     transition: all 0.5s;
     -webkit-transition: font-size 0s;
     transition: font-size 0s;
+    position: relative; 
 }
 .cell, .spacer, .cell svg {
     fill: #00529c;

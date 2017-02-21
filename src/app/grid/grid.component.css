@@ -1,23 +1,44 @@
-button {
+.test-button {
     position:absolute;
     z-index: 6;
     right:0;
     top:0;
 }
-button + button {
+.test-button + .test-button {
     top: 30px;
 }
-button + button + button {
+.test-button + .test-button + .test-button {
     top: 60px;
 }
-button + button + button + button {
+.test-button + .test-button + .test-button + .test-button {
     top: 90px;
 }
-button + button + button + button + button {
+
+/*button + button + button + button + button {
     top: 120px;
 }
 button + button + button + button + button + button {
     top: 150px;
+}*/
+.info-button {
+    position:absolute;
+    z-index: 7;
+    right: 1%;
+    top: 1%;
+    cursor: pointer;
+    font-family: Raleway, sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin: auto;
+    display: inline-block;
+    background-color: #f2b33d;
+    color: #ffffff;
+}
+@media screen and (max-width:799px){
+    .info-button {
+        bottom: 2%;
+        top: unset;
+    }
 }
 body {
     margin: 0;

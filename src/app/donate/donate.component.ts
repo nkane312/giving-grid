@@ -151,7 +151,31 @@ export class DonateComponent implements OnInit {
     console.log(valid);
   }
 
-  private pushGAData() {
+  public testGA() {
+    var ga = new EcommerceTransaction({
+      transactionId: 'testTransaction',
+      dfId: 10021,
+      campaign: 'WOE',
+      version: 1
+    }, [{
+      id: 'Rect1',
+      value: 25,
+      quantity: 1
+    },
+    {
+      id: 'Rect2',
+      value: 50,
+      quantity: 1
+    }]);
+    ga.pushGAData();
+  }
+  ngOnInit() {
+  }
+
+}
+class EcommerceTransaction {
+  public pushGAData() {
+    console.log(dataLayer);
     // Send transaction data with a pageview if available
     // when the page loads. Otherwise, use an event when the transaction
     // data becomes available.
@@ -159,47 +183,41 @@ export class DonateComponent implements OnInit {
       'ecommerce': {
         'purchase': {
           'actionField': {
-            'id': '',   // Transaction ID. Required for purchases and refunds.
+            'transactionId': this.transaction.transactionId,   // Transaction ID. Required for purchases and refunds.
             'affiliation': 'Giving Grid',
             'total': this.total,
-            'dfId': this.dfId,
-            'campaign': '',
-            'verson': '',
+            'dfId': this.transaction.dfId,
+            'campaign': this.transaction.campaign,
+            'verson': this.transaction.version,
           },
-          'products': [{                            
-            'name': '',   // Name or ID is required.
-            'id': '',
-            'value': '',
-            'quantity': 1,
-          }]
+          'products': this.products
         }
       }
     });
   }
-
-  ngOnInit() {
-  }
-
-}
-class EcommerceTransaction {
   total: number;
   constructor(private transaction: Transaction, private products: Array<Product>){
-    var productValues = products.values;
-    var valuesArray = Array.prototype.slice.call(productValues);
-    var sum = valuesArray.reduce(function(acc, val) {
-      return acc + val;
+    products.map(function(product, i, products){
+      if (!product.hasOwnProperty('quantity')) {
+        products[i].quantity = 1;
+      }
+    })
+    this.total = products.reduce(function(acc, product) {
+      return acc + product.value;
     }, 0);
+    
   }
 }
 interface Transaction {
   transactionId: string;
-  dfId: string;
+  dfId: number;
   campaign: string;
   version: number;
 }
 interface Product {
-  cellId: string;
+  id: string;
   value: number;
+  quantity: number;
 }
 
 export interface Donate {

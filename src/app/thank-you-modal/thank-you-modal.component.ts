@@ -30,10 +30,12 @@ import {ShareButtonsModule} from "ng2-sharebuttons";
   ],
 })
 export class ThankYouModalComponent implements OnInit {
-  private title = 'Giving Grid';
-  private tags = 'ThisIsATag';
-  private description = 'This is a tweet and facebook description.';
-  private shareTitle = 'Share your donation with others!';
+  @Input() total; 
+  private url = window.location.href;
+  private title = 'Give Together to Provide Prophetic Rescue!';
+  private tags = 'TheFellowship, www.ifcj.org/rescue';
+  private description = 'Bring Jews home to Israel and Give Together around the world.';
+  private shareTitle = 'Share The Give Together Ministry Effort With Others!';
   private fbInner = "<img src='../assets/facebook.svg'>";
   private twitterInner = "<img src='../assets/twitter.svg'>";
   private state;
