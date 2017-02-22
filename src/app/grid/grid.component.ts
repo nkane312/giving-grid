@@ -199,8 +199,7 @@ export class GridComponent {
                 .style('overflow', 'visible')
                 .style('pointer-events', 'none')
                 .style('background', 'none')
-                .style('alignment-baseline', 'text-after-edge')
-                .style('dominant-baseline', 'text-after-edge')
+                .style('dominant-baseline', 'ideographic')
                 .text('$')
                 .classed('svg-content-responsive', true)
             .append('tspan')
@@ -360,13 +359,15 @@ export class GridComponent {
             });
         d3.select(cell.value)
             .classed('selectedText', (d, i) => {
-                if(cell.selected && cell.class !== 'revealed'){
+                if(cell.selected === true){
                     d3.select('#' + cell.value.parentNode.id)
-                        .classed('selectedText', true);
+                        .classed('selectedText', true)
+                        .classed('available', false);
                 }
-                else if (cell.class !== 'revealed'){
+                else if (cell.selected === false){
                     d3.select('#' + cell.value.parentNode.id)
-                        .classed('revealed', true);
+                        .classed('selectedText', false)
+                        .classed('available', true);
                 }
                 return !d3.select(cell.value).classed('selectedText');
             })
