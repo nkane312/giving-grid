@@ -1,4 +1,4 @@
 <md-card *ngIf="totalState !== true" (@flyInOut.done)="descriptionDone($event)" [@flyInOut]="'in'">
-  <h1>{{headline}}</h1>
-  <p>{{description}}</p>
+  <h1 [innerHTML]="headline"></h1>
+  <p [innerHTML]="description"></p>
 </md-card>
