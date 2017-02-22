@@ -90,8 +90,9 @@ function generateCells(spread){
 var grid = new GridSchema({
     image: './assets/freedom-flight.jpg',
     dfId: 12345,
+    lvlId: 123,
     campaign: 'WOE',
-    version: 7,
+    version: 8,
     cells: generateCells(spread)
 });
 

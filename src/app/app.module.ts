@@ -11,6 +11,7 @@ import { routing } from './app.routes';
 
 import { SocketService } from './services/socket.service';
 import { ApiService } from './services/api.service';
+import { LuminateApi } from './services/luminate-api.service';
 
 import { AppComponent } from './app.component';
 import { GridComponent } from './grid/grid.component';
@@ -37,6 +38,7 @@ import { DescriptionComponent } from './description/description.component';
   providers: [
     SocketService,
     ApiService,
+    LuminateApi
   ],
   bootstrap: [AppComponent]
 })

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
-declare var luminateExtend:any;
+import { DonateForm } from './donate-form.controller';
+import { LuminateApi } from '../services/luminate-api.service';
 
 @Component({
   selector: 'donate',
@@ -13,6 +13,7 @@ declare var luminateExtend:any;
 export class DonateComponent implements OnInit {
   @Input() total;
   @Input() dfId;
+  @Input() lvlId;
   @Input() totalState;
   @Output() donating = new EventEmitter();
 
@@ -52,7 +53,7 @@ export class DonateComponent implements OnInit {
     return y;
   };
   private donate: DonateForm;
-  constructor(private http: Http) {
+  constructor(private luminateApi: LuminateApi) {
     this.donate = new DonateForm(
       {
         first: new FormControl('', Validators.required),
@@ -87,13 +88,25 @@ export class DonateComponent implements OnInit {
   private showMobile(show: boolean){
     this._isMobile = show;
   }
-
-  private error = false;
+  private donateRequest;
   private onSubmit({value, valid}: {value: DonateForm, valid: boolean}){
     this.donate.validate();
     if (valid){
-      var lumApi = new LuminateAPI(this.http);
-      lumApi.postDonate(value, this.donate.payment.paymentType);
+      this.donateRequest = this.luminateApi.sendRequest(value, {paymentType: this.donate.payment.paymentType, dfId: this.dfId, lvlId: this.lvlId});
+      this.donateRequest.subscribe(
+        data => {
+          console.log('success');
+          console.log(data);
+        },
+        err => {
+          console.log('error');
+          console.log(err);
+        },
+        complete => {
+          console.log('complete');
+          console.log(complete);
+        }
+      );
     }
   }
 
@@ -103,174 +116,3 @@ export class DonateComponent implements OnInit {
 
 }
 
-export class LuminateAPI {
-  private donateApiEndpoint = 'https://secure2.convio.net/ifcj/site/CRDonationAPI';
-  private apiKey = 'convioAPIFromis7';
-  private v = '1.0';
-  
-  private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
-  private donateFields = {
-    method: 'donate',
-    api_key: this.apiKey,
-    v: this.v,
-    response_format: 'json',
-    'billing.address.street': undefined,
-    'billing.address.city': undefined,
-    'billing.address.zip': undefined,
-    'billing.address.first': undefined,
-    'billing.address.last': undefined,
-    'donor.email': undefined,
-    form_id: undefined,
-    level_id: undefined,
-    card_cvv: undefined,
-    card_exp_date_month: undefined,
-    card_exp_date_year: undefined,
-    card_number: undefined
-  }
-  constructor(private http: Http){
-  }
-
-
-
-  public postDonate(data, type){
-    console.log(data);
-    var body;
-    switch (type) {
-      case 'credit':
-        data.
-        break;
-
-      case 'ach':
-        break;
-
-      case 'paypal':
-        break;
-
-      default:
-        break;
-    }
-    //return this.http.post(this.donateApiEndpoint, data, this.headers);
-  }
-  public postStartDonate(data){
-
-  }
-}
-
-export class DonateForm {
-  public master: FormGroup;
-  public creditGroup: FormGroup;
-  public achGroup: FormGroup;
-  public detailsGroup: FormGroup;
-
-  constructor(public details, public payment){
-
-    this.creditGroup = new FormGroup({
-      number: this.payment.credit.number,
-      cvv: this.payment.credit.cvv,
-      expMonth: this.payment.credit.expMonth,
-      expYear: this.payment.credit.expYear
-    });
-    this.achGroup = new FormGroup({
-      routing: this.payment.ach.routing,
-      account: this.payment.ach.account,
-      type: this.payment.ach.type
-    });
-
-    this.detailsGroup = new FormGroup({
-      first: this.details.first,
-      last: this.details.last,
-      street: this.details.street,
-      city: this.details.city,
-      zip: this.details.zip,
-      state: this.details.state,
-      country: this.details.country,
-      phone: this.details.phone,
-      email: this.details.email,
-    });
-
-    this.master = new FormGroup({
-      details: this.detailsGroup,
-      payment: new FormGroup({
-        credit: this.creditGroup,
-        ach: this.achGroup
-      })
-    });
-  }
-
-  public validate(): boolean{
-    var isValid = true;
-    for (let detail in this.details){
-      if(this.details.hasOwnProperty(detail)){
-        this.details[detail].markAsDirty();
-        this.details[detail].markAsTouched();
-        if(!this.details[detail].valid){
-          isValid = false;
-        }
-      }
-    }
-    if (this._paymentMethod === 'credit'){
-      for (let prop in this.payment.credit){
-        if(this.payment.credit.hasOwnProperty(prop)){
-          this.payment.credit[prop].markAsDirty();
-          this.payment.credit[prop].markAsTouched();
-          if(!this.payment.credit[prop].valid){
-            isValid = false;
-          }
-        }
-      }
-    }
-    else if(this._paymentMethod === 'ach'){
-      for (let prop in this.payment.ach){
-        if(this.payment.ach.hasOwnProperty(prop)){
-          this.payment.ach[prop].markAsDirty();
-          this.payment.ach[prop].markAsTouched();
-          if(!this.payment.ach[prop].valid){
-            isValid = false;
-          }
-        }
-      }
-    }
-    return isValid;
-  }
-
-  private _paymentMethod: string;
-  public setPaymentMethod (type){
-    switch(type){
-      case 'credit':
-        this._paymentMethod = type;
-        this.creditGroup.enable();
-        this.achGroup.disable();
-        break;
-      case 'ach': 
-        this._paymentMethod = type;
-        this.creditGroup.disable();
-        this.achGroup.enable();
-        break;
-      case 'paypal':
-        this.creditGroup.disable();
-        this.achGroup.disable();
-        this._paymentMethod = type;
-        break;
-      default:
-        break;
-    }
-  };
-
-  public getPaymentMethod(){
-    return this._paymentMethod;
-  }
-}
-export interface PaymentInfo {
-  paymentType: string;
-  credit: {
-    number: number;
-    cvv: number;
-    expMonth: number;
-    expYear: number;
-  }
-  ach: {
-    routing: number;
-    account: number;
-    type: string;
-  }
-}
