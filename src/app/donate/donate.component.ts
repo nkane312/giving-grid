@@ -154,17 +154,17 @@ export class DonateComponent implements OnInit {
   public testGA() {
     var ga = new EcommerceTransaction({
       transactionId: 'testTransaction',
-      dfId: 10021,
+      dfId: 12345,
       campaign: 'WOE',
       version: 1
     }, [{
       id: 'Rect1',
-      value: 25,
+      price: 25,
       quantity: 1
     },
     {
       id: 'Rect2',
-      value: 50,
+      price: 50,
       quantity: 1
     }]);
     ga.pushGAData();
@@ -175,7 +175,6 @@ export class DonateComponent implements OnInit {
 }
 class EcommerceTransaction {
   public pushGAData() {
-    console.log(dataLayer);
     // Send transaction data with a pageview if available
     // when the page loads. Otherwise, use an event when the transaction
     // data becomes available.
@@ -183,16 +182,17 @@ class EcommerceTransaction {
       'ecommerce': {
         'purchase': {
           'actionField': {
-            'transactionId': this.transaction.transactionId,   // Transaction ID. Required for purchases and refunds.
+            'id': this.transaction.transactionId,   // Transaction ID. Required for purchases and refunds.
             'affiliation': 'Giving Grid',
-            'total': this.total,
-            'dfId': this.transaction.dfId,
-            'campaign': this.transaction.campaign,
-            'verson': this.transaction.version,
+            'dimension3': this.transaction.dfId,
+            'revenue': this.total,
+            'category': this.transaction.campaign,
+            'variant': this.transaction.version,
           },
           'products': this.products
         }
-      }
+      },
+      'event' : 'purchased'
     });
   }
   total: number;
@@ -203,7 +203,7 @@ class EcommerceTransaction {
       }
     })
     this.total = products.reduce(function(acc, product) {
-      return acc + product.value;
+      return acc + product.price;
     }, 0);
     
   }
@@ -216,7 +216,7 @@ interface Transaction {
 }
 interface Product {
   id: string;
-  value: number;
+  price: number;
   quantity: number;
 }
 
