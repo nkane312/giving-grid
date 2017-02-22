@@ -21,18 +21,15 @@ function setChances(spread, total){
 }
 
 const spread = [
-    {value: 25, quantity: 40, chance: undefined},
-    {value: 35, quantity: 60, chance: undefined},
-    {value: 50, quantity: 20, chance: undefined},
-    {value: 75, quantity: 10, chance: undefined},
+    {value: 25, quantity: 41, chance: undefined},
+    {value: 35, quantity: 59, chance: undefined},
+    {value: 52, quantity: 20, chance: undefined},
+    {value: 55, quantity: 1, chance: undefined},
+    {value: 75, quantity: 9, chance: undefined},
     {value: 100, quantity: 10, chance: undefined},
-    {value: 125, quantity: 20, chance: undefined},
-    {value: 150, quantity: 9, chance: undefined},
-    {value: 350, quantity: 11, chance: undefined},
-    {value: 700, quantity: 14, chance: undefined},
-    {value: 1050, quantity: 1, chance: undefined},
-    {value: 1400, quantity: 4, chance: undefined},
-    {value: 5000, quantity: 1, chance: undefined}
+    {value: 350, quantity: 40, chance: undefined},
+    {value: 700, quantity: 16, chance: undefined},
+    {value: 995, quantity: 4, chance: undefined},
 ];
 
 function pickIndex(spread){
@@ -89,10 +86,12 @@ function generateCells(spread){
 
 var grid = new GridSchema({
     image: './assets/freedom-flight.jpg',
-    dfId: 12345,
-    lvlId: 123,
+    dfId: 13044,
+    lvlId: 19329,
+    headline: 'Give Together!',
+    description: 'Freedom Flight now boarding! Click on one or more giving amounts and fill out your donation details below to join hundreds of Christians and Jews in rescuing 350 Jews from areas of distress around the world. As the worldwide <em>Fellowship</em> community bands together to send the next Freedom Flight home to Israel, each donation square will reveal a special image to show the lifesaving impact of your support of the <em>On Wings of Eagles</em> ministry.',
     campaign: 'WOE',
-    version: 8,
+    version: 11,
     cells: generateCells(spread)
 });
 

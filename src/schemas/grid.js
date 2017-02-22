@@ -10,6 +10,8 @@ var GridSchema = new Schema({
     lvlId: { type: Number },
     campaign: { type: String },
     version: { type: Number },
+    headline: { type: String },
+    description: { type: String },
     cells: [CellSchema]
 });
 

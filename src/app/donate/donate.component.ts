@@ -29,6 +29,8 @@ export class DonateComponent implements OnInit {
   @Input() dfId;
   @Input() lvlId;
   @Input() totalState;
+  @Input() headline;
+  @Input() description;
   @Output() donating = new EventEmitter();
 
   private finish = false;
@@ -153,6 +155,9 @@ export class DonateComponent implements OnInit {
   }
   ngOnInit() {
     this.donate.setPaymentMethod('credit');
+  }
+  ngOnChanges() {
+    console.log(this.description);
   }
 
 }

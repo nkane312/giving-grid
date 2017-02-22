@@ -19,7 +19,8 @@ import { Component, OnInit, Input, Output, EventEmitter, trigger, state, style, 
 })
 export class DescriptionComponent implements OnInit {
   @Input() totalState;
-
+  @Input() description;
+  @Input() headline;
   private finish = false;
   private descriptionDone() {
     this.finish = true;

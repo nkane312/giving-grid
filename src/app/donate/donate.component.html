@@ -1,6 +1,6 @@
 <div id="donate-wrapper">
   <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
-  <description [totalState]="totalState" (done)="done($event)"></description>
+  <description [totalState]="totalState" [headline]="headline" [description]="description" (done)="done($event)"></description>
   <form [formGroup]="donate.master" (ngSubmit)="onSubmit(donate.master)" novalidate>
     <md-card formGroupName="details">
       <h2>Your Details</h2>

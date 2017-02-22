@@ -67,6 +67,8 @@ export class GridComponent {
         _id: undefined,
         dfId: undefined,
         lvlId: undefined,
+        headline: undefined,
+        description: undefined,
         selectTotal: 0,
     };
 
@@ -109,6 +111,8 @@ export class GridComponent {
                     this.grid._id = data._id;
                     this.grid.dfId = data.dfId;
                     this.grid.lvlId = data.lvlId;
+                    this.grid.description = data.description;
+                    this.grid.headline = data.headline;
                     this.grid.setSize();
                     this.grid.rectSize = this.setRectSize(this.grid);
                     this.grid = this.initGrid(this.grid);
