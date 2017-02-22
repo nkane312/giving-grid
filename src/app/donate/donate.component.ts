@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, trigger, state, style, animate, transition } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Rx';
 
-declare var luminateExtend:any;
+import { DonateForm } from './donate-form.controller';
+import { LuminateApi } from '../services/luminate-api.service';
 
 declare var dataLayer: any;
 
@@ -25,6 +27,7 @@ declare var dataLayer: any;
 export class DonateComponent implements OnInit {
   @Input() total;
   @Input() dfId;
+  @Input() lvlId;
   @Input() totalState;
   @Output() donating = new EventEmitter();
 
@@ -36,12 +39,6 @@ export class DonateComponent implements OnInit {
       this.finish = false;
     }
   }
-
-  private donateApiEndpoint = "https://secure2.convio.net/ifcj/site/CRDonationAPI";
-  private apiKey = "convioAPIFromis7";
-  private v = "1.0";
-  private responseFormat = "json";
-
 
   private states = [
     {value: 'IL', viewValue: 'Illinois'},
@@ -78,77 +75,62 @@ export class DonateComponent implements OnInit {
     }
     return y;
   };
-  
-  constructor() {
+  private donate: DonateForm;
+  constructor(private luminateApi: LuminateApi) {
+    this.donate = new DonateForm(
+      {
+        first: new FormControl('', Validators.required),
+        last: new FormControl('', Validators.required),
+        street: new FormControl('', Validators.required),
+        city: new FormControl('', Validators.required),
+        zip: new FormControl('', [Validators.required, Validators.pattern('[0-9 -.]+')]),
+        state: new FormControl('', Validators.required),
+        country: new FormControl('', Validators.required),
+        phone: new FormControl('', Validators.pattern('[0-9 ()-.]+')),
+        email: new FormControl('', [Validators.required, Validators.pattern('')])
+      },
+      {
+        paymentType: 'credit',
+        credit: {
+          number: new FormControl('', [Validators.required, Validators.pattern('[0-9 ()-.]+')]),
+          cvv: new FormControl('', [Validators.required, Validators.pattern('[0-9 ()-.]+')]),
+          expMonth: new FormControl('', Validators.required),
+          expYear: new FormControl('', Validators.required)
+        },
+        ach: {
+          routing: new FormControl('', [Validators.required, Validators.pattern('[0-9 ()-.]+')]),
+          account: new FormControl('', [Validators.required, Validators.pattern('[0-9 ()-.]+')]),
+          type: new FormControl('', Validators.required)
+        }
+      }
+    );
     this.years = this.setYears();
   }
-  private _paymentMethod = 'card';
 
-  private setPaymentMethod (type){
-    switch(type){
-      case 'card':
-        this._paymentMethod = type;
-        break;
-      case 'ach': 
-        this._paymentMethod = type;
-        break;
-      case 'paypal':
-        this._paymentMethod = type;
-        break;
-      default:
-        break;
-    }
-    
-  };
-
-  private getPaymentMethod(){
-    return this._paymentMethod;
-  }
   private _isMobile: boolean;
   private showMobile(show: boolean){
     this._isMobile = show;
   }
-
-  private creditCardPayment = new FormGroup({
-    number: new FormControl('', Validators.required),
-    cvv: new FormControl('', Validators.required),
-    expMonth: new FormControl('', Validators.required),
-    expYear: new FormControl('', Validators.required)
-  });
-  private achPayment = new FormGroup({
-    routing: new FormControl('', Validators.required),
-    account: new FormControl('', Validators.required)
-  });
-  
-  private details = new FormGroup({
-    name: new FormGroup({
-      first: new FormControl('', Validators.required),
-      last: new FormControl('', Validators.required)
-    }),
-    address: new FormGroup({
-      street: new FormControl('', Validators.required),
-      city: new FormControl('', Validators.required),
-      zip: new FormControl('', Validators.required),
-      state: new FormControl('', Validators.required),
-      country: new FormControl('', Validators.required)
-    }),
-    contact: new FormGroup({
-      phone: new FormControl(''),
-      email: new FormControl('', Validators.required)
-    })
-  });
-
-  private donate = new FormGroup({
-    details: this.details,
-    payment: new FormGroup({
-      credit: this.creditCardPayment,
-      ach: this.achPayment
-    })
-  });
-  
-  private onSubmit({value, valid}: {value: Donate, valid: boolean}){
-    console.log(value);
-    console.log(valid);
+  private donateRequest;
+  private onSubmit({value, valid}: {value: DonateForm, valid: boolean}){
+    this.donate.validate();
+    if (valid){
+      this.donateRequest = this.luminateApi.sendRequest(value, {paymentType: this.donate.payment.paymentType, dfId: this.dfId, lvlId: this.lvlId});
+      this.donateRequest.subscribe(
+        data => {
+          console.log('success');
+          console.log(data);
+        },
+        err => {
+          console.log('error');
+          console.log(err);
+        },
+        complete => {
+          console.log('complete');
+          console.log(complete);
+        }
+      );
+    }
   }
 
   public testGA() {
@@ -170,6 +152,7 @@ export class DonateComponent implements OnInit {
     ga.pushGAData();
   }
   ngOnInit() {
+    this.donate.setPaymentMethod('credit');
   }
 
 }

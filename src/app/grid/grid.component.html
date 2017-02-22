@@ -1,5 +1,5 @@
 <div id="grid"></div>
-<donate [totalState]="totalState" [total]="grid.selectTotal" [dfId]="grid.dfId"></donate>
+<donate [totalState]="totalState" [total]="grid.selectTotal" [lvlId]="grid.lvlId" [dfId]="grid.dfId"></donate>
 <button class="test-button" (click)="gridButton2(this.grid)">CLICK ME</button>
 <button class="test-button" (click)="revealByIndex([1, 2, 3, 4, 5])">REVEAL</button>
 <button class="test-button" (click)="apiService.updateGrid(grid._id, [10, 11])">POST</button>

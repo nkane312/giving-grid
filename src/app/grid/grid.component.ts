@@ -65,6 +65,8 @@ export class GridComponent {
             }
         }, 
         _id: undefined,
+        dfId: undefined,
+        lvlId: undefined,
         selectTotal: 0,
     };
 
@@ -105,6 +107,8 @@ export class GridComponent {
                     this.grid.cells = data.cells;
                     this.grid.image.link = data.image;
                     this.grid._id = data._id;
+                    this.grid.dfId = data.dfId;
+                    this.grid.lvlId = data.lvlId;
                     this.grid.setSize();
                     this.grid.rectSize = this.setRectSize(this.grid);
                     this.grid = this.initGrid(this.grid);
@@ -418,7 +422,7 @@ export class GridComponent {
         }
     }
     private revealSpacer(s, t){
-        setTimeout(() => { console.log(this.grid.spacers[s]); this.grid.spacers[s].classList.add('revealed'); }, (t + s) * 100);
+        setTimeout(() => { this.grid.spacers[s].classList.add('revealed'); }, (t + s) * 100);
     }
     private createImage(imageLink) {
         return d3.select('#gridSvg')
