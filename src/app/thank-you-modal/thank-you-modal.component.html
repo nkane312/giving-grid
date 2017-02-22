@@ -4,12 +4,16 @@
     <div [@flyInOut]="'in'" class="modal-content">
       <button type="button" class="close" (click)="close()">&times;</button>
       <div class="modal-header">
-        <h4 class="modal-title">Thank You!</h4>
+        <h4 class="modal-title">Thank You for Saving Lives!</h4>
       </div>
       <div class="modal-body">
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+        <p>Your generous donation of <strong>${{ total }}</strong> to the On Wings of Eagles ministry will help rescue the next Jewish person anxiously waiting to escape danger and suffering!</p>
           
-        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+        <p>It is difficult to express just how much your gifts mean to Rabbi Eckstein, The <em>Fellowship</em>, and most importantly the families, children, and Holocaust survivors whose lives are changed for the better because of you.</p>
+        
+        <p>As other ministry partners participate in the <strong>Give Together</strong> community effort, more of the hidden image will be revealed to show the impact of your support. Please check back soon to see how the image unveils at <a href="{{ url }}">{{ url }}</a>. In the coming days, we will send you an emailed report on the number of Jewish people rescued because of your participation in this outreach!</p>
+        
+        <p>Look for your donation receipt in your email!</p>
       </div>
       <div class="modal-footer">
         <share-buttons 

@@ -1,14 +1,28 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, trigger, state, style, animate, transition } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Rx';
 
 import { DonateForm } from './donate-form.controller';
 import { LuminateApi } from '../services/luminate-api.service';
 
+declare var dataLayer: any;
+
 @Component({
   selector: 'donate',
   templateUrl: './donate.component.html',
-  styleUrls: ['./donate.component.css']
+  styleUrls: ['./donate.component.css'],
+  animations: [
+    trigger('flyInOut', [
+      state('in', style({transform: 'translateX(0)'})),
+      transition('void => *', [
+        style({transform: 'translateX(100%)'}),
+        animate('250ms')
+      ]),
+      transition('* => void', [
+        animate('250ms', style({transform: 'translateX(100%)'}))
+      ])
+    ]),
+  ],
 })
 export class DonateComponent implements OnInit {
   @Input() total;
@@ -16,6 +30,15 @@ export class DonateComponent implements OnInit {
   @Input() lvlId;
   @Input() totalState;
   @Output() donating = new EventEmitter();
+
+  private finish = false;
+  private done() {
+    if (this.totalState === true) {
+      this.finish = true;
+    } else {
+      this.finish = false;
+    }
+  }
 
   private states = [
     {value: 'IL', viewValue: 'Illinois'},
@@ -110,9 +133,107 @@ export class DonateComponent implements OnInit {
     }
   }
 
+  public testGA() {
+    var ga = new EcommerceTransaction({
+      transactionId: 'testTransaction',
+      dfId: 10021,
+      campaign: 'WOE',
+      version: 1
+    }, [{
+      id: 'Rect1',
+      value: 25,
+      quantity: 1
+    },
+    {
+      id: 'Rect2',
+      value: 50,
+      quantity: 1
+    }]);
+    ga.pushGAData();
+  }
   ngOnInit() {
     this.donate.setPaymentMethod('credit');
   }
 
 }
+class EcommerceTransaction {
+  public pushGAData() {
+    console.log(dataLayer);
+    // Send transaction data with a pageview if available
+    // when the page loads. Otherwise, use an event when the transaction
+    // data becomes available.
+    dataLayer.push({
+      'ecommerce': {
+        'purchase': {
+          'actionField': {
+            'transactionId': this.transaction.transactionId,   // Transaction ID. Required for purchases and refunds.
+            'affiliation': 'Giving Grid',
+            'total': this.total,
+            'dfId': this.transaction.dfId,
+            'campaign': this.transaction.campaign,
+            'verson': this.transaction.version,
+          },
+          'products': this.products
+        }
+      }
+    });
+  }
+  total: number;
+  constructor(private transaction: Transaction, private products: Array<Product>){
+    products.map(function(product, i, products){
+      if (!product.hasOwnProperty('quantity')) {
+        products[i].quantity = 1;
+      }
+    })
+    this.total = products.reduce(function(acc, product) {
+      return acc + product.value;
+    }, 0);
+    
+  }
+}
+interface Transaction {
+  transactionId: string;
+  dfId: number;
+  campaign: string;
+  version: number;
+}
+interface Product {
+  id: string;
+  value: number;
+  quantity: number;
+}
 
+export interface Donate {
+  details: ConsInfo;
+  payment: PaymentInfo;
+}
+export interface ConsInfo {
+  name: {
+    first: string;
+    last: string;
+  }
+  address: {
+    street: string;
+    city: string;
+    zip: number;
+    state: string;
+    country: string;
+  }
+  contact: {
+    phone: number;
+    email: string;
+  }
+}
+export interface PaymentInfo {
+  paymentType: string;
+  card: {
+    number: number;
+    cvv: number;
+    expMonth: number;
+    expYear: number;
+  }
+  ach: {
+    routing: number;
+    account: number;
+  }
+}

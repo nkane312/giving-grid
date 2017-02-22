@@ -4,13 +4,19 @@ body {
     background-color: #ffffff;
     overflow: hidden;
 }
+a {
+    color: #00529c;
+    text-decoration: none;
+    font-weight: bold;
+}
 .text {
-    fill: #fff;
+    fill: #ffffff;
     font-family:'Oswald-Light';
     -webkit-transition: all 1s;
     transition: all 0.5s;
     -webkit-transition: font-size 0s;
     transition: font-size 0s;
+    position: relative; 
 }
 .cell, .spacer, .cell svg {
     fill: #00529c;
@@ -34,6 +40,7 @@ body {
     opacity: 0;
     transition: 2s ease-in-out;
     cursor: default !important;
+    pointer-events: none;
 }
 h1, h2, h3, h4 {
     opacity: 0.87;
@@ -102,6 +109,14 @@ button.btn-lg.orange:hover {
         width:50%;
         height:50%;
     }
+}
+
+md-card {
+    margin-bottom: 10px;
+}
+.md-input-placeholder {
+    color: rgba(0, 0, 0, 0.75);
+    font-size: 115%;
 }
 
 /* Modal styles */

@@ -1,0 +1,25 @@
+<div *ngIf="state" [@fadeInOut]="'in'" class="overlay" (click)="close()"></div>
+<div *ngIf="state" id="info-modal" class="modal" role="dialog">
+  <div class="modal-dialog">
+    <div [@flyInOut]="'in'" class="modal-content">
+      <button type="button" class="close" (click)="close()">&times;</button>
+      <div class="modal-header">
+        <h4 class="modal-title">Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>Each square represents a donation amount to help rescue poor Jewish people from areas of distress.</p>
+          
+        <p>Click on one or more squares until you see your total desired donation amount shows. <strong>You may also type in the amount you would like to give instead of choosing the squares</strong>.</p>
+
+        <p>Type in your details including your name, address, and payment information and click “Donate Now.”</p>
+
+        <p>Once you have donated, the squares you chose and fulfilled will reveal a hidden image behind it. As other <em>Fellowship</em> friends join you in this ministry effort, more of the hidden image will be revealed to show the impact of your generosity and compassion.</p>
+        
+        <p>If you need additional help, call our support staff at 1-800-846-8844 Monday through Friday, 8am &ndash; 6pm CST.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-lg" color="accent" md-raised-button type="button" (click)="close()">I’m Ready to Donate!</button>
+      </div>
+    </div>
+  </div>
+</div>

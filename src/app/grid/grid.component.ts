@@ -78,6 +78,14 @@ export class GridComponent {
         this.modalState = e;
     }
 
+    private infoState = false;
+    private showInfo(){
+        this.infoState = true;
+    }
+    private infoClosed(e){
+        this.infoState = e;
+    }
+
     private totalState = false;
 
 
@@ -149,6 +157,14 @@ export class GridComponent {
                 .attr('id', function(d, i) {
                     return 'rect' + (i + 1);
                 })
+                /*.attr('data-action', 'click')
+                .attr('data-category', 'giving-grid-cell')
+                .attr('data-label', (d, i) => {
+                    return 'rect' + (i + 1) + ': $' + grid.cells[i].dollarValue;
+                })
+                .attr('data-value', (d, i) => {
+                    return grid.cells[i].dollarValue;
+                })*/
                 .style('filter', `url(${window.location.href}#drop-shadow)`)
                 .classed('available', true)
                 .classed('cell', true)
@@ -161,7 +177,7 @@ export class GridComponent {
                 .on('mouseout', function(d) {
                     d3.select(this).style('cursor', '');
                 });
-        
+
         tempValues = grid.g.selectAll('.values')
             .data(grid.cells)
             .enter()
@@ -169,7 +185,9 @@ export class GridComponent {
                 .attr('id', function(d, i) { return 'text' + (i + 1) })
                 .classed('available', true)
                 .classed('text', true)
-                .style('z-index', '999999999')
+                .style('value', true)
+                .style('display', 'block')
+                .style('z-index', '1000')
                 .style('stroke-width', 0.25)
                 .style('stroke', '#505050')
                 .style('text-anchor', 'middle')
@@ -177,10 +195,18 @@ export class GridComponent {
                 .style('overflow', 'visible')
                 .style('pointer-events', 'none')
                 .style('background', 'none')
+                .style('alignment-baseline', 'text-after-edge')
+                .style('dominant-baseline', 'text-after-edge')
+                .text('$')
+                .classed('svg-content-responsive', true)
+            .append('tspan')
+                .classed('available', true)
+                .style('value', true)
+                .style('dominant-baseline', 'alphabetic')
                 .text((d, i) => {
                     return grid.cells[i].dollarValue;
-                })
-            .classed('svg-content-responsive', true); 
+                });
+            
             tempRects._groups[0].forEach((r, i) => {
                 grid.cells[i].rect = r;
             });
@@ -264,6 +290,9 @@ export class GridComponent {
                 }
                 return (Math.floor((i + textSpaceCountY) / grid.cols) * grid.rectSize.height) + (grid.rectSize.height /1.5);
             })
+            .style('font-size', `${(grid.rectSize.width / 3.5)}px`);
+        d3.selectAll('tspan')
+            .style('position', 'absolute')
             .style('font-size', `${(grid.rectSize.width / 2)}px`);
     }
     private adjustImage(grid){
@@ -327,6 +356,14 @@ export class GridComponent {
             });
         d3.select(cell.value)
             .classed('selectedText', (d, i) => {
+                if(cell.selected && cell.class !== 'revealed'){
+                    d3.select('#' + cell.value.parentNode.id)
+                        .classed('selectedText', true);
+                }
+                else if (cell.class !== 'revealed'){
+                    d3.select('#' + cell.value.parentNode.id)
+                        .classed('revealed', true);
+                }
                 return !d3.select(cell.value).classed('selectedText');
             })
             .classed('available', (d, i) => {
@@ -338,7 +375,7 @@ export class GridComponent {
             this.totalState = false;
         }
     }
-    private gridButton2() {
+    private gridButton2(grid) {
         var x = document.getElementsByClassName('selected');
         var y = document.getElementsByClassName('selectedText');
         var selectedArray = Array.prototype.slice.call(x);
@@ -351,6 +388,7 @@ export class GridComponent {
                 selectedTextArray[i].classList.add('revealed');
             }, i * 100);
         });
+        grid.selectTotal = 0;
     }
     private revealByIndex(indexes, timing) {
         if (!timing){
@@ -361,6 +399,8 @@ export class GridComponent {
                         this.grid.cells[index].rect.classList.add('revealed');
                         this.grid.cells[index].value.classList.remove('available');
                         this.grid.cells[index].value.classList.add('revealed');
+                        this.grid.cells[index].value.parentNode.classList.remove('available');
+                        this.grid.cells[index].value.parentNode.classList.add('revealed');
                     } 
                 }, i * 100);
             });        
@@ -373,6 +413,8 @@ export class GridComponent {
                         this.grid.cells[index].rect.classList.add('revealed');
                         this.grid.cells[index].value.classList.remove('available');
                         this.grid.cells[index].value.classList.add('revealed');
+                        this.grid.cells[index].value.parentNode.classList.remove('available');
+                        this.grid.cells[index].value.parentNode.classList.add('revealed');
                     } 
                 }, timing * 100);
             });        

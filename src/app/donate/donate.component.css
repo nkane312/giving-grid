@@ -1,7 +1,4 @@
 /* General donation form styles */
-md-card + md-card {
-    margin-top:10px;
-}
 .donate-button {
     margin: 8px auto;
     display:block;

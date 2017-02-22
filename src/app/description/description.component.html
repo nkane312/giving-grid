@@ -1,4 +1,4 @@
-<md-card *ngIf="totalState !== true">
-  <h1>Giving Grid</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer scelerisque, lacus sed dictum volutpat, nisl augue elementum nisi, at sollicitudin turpis felis id leo. Curabitur placerat malesuada dignissim. Nullam placerat risus ac sagittis faucibus. Proin condimentum semper egestas. Vivamus quis metus eget tellus egestas faucibus sed nec lectus.</p>
+<md-card *ngIf="totalState !== true" (@flyInOut.done)="descriptionDone($event)" [@flyInOut]="'in'">
+  <h1>Give Together!</h1>
+  <p>Freedom Flight now boarding! Click on one or more giving amounts and fill out your donation details below to join hundreds of Christians and Jews in rescuing 350 Jews from areas of distress around the world. As the worldwide <em>Fellowship</em> community bands together to send the next Freedom Flight home to Israel, each donation square will reveal a special image to show the lifesaving impact of your support of the <em>On Wings of Eagles</em> ministry.</p>
 </md-card>
