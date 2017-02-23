@@ -204,6 +204,7 @@ export class GridComponent {
                 .classed('svg-content-responsive', true)
             .append('tspan')
                 .classed('available', true)
+                .style('font-family', 'Oswald-Light')
                 .style('value', true)
                 .style('dominant-baseline', 'alphabetic')
                 .text((d, i) => {

@@ -11,7 +11,7 @@ a {
 }
 .text {
     fill: #ffffff;
-    font-family:'Oswald-Light';
+    font-family:'Arial Narrow';
     -webkit-transition: all 1s;
     transition: all 0.5s;
     -webkit-transition: font-size 0s;

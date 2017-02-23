@@ -5,7 +5,8 @@ import { Observable } from 'rxjs/Rx';
 import { DonateForm } from './donate-form.controller';
 import { LuminateApi } from '../services/luminate-api.service';
 
-declare var dataLayer: any;
+//declare var dataLayer: any;
+declare var ga: any;
 
 @Component({
   selector: 'donate',
@@ -137,19 +138,23 @@ export class DonateComponent implements OnInit {
 
   public testGA() {
     var ga = new EcommerceTransaction({
-      transactionId: 'testTransaction',
+      transactionId: 'testTransaction2',
       dfId: 12345,
       campaign: 'WOE',
       version: 1
     }, [{
-      id: 'Rect1',
+      id: 25,
+      name: 'Rect6',
       price: 25,
-      quantity: 1
+      quantity: 1,
+      category: 'Grid Square'
     },
     {
-      id: 'Rect2',
+      id: 50,
+      name: 'Rect7',
       price: 50,
-      quantity: 1
+      quantity: 1,
+      category: 'Grid Square'
     }]);
     ga.pushGAData();
   }
@@ -163,25 +168,27 @@ export class DonateComponent implements OnInit {
 }
 class EcommerceTransaction {
   public pushGAData() {
-    // Send transaction data with a pageview if available
-    // when the page loads. Otherwise, use an event when the transaction
-    // data becomes available.
-    dataLayer.push({
-      'ecommerce': {
-        'purchase': {
-          'actionField': {
-            'id': this.transaction.transactionId,   // Transaction ID. Required for purchases and refunds.
-            'affiliation': 'Giving Grid',
-            'dimension3': this.transaction.dfId,
-            'revenue': this.total,
-            'category': this.transaction.campaign,
-            'variant': this.transaction.version,
-          },
-          'products': this.products
-        }
-      },
-      'event' : 'purchased'
+    ga('create', 'UA-4133035-40', 'auto');
+    ga('require', 'ec');
+
+    this.products.map(function(product){
+      ga('ec:addProduct', product);
     });
+
+    ga('ec:setAction', 'purchase', {
+      'id': this.transaction.transactionId,
+      'affiliation': 'Giving Grid',
+      'revenue': this.total,
+      'category': this.transaction.campaign,
+      'variant': this.transaction.version,
+    });
+
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Giving Grid',
+      eventAction: 'Donation',
+      eventLabel: 'Squares Purchased'
+    }); 
   }
   total: number;
   constructor(private transaction: Transaction, private products: Array<Product>){
@@ -203,9 +210,11 @@ interface Transaction {
   version: number;
 }
 interface Product {
-  id: string;
+  id: number;
+  name: string;
   price: number;
   quantity: number;
+  category: string;
 }
 
 export interface Donate {
