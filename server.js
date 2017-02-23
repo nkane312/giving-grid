@@ -16,7 +16,7 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
     next();
 });
-mongoose.connect('mongodb://127.0.0.1:27020');
+mongoose.connect('mongodb://express:SnailFail!2017@ds161109.mlab.com:61109/giving-grid');
 var db = mongoose.connection;
 require('./src/schemas/grid');
 require('./express-routes/api/grid')(app);
