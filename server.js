@@ -7,6 +7,9 @@ var path = require('path');
 var fs = require('fs');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var helmet = require('helmet');
+
+app.use(helmet());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(function(req, res, next) {
