@@ -31,13 +31,30 @@ button + button + button + button + button + button {
     font-weight: 800;
     margin: auto;
     display: inline-block;
-    background-color: #f2b33d;
+    background-color: #e48c1b;
     color: #ffffff;
 }
+.info-button-mobile {
+    display: none;
+}
 @media screen and (max-width:799px){
+    .info-button-mobile {
+        position: absolute;
+        z-index: 7;
+        right: 0%;
+        bottom: 0%;
+        height: 10%;
+        width: 15%;
+        cursor: pointer;
+        font-family: Raleway, sans-serif;
+        font-size: 30px;
+        font-weight: 800;
+        display: inline-block;
+        background-color: #e48c1b;
+        color: #ffffff;
+    }
     .info-button {
-        bottom: 2%;
-        top: unset;
+        display: none;
     }
 }
 body {

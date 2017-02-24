@@ -100,7 +100,20 @@ button.btn-lg.orange:hover {
 .total h2 {
     color: white;
 }
-
+.total-mobile, .mobile-donate {
+    display: none;
+}
+.clear {
+    float: right;
+    background-color: #60c1cc;
+    color: #00529c;
+    z-index: 7;
+    cursor: pointer;
+    font-family: Raleway, sans-serif;
+    font-weight: 800;
+    margin: auto;
+    display: inline-block;
+}
 @media screen and (max-width:799px){
     .loading-logo {
         width:90%; 
@@ -108,6 +121,34 @@ button.btn-lg.orange:hover {
     .loading-gif {
         width:50%;
         height:50%;
+    }
+    .total {
+        display: none;
+    }
+    .total-mobile {
+        background: #00529c;
+        display: block;
+        width: 35%;
+        border: 1px grey solid;
+        height: 100%;
+        float: left;
+    }
+    .total-mobile h2 {
+        font-size: 1.25em;
+        color: white;
+    }
+    .mobile-donate {
+        width: 43.5%;
+        float: left;
+        border: 1px grey solid !important;
+        height: 100%;
+        font-size: 24px !important;
+    }
+    .donate-button {
+        margin: auto !important;
+        width: 47%;
+        font-size: 24px !important;
+        padding: 14px 0px !important;
     }
 }
 
@@ -118,6 +159,7 @@ md-card {
     color: rgba(0, 0, 0, 0.75);
     font-size: 115%;
 }
+
 
 /* Modal styles */
 .overlay {
@@ -146,6 +188,17 @@ md-card {
     background-color: #fefefe;
     padding: 20px;
     border: 1px solid #888;
+    overflow-y: auto;
+}
+.modal-content p {
+    margin-right: 60px;
+    font-size: 18px;
+}
+.info-image {
+    float: left;
+    box-shadow: 2px 2px 5px #888888;
+    width: 30%;
+    margin: 25px 100px 0px 0px;
 }
 .close {
     color: #aaa;
@@ -191,6 +244,14 @@ md-card {
         transform: translate(0,0);
         overflow-y: auto;
     }
+    .modal-content p {
+        margin-right: 0px;
+        font-size: 16px;
+    }
+    .info-image {
+        display: none;
+    }
+
 }
 
 /* Modal Social Share Styles */

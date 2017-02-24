@@ -28,6 +28,7 @@ import { Component, OnInit, Input, Output, EventEmitter, trigger, state, style, 
   ],
 })
 export class InformationComponent implements OnInit {
+  @Input() headline;
   private state;
   @Output() closed = new EventEmitter();
   @Input()

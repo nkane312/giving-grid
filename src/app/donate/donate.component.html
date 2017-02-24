@@ -112,25 +112,123 @@
 </div>
 
 <div id="mobile-donate-wrapper">
-  <h2>Giving Grid</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer scelerisque, lacus sed dictum volutpat, nisl augue elementum nisi, at sollicitudin turpis felis id leo. Curabitur placerat malesuada dignissim. Nullam placerat risus ac sagittis faucibus. Proin condimentum semper egestas. Vivamus quis metus eget tellus egestas faucibus sed nec lectus.</p>
-  <button class="btn-lg" color="accent" md-raised-button (click)="showMobile(true)">Donate Now!</button>
+  <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
+  <button class="btn-lg mobile-donate" color="accent" md-raised-button (click)="showMobile(true)">Donate Now!</button>
 </div>
 <div class="overlay" *ngIf="_isMobile"></div>
 <div class="modal" *ngIf="_isMobile">
   <div class="modal-dialog">
     <div class="modal-content">
-      <button type="button" class="close" (click)="close()">&times;</button>
+      <button type="button" class="close" (click)="showMobile(false)">&times;</button>
       <div class="modal-header">
-        <h3 class="modal-title">Your Details</h3>
+        <h4 class="modal-title">Your Details</h4>
       </div>
       <div class="modal-body">
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+        <form [formGroup]="donate.master" (ngSubmit)="onSubmit(donate.master)" novalidate>
+          <md-card formGroupName="details">
+            <md-input-container dividerColor="{{donate.details.first.valid || donate.details.first.pristine ? 'primary' : 'warn'}}">
+              <input md-input placeholder="First name" formControlName="first" required>
+              <md-hint *ngIf="!donate.details.first.valid && !donate.details.first.pristine">Enter your first name</md-hint>
+            </md-input-container>
+            <md-input-container dividerColor="{{donate.details.last.valid || donate.details.last.pristine ? 'primary' : 'warn'}}">
+              <input md-input placeholder="Last name" formControlName="last" required>
+              <md-hint *ngIf="!donate.details.last.valid && !donate.details.last.pristine">Enter your last name</md-hint>        
+            </md-input-container>
+            <md-input-container dividerColor="{{donate.details.street.valid || donate.details.street.pristine ? 'primary' : 'warn'}}" class="full-width">
+              <input md-input placeholder="Street" formControlName="street" required>
+              <md-hint *ngIf="!donate.details.street.valid && !donate.details.street.pristine">Enter your street</md-hint>
+            </md-input-container>
+            <md-input-container dividerColor="{{donate.details.city.valid || donate.details.city.pristine ? 'primary' : 'warn'}}">
+              <input md-input placeholder="City" formControlName="city" required>
+              <md-hint *ngIf="!donate.details.city.valid && !donate.details.city.pristine">Enter your city</md-hint>
+            </md-input-container>
+            <md-input-container dividerColor="{{donate.details.zip.valid || donate.details.zip.pristine ? 'primary' : 'warn'}}">
+              <input md-input placeholder="Zip code" formControlName="zip" required>
+              <md-hint *ngIf="!donate.details.zip.valid && !donate.details.zip.pristine">Enter your zip code</md-hint>
+            </md-input-container>
+            <div class="select-container">
+              <md-select placeholder="State" formControlName="state" required>
+                <md-option *ngFor="let state of states" [value]="state.value">{{state.viewValue}}</md-option>
+              </md-select>
+              <md-hint *ngIf="!donate.details.state.valid && !donate.details.state.pristine">Pick your state</md-hint>
+            </div>
+            <div class="select-container">
+              <md-select placeholder="Country" formControlName="country" required>
+                <md-option *ngFor="let country of countries" [value]="country.value">{{country.viewValue}}</md-option>
+              </md-select>
+              <md-hint *ngIf="!donate.details.country.valid && !donate.details.country.pristine">Pick your country</md-hint>
+            </div>
+            <md-input-container dividerColor="{{donate.details.phone.valid || donate.details.phone.pristine ? 'primary' : 'warn'}}">
+              <input md-input placeholder="Phone number" formControlName="phone">
+            </md-input-container>
+            <md-input-container dividerColor="{{donate.details.email.valid || donate.details.email.pristine ? 'primary' : 'warn'}}">
+              <input md-input type="email" placeholder="Email address" formControlName="email" required>
+              <md-hint *ngIf="!donate.details.email.valid && !donate.details.email.pristine">Enter your email</md-hint>
+            </md-input-container>
+          </md-card>
           
-        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-lg" color="accent" md-raised-button type="button" (click)="close()">Reveal My Squares!</button>
+          <md-card formGroupName="payment">
+            <h2>Payment Information</h2>
+            <div class="payment-info">
+              <button type="button" class="btn-lg" [ngClass]="{'orange': donate.getPaymentMethod() === 'credit'}" (click)="donate.setPaymentMethod('credit')" md-raised-button>Credit card</button>
+              <button type="button" class="btn-lg" [ngClass]="{'orange': donate.getPaymentMethod() === 'ach'}"  (click)="donate.setPaymentMethod('ach')"  md-raised-button>Bank account</button>
+              <button type="button" class="btn-lg" [ngClass]="{'orange': donate.getPaymentMethod() === 'paypal'}"  (click)="donate.setPaymentMethod('paypal')"  md-raised-button>PayPal</button>
+            </div>
+            <div formGroupName="credit" *ngIf="donate.getPaymentMethod() === 'credit'">
+              <md-input-container dividerColor="{{donate.payment.credit.number.valid || donate.payment.credit.number.pristine ? 'primary' : 'warn'}}">
+                <input md-input type="number" placeholder="Card number" formControlName="number" required>
+                <md-hint *ngIf="!donate.payment.credit.number.valid && !donate.payment.credit.number.pristine">Enter the card number</md-hint>
+              </md-input-container>
+              <md-input-container dividerColor="{{donate.payment.credit.cvv.valid || donate.payment.credit.cvv.pristine ? 'primary' : 'warn'}}">
+                <input md-input type="number" placeholder="CVV" formControlName="cvv" required>
+                <md-hint *ngIf="!donate.payment.credit.cvv.valid && !donate.payment.credit.cvv.pristine">Enter the CVV</md-hint>
+              </md-input-container>
+              
+              <div>
+                <div class="select-container">
+                  <md-select placeholder="Month" formControlName="expMonth" required>
+                    <md-option *ngFor="let month of months" [value]="month.value">{{month.viewValue}}</md-option>
+                  </md-select>
+                  <md-hint *ngIf="!donate.payment.credit.expMonth.valid && !donate.payment.credit.expMonth.pristine">Select expiration month</md-hint>
+                </div>
+
+                <div class="select-container">
+                  <md-select placeholder="Year" formControlName="expYear" required>
+                    <md-option *ngFor="let year of years" [value]="year">{{year}}</md-option>
+                  </md-select>
+                  <md-hint *ngIf="!donate.payment.credit.expYear.valid && !donate.payment.credit.expYear.pristine">Select expiration year</md-hint>
+                </div>
+              </div>
+            </div>
+            
+            <div formGroupName="ach" *ngIf="donate.getPaymentMethod() === 'ach'">
+              <md-input-container dividerColor="{{donate.payment.ach.routing.valid || donate.payment.ach.routing.pristine ? 'primary' : 'warn'}}">
+                <input md-input type="number" placeholder="Routing number" formControlName="routing" required>
+                <md-hint *ngIf="!donate.payment.ach.routing.valid && !donate.payment.ach.routing.pristine">Enter your routing number</md-hint>
+              </md-input-container>
+
+              <md-input-container dividerColor="{{donate.payment.ach.account.valid || donate.payment.ach.account.pristine ? 'primary' : 'warn'}}">
+                <input md-input type="number" placeholder="Account number" formControlName="account" required>
+                <md-hint *ngIf="!donate.payment.ach.account.valid && !donate.payment.ach.account.pristine">Enter your account number</md-hint>
+              </md-input-container>
+              <div class="bank-type">
+                <md-radio-group formControlName="type" required>
+                  <md-radio-button value="checking">Checking</md-radio-button>
+                  <md-radio-button value="savings">Savings</md-radio-button>
+                </md-radio-group>
+                <md-hint *ngIf="!donate.payment.ach.type.valid && !donate.payment.ach.type.pristine">Select account type</md-hint>
+              </div>
+            </div>
+            
+            <md-card *ngIf="donate.getPaymentMethod() === 'paypal'">
+              <p>Your donation will be completed using PayPal.</p>
+            </md-card>
+
+            <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
+            <button type="submit" class="donate-button btn-lg" md-raised-button color="accent">Donate</button>
+
+          </md-card>
+        </form>
       </div>
     </div>
   </div>

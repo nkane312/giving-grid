@@ -1,3 +1,8 @@
 <md-card *ngIf="finish" [@flyInOut]="'in'" class="total">
     <h2>Total: {{total | currency:'USD' :true}}</h2>
+    <!--<button class="clear" (click)="clear()">Clear</button>-->
+</md-card>
+
+<md-card class="total-mobile">
+    <h2>Total: {{total | currency:'USD' :true}}</h2>
 </md-card>

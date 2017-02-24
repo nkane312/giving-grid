@@ -35,7 +35,7 @@ export class ThankYouModalComponent implements OnInit {
   private title = 'Give Together to Provide Prophetic Rescue!';
   private tags = 'TheFellowship, www.ifcj.org/rescue';
   private description = 'Bring Jews home to Israel and Give Together around the world.';
-  private shareTitle = 'Share The Give Together Ministry Effort With Others!';
+  private shareTitle = 'Share the Give Together Ministry Effort with Others!';
   private fbInner = "<img src='../assets/facebook.svg'>";
   private twitterInner = "<img src='../assets/twitter.svg'>";
   private state;

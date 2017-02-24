@@ -3,13 +3,15 @@
   <div class="modal-dialog">
     <div [@flyInOut]="'in'" class="modal-content">
       <button type="button" class="close" (click)="close()">&times;</button>
+      <img class="info-image" src="../assets/giving-grid-info-modal.jpg" />
       <div class="modal-header">
-        <h4 class="modal-title">Instructions</h4>
+        <h4 class="modal-title">{{ headline }}</h4>
       </div>
       <div class="modal-body">
+        
         <p>Each square represents a donation amount to help rescue poor Jewish people from areas of distress.</p>
           
-        <p>Click on one or more squares until you see your total desired donation amount shows. <strong>You may also type in the amount you would like to give instead of choosing the squares</strong>.</p>
+        <p>Click on one or more squares until you see your total desired donation amount shows. Or <a href="https://secure.ifcj.org/site/Donation2?df_id=13044&13044.donation=form1&mfc_pref=T">you can also give using our standard donation form here</a>.</p>
 
         <p>Type in your details including your name, address, and payment information and click “Donate Now.”</p>
 

@@ -114,6 +114,7 @@ export class DonateComponent implements OnInit {
   private showMobile(show: boolean){
     this._isMobile = show;
   }
+
   private donateRequest;
   private onSubmit({value, valid}: {value: DonateForm, valid: boolean}){
     this.donate.validate();
@@ -164,7 +165,9 @@ export class DonateComponent implements OnInit {
   ngOnChanges() {
     console.log(this.description);
   }
-
+  private mobileDonate() {
+    
+  }
 }
 class EcommerceTransaction {
   public pushGAData() {

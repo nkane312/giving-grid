@@ -4,6 +4,7 @@
 <button class="test-button" (click)="revealByIndex([1, 2, 3, 4, 5])">REVEAL</button>
 <button class="test-button" (click)="apiService.updateGrid(grid._id, [10, 11])">POST</button>
 <button class="test-button" (click)="showModal()">SHOW MODAL</button>
-<button class="info-button" (click)="showInfo()">&#9432; Help</button><!--&#9432; for Info-->
+<button class="info-button" (click)="showInfo()">&#9432; Help</button>
+<button class="info-button-mobile" (click)="showInfo()">&#9432;</button>
 <thank-you-modal [show]="modalState" [total]="grid.selectTotal" (closed)="modalClosed($event)"></thank-you-modal>
-<information [show]="infoState" (closed)="infoClosed($event)"></information>
+<information [show]="infoState" [headline]="grid.headline" (closed)="infoClosed($event)"></information>
