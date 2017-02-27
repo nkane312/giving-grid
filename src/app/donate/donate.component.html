@@ -1,6 +1,7 @@
 <div id="donate-wrapper">
   <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
   <description [totalState]="totalState" [headline]="headline" [description]="description" (done)="done($event)"></description>
+  <button class="info-button btn-lg" (click)="showInfo()" md-raised-button><i class="material-icons">info</i> Click Here for Help</button>
   <form [formGroup]="donate.master" (ngSubmit)="onSubmit(donate.master)" novalidate>
     <md-card formGroupName="details">
       <h2>Your Details</h2>
@@ -112,8 +113,9 @@
 </div>
 
 <div id="mobile-donate-wrapper">
-  <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
-  <button class="btn-lg mobile-donate" color="accent" md-raised-button (click)="showMobile(true)">Donate Now!</button>
+  <button class="btn-lg mobile-donate" color="accent" md-raised-button (click)="showMobile(true)">Donate</button>
+  <total [finish]="finish" [totalState]="totalState" [total]="total" ></total>
+  <button class="info-button-mobile btn-lg" (click)="showInfo()" md-raised-button><i class="material-icons">info</i></button>
 </div>
 <div class="overlay" *ngIf="_isMobile"></div>
 <div class="modal" *ngIf="_isMobile">
@@ -233,3 +235,4 @@
     </div>
   </div>
 </div>
+<information [show]="infoState" [headline]="headline" (closed)="infoClosed($event)"></information>

@@ -26,6 +26,23 @@ md-hint {
     color: #f44336;
     font-weight:bold;
 }
+.info-button {
+    z-index: 7;
+    top: 1%;
+    width: 100%;    
+    cursor: pointer;
+    font-family: Raleway, sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin: auto;
+    display: inline-block;
+    background-color: #e48c1b;
+    color: #ffffff;
+}
+.info-button-mobile {
+    display: none;
+}
+
 
 /* Donation form wrappers */
 #donate-wrapper {
@@ -54,13 +71,34 @@ md-hint {
         display:none;
     }
     #mobile-donate-wrapper {
-        display:block;
+        display: block;
         background:#ffffff;
         position: fixed;
         bottom: 0;
         top: auto;
         height: 10%;
         width: 100%;
+    }
+    .info-button-mobile {
+        border: 1px grey solid;
+        height: 100%;
+        width: 20%;
+        position: absolute;   
+        cursor: pointer;
+        font-size: 30px;
+        display: inline-block;
+        background-color: #e48c1b;
+        color: #ffffff;
+        right: 0;
+        padding: 0;
+    }
+    .info-button {
+        display: none;
+    }
+}
+@media screen and (max-width: 380px) {
+    .info-button-mobile {
+        right: -10px;
     }
 }
 
