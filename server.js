@@ -38,11 +38,32 @@ app.get('/vendor.bundle.js', function(req, res){
 app.get('/main.bundle.js', function(req, res){
     res.sendFile(path.join(__dirname, '/dist/main.bundle.js'));
 });
+// Routes to webpack bundled map files
+app.get('/styles.bundle.map', function(req, res){
+    res.sendFile(path.join(__dirname + '/dist/styles.bundle.map'));
+});
+app.get('/inline.bundle.map', function(req, res){
+    res.sendFile(path.join(__dirname, '/dist/inline.bundle.map'));
+});
+app.get('/vendor.bundle.map', function(req, res){
+    res.sendFile(path.join(__dirname, '/dist/vendor.bundle.map'));
+});
+app.get('/main.bundle.map', function(req, res){
+    res.sendFile(path.join(__dirname, '/dist/main.bundle.map'));
+});
 
 // Static assets folder
 app.use('/assets', express.static(path.join(__dirname, '/dist/assets')));
 
+app.get('/*.ttf', function(req, res){
+    res.sendFile(path.join(__dirname, `/dist/${req.path}`));
+});
+
 app.get('/', function(req, res){
+    res.sendFile(path.join(__dirname, '/dist/index.html'));
+});
+
+app.get('*', function(req, res){
     res.sendFile(path.join(__dirname, '/dist/index.html'));
 });
 
