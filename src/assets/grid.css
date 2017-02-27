@@ -114,6 +114,10 @@ button.btn-lg.orange:hover {
     margin: auto;
     display: inline-block;
 }
+.material-icons {
+    vertical-align: text-top !important;
+}
+
 @media screen and (max-width:799px){
     .loading-logo {
         width:90%; 
@@ -127,28 +131,40 @@ button.btn-lg.orange:hover {
     }
     .total-mobile {
         background: #00529c;
-        display: block;
-        width: 35%;
+        display: inline-block;
+        width: 40%;
         border: 1px grey solid;
+        margin-bottom: 10px;
+        z-index: 10;
+    }
+    #mobile-donate-wrapper > total > .total-mobile {
+        position: absolute;
         height: 100%;
-        float: left;
+        margin-bottom: 0px;
+        left: 40%;
     }
     .total-mobile h2 {
-        font-size: 1.25em;
+        font-size: 1.5em;
+        line-height: 20px;
         color: white;
     }
     .mobile-donate {
-        width: 43.5%;
-        float: left;
         border: 1px grey solid !important;
         height: 100%;
-        font-size: 24px !important;
+        position: absolute !important;
+        width: 40%;
+        padding: 0;
+        font-size: 25px !important;
     }
     .donate-button {
         margin: auto !important;
+        left: 0;
         width: 47%;
         font-size: 24px !important;
         padding: 14px 0px !important;
+    }
+    .material-icons {
+        font-size: 36px !important;
     }
 }
 
@@ -159,7 +175,6 @@ md-card {
     color: rgba(0, 0, 0, 0.75);
     font-size: 115%;
 }
-
 
 /* Modal styles */
 .overlay {

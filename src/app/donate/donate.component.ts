@@ -34,6 +34,16 @@ export class DonateComponent implements OnInit {
   @Input() description;
   @Output() donating = new EventEmitter();
 
+
+  private infoState = false;
+  private showInfo(){
+      this.infoState = true;
+  }
+  private infoClosed(e){
+      this.infoState = e;
+  }
+
+
   private finish = false;
   private done() {
     if (this.totalState === true) {

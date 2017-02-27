@@ -29,7 +29,7 @@ import { Component, OnInit, Input, Output, EventEmitter, trigger, state, style, 
 })
 export class InformationComponent implements OnInit {
   @Input() headline;
-  private state;
+  private state = false;
   @Output() closed = new EventEmitter();
   @Input()
   set show(value) {

@@ -80,13 +80,13 @@ export class GridComponent {
         this.modalState = e;
     }
 
-    private infoState = false;
+    /*private infoState = false;
     private showInfo(){
         this.infoState = true;
     }
     private infoClosed(e){
         this.infoState = e;
-    }
+    }*/
 
     private totalState = false;
 
