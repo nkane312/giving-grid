@@ -27,7 +27,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 // Routes to webpack bundles
 app.get('/styles.bundle.css', function(req, res){
-    res.sendFile(path.join(__dirname + '/dist/styles.bundle.css'));
+    res.sendFile(path.join(__dirname, '/dist/styles.bundle.css'));
 });
 app.get('/inline.bundle.js', function(req, res){
     res.sendFile(path.join(__dirname, '/dist/inline.bundle.js'));
@@ -40,7 +40,7 @@ app.get('/main.bundle.js', function(req, res){
 });
 // Routes to webpack bundled map files
 app.get('/styles.bundle.map', function(req, res){
-    res.sendFile(path.join(__dirname + '/dist/styles.bundle.map'));
+    res.sendFile(path.join(__dirname, '/dist/styles.bundle.map'));
 });
 app.get('/inline.bundle.map', function(req, res){
     res.sendFile(path.join(__dirname, '/dist/inline.bundle.map'));
@@ -51,6 +51,36 @@ app.get('/vendor.bundle.map', function(req, res){
 app.get('/main.bundle.map', function(req, res){
     res.sendFile(path.join(__dirname, '/dist/main.bundle.map'));
 });
+
+// Routes to production webpack bundles
+app.get('/styles.*.bundle.css', function(req, res){
+    res.sendFile(path.join(__dirname, `/dist/${req.path}`));
+});
+app.get('/inline.*.bundle.js', function(req, res){
+    res.sendFile(path.join(__dirname, `/dist/${req.path}`));
+});
+app.get('/vendor.*.bundle.js', function(req, res){
+    res.sendFile(path.join(__dirname, `/dist/${req.path}`));
+});
+app.get('/main.*.bundle.js', function(req, res){
+    res.sendFile(path.join(__dirname, `/dist/${req.path}`));
+});
+// Routes to production webpack bundled map files
+app.get('/styles.*.bundle.map', function(req, res){
+    res.sendFile(path.join(__dirname, `/dist/${req.path}`));
+});
+app.get('/inline.*.bundle.map', function(req, res){
+    res.sendFile(path.join(__dirname, `/dist/${req.path}`));
+});
+app.get('/vendor.*.bundle.map', function(req, res){
+    res.sendFile(path.join(__dirname, `/dist/${req.path}`));
+});
+app.get('/main.*.bundle.map', function(req, res){
+    res.sendFile(path.join(__dirname, `/dist/${req.path}`));
+});
+
+
+
 
 // Static assets folder
 app.use('/assets', express.static(path.join(__dirname, '/dist/assets')));
