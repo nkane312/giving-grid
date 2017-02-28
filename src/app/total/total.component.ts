@@ -30,10 +30,6 @@ export class TotalComponent implements OnInit {
     }
   }
 
-  /*private clear() {
-    
-  }*/
-
   constructor() { }
 
   ngOnInit() {
