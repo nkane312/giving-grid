@@ -85,8 +85,8 @@ export class GridComponent {
 
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private route: ActivatedRoute) {
         var params;
-        route.params.subscribe(queryString => {
-            params = queryString;
+        route.params.subscribe(routeParams => {
+            params = routeParams;
         });
         
         this.apiService.getGrid(params.campaign, params.version)

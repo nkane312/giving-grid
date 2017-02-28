@@ -7,7 +7,7 @@ module.exports = function(app){
         var id = req.query.id;
         var campaign = req.query.campaign;
         var version = req.query.version;
-        if (campaign && version === 'undefined') {
+        if (campaign !== 'undefined' && version === 'undefined') {
             Grid.find({'campaign': campaign}, function(err, grids){
                 if(err){
                     console.log(`Error: ${err}`);
@@ -23,7 +23,7 @@ module.exports = function(app){
                     res.send(active);
                 }
             });
-        } else if (campaign && version !== 'undefined') {
+        } else if (campaign !== 'undefined' && version !== 'undefined') {
             Grid.findOne({'campaign': campaign, 'version': version}, function(err, grid){
                 if(err){
                     console.log(`Error: ${err}`);
