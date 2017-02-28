@@ -8,6 +8,7 @@ import 'rxjs/Rx';
 import 'classlist-polyfill';
 
 import { ApiService } from '../services/api.service';
+import { SocketService } from '../services/socket.service';
 
 import { ThankYouModalComponent } from '../thank-you-modal/thank-you-modal.component';
 import { DonateComponent } from '../donate/donate.component';
@@ -83,7 +84,7 @@ export class GridComponent {
     private totalState = false;
 
 
-    constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private route: ActivatedRoute) {
+    constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private socketService: SocketService, private route: ActivatedRoute) {
         var params;
         route.params.subscribe(routeParams => {
             params = routeParams;
@@ -365,7 +366,7 @@ export class GridComponent {
             this.totalState = false;
         }
     }
-    private gridButton2(grid) {
+    private revealSquares(grid) {
         var x = document.getElementsByClassName('selected');
         var y = document.getElementsByClassName('selectedText');
         var selectedArray = Array.prototype.slice.call(x);
@@ -379,6 +380,7 @@ export class GridComponent {
             }, i * 100);
         });
         grid.selectTotal = 0;
+        this.modalState = true;
     }
     private revealByIndex(indexes, timing) {
         if (!timing){

@@ -126,18 +126,34 @@ export class DonateComponent implements OnInit {
   }
 
   private donateRequest;
+  private formSub = false;
   private onSubmit({value, valid}: {value: DonateForm, valid: boolean}){
     this.donate.validate();
-    if (valid){
-      this.donateRequest = this.luminateApi.sendRequest(value, {paymentType: this.donate.payment.paymentType, dfId: this.dfId, lvlId: this.lvlId});
+    this.formSub = true;
+    if (valid && this.total >= 5){
+      this.donateRequest = this.luminateApi.sendRequest(value, {type: this.donate.payment.paymentType, amount: this.total, dfId: this.dfId, lvlId: this.lvlId});
+      console.log(this.donateRequest);
       this.donateRequest.subscribe(
         data => {
           console.log('success');
           console.log(data);
+          console.log(JSON.parse(data._body));
+          var body = JSON.parse(data._body);
+          if (body.donationResponse.donation) {
+            //Call GA function
+            this.gaData(body.donationResponse.donation.transaction_id);
+            this.donating.emit();
+            //Set total to zero
+            //Call TY Modal
+            //Reveal Squares
+            
+          }
         },
         err => {
           console.log('error');
           console.log(err);
+          console.log(JSON.parse(err._body));
+          var body = JSON.parse(err._body);
         },
         complete => {
           console.log('complete');
@@ -147,10 +163,10 @@ export class DonateComponent implements OnInit {
     }
   }
 
-  public testGA() {
+  public gaData(transactionId) {
     var ga = new EcommerceTransaction({
-      transactionId: 'testTransaction2',
-      dfId: 12345,
+      transactionId: transactionId,
+      dfId: 13044,
       campaign: 'WOE',
       version: 1
     }, [{

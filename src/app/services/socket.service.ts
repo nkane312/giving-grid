@@ -16,5 +16,8 @@ export class SocketService {
       io.connect(`http://${window.location.hostname}:5001`);
       console.log(data);
     });
+    this.socket.on('revealSquares', function(data){
+      
+    });
   }
 }

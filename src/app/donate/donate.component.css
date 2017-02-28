@@ -22,7 +22,10 @@
 .full-width {
     width:100%;
 }
-md-hint {
+.margin-bottom {
+    margin-bottom: 10px;
+}
+md-hint, .no-total {
     color: #f44336;
     font-weight:bold;
 }
@@ -35,6 +38,17 @@ md-hint {
     font-size: 20px;
     font-weight: 800;
     margin: auto;
+    display: inline-block;
+    background-color: #e48c1b;
+    color: #ffffff;
+}
+.info-donate-button {
+    width: 100%;    
+    cursor: pointer;
+    font-family: Raleway, sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 10px;
     display: inline-block;
     background-color: #e48c1b;
     color: #ffffff;

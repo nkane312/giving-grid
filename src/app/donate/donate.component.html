@@ -53,7 +53,7 @@
         <button type="button" class="btn-lg" [ngClass]="{'orange': donate.getPaymentMethod() === 'ach'}"  (click)="donate.setPaymentMethod('ach')"  md-raised-button>Bank account</button>
         <button type="button" class="btn-lg" [ngClass]="{'orange': donate.getPaymentMethod() === 'paypal'}"  (click)="donate.setPaymentMethod('paypal')"  md-raised-button>PayPal</button>
       </div>
-      <div formGroupName="credit" *ngIf="donate.getPaymentMethod() === 'credit'">
+      <div class="margin-bottom" formGroupName="credit" *ngIf="donate.getPaymentMethod() === 'credit'">
         <md-input-container dividerColor="{{donate.payment.credit.number.valid || donate.payment.credit.number.pristine ? 'primary' : 'warn'}}">
           <input md-input type="number" placeholder="Card number" formControlName="number" required>
           <md-hint *ngIf="!donate.payment.credit.number.valid && !donate.payment.credit.number.pristine">Enter the card number</md-hint>
@@ -80,7 +80,7 @@
         </div>
       </div>
       
-      <div formGroupName="ach" *ngIf="donate.getPaymentMethod() === 'ach'">
+      <div class="margin-bottom" formGroupName="ach" *ngIf="donate.getPaymentMethod() === 'ach'">
         <md-input-container dividerColor="{{donate.payment.ach.routing.valid || donate.payment.ach.routing.pristine ? 'primary' : 'warn'}}">
           <input md-input type="number" placeholder="Routing number" formControlName="routing" required>
           <md-hint *ngIf="!donate.payment.ach.routing.valid && !donate.payment.ach.routing.pristine">Enter your routing number</md-hint>
@@ -104,12 +104,15 @@
       </md-card>
 
       <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
+      <div *ngIf="total < 5 && formSub">
+        <p class="no-total">Please click on at least one of the grid squares to donate.</p>
+        <button class="info-button btn-lg" (click)="showInfo()" md-raised-button color="info"><i class="material-icons">info</i> Click Here for Help</button>
+      </div>
       <button type="submit" class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
 
     </md-card>
     
   </form>
-  <button (click)="testGA()" id="testGA">TEST GA HERE</button>
 </div>
 
 <div id="mobile-donate-wrapper">
@@ -225,7 +228,10 @@
             <md-card *ngIf="donate.getPaymentMethod() === 'paypal'">
               <p>Your donation will be completed using PayPal.</p>
             </md-card>
-
+            <div *ngIf="total < 5 && formSub">
+              <p class="no-total">Please click on at least one of the grid squares to donate.</p>
+              <button class="info-donate-button btn-lg" (click)="showInfo()" md-raised-button><i class="material-icons">info</i> Click Here for Help</button>
+            </div>
             <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
             <button type="submit" class="donate-button btn-lg" md-raised-button color="accent">Donate</button>
 
