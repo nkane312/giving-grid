@@ -29,7 +29,7 @@ a {
 .selected {
     fill: #60c1cc;
 }
-.selectedText {
+.selectedText, .selectedTspan {
     fill: #00529c;
 }
 .selected:hover{

@@ -152,8 +152,6 @@ export class DonateComponent implements OnInit {
         err => {
           console.log('error');
           console.log(err);
-          console.log(JSON.parse(err._body));
-          var body = JSON.parse(err._body);
         },
         complete => {
           console.log('complete');

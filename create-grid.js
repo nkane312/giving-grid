@@ -85,7 +85,7 @@ function generateCells(spread){
 
 
 var grid = new GridSchema({
-    image: './assets/freedom-flight-collage.jpg',
+    image: './assets/freedom-flight.jpg',
     dfId: 13044,
     lvlId: 19329,
     headline: '25 Years of Prophecy Fulfilled!',

@@ -79,6 +79,11 @@ export class GridComponent {
     }
     private modalClosed(e){
         this.modalState = e;
+        var self = this;
+        setTimeout(function() {
+            self.revealSquares(self.grid);
+            self.totalState = false;
+        }, 1500);
     }
 
     private totalState = false;
@@ -344,7 +349,7 @@ export class GridComponent {
                 return !d3.select(cell.rect).classed('available');
             });
         d3.select(cell.value)
-            .classed('selectedText', (d, i) => {
+            .classed('selectedTspan', (d, i) => {
                 if(cell.selected === true){
                     d3.select('#' + cell.value.parentNode.id)
                         .classed('selectedText', true)
@@ -355,7 +360,7 @@ export class GridComponent {
                         .classed('selectedText', false)
                         .classed('available', true);
                 }
-                return !d3.select(cell.value).classed('selectedText');
+                return !d3.select(cell.value).classed('selectedTspan');
             })
             .classed('available', (d, i) => {
                 return !d3.select(cell.value).classed('available');
@@ -369,18 +374,21 @@ export class GridComponent {
     private revealSquares(grid) {
         var x = document.getElementsByClassName('selected');
         var y = document.getElementsByClassName('selectedText');
+        var z = document.getElementsByClassName('selectedTspan');
         var selectedArray = Array.prototype.slice.call(x);
         var selectedTextArray = Array.prototype.slice.call(y);
+        var selectedTspanArray = Array.prototype.slice.call(z);
         selectedArray.forEach (function(s, i){
             setTimeout(() => {
                 selectedArray[i].classList.remove('selected');
                 selectedArray[i].classList.add('revealed');
                 selectedTextArray[i].classList.remove('selectedText');
                 selectedTextArray[i].classList.add('revealed');
+                selectedTspanArray[i].classList.remove('selectedTspan');
+                selectedTspanArray[i].classList.add('revealed');
             }, i * 100);
         });
         grid.selectTotal = 0;
-        this.modalState = true;
     }
     private revealByIndex(indexes, timing) {
         if (!timing){

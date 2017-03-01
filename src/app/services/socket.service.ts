@@ -17,7 +17,8 @@ export class SocketService {
       console.log(data);
     });
     this.socket.on('revealSquares', function(data){
-      
+      console.log(data);
+      //this.revealSquares(data)
     });
   }
 }
