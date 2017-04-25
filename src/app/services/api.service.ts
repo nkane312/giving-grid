@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class ApiService {
-  private baseApiUrl = `http://${window.location.hostname}:3001/api/`;
+  private baseApiUrl = `//${window.location.hostname}:8443/api/`;
 
   private _grid$: BehaviorSubject<any> = new BehaviorSubject(undefined);
 

@@ -1,26 +1,3 @@
-.test-button {
-    position:absolute;
-    z-index: 6;
-    right:0;
-    top:0;
-}
-.test-button + .test-button {
-    top: 30px;
-}
-.test-button + .test-button + .test-button {
-    top: 60px;
-}
-.test-button + .test-button + .test-button + .test-button {
-    top: 90px;
-}
-
-/*button + button + button + button + button {
-    top: 120px;
-}
-button + button + button + button + button + button {
-    top: 150px;
-}*/
-
 body {
     margin: 0;
     padding: 0;

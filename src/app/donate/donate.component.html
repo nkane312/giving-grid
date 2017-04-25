@@ -2,6 +2,7 @@
   <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
   <description [totalState]="totalState" [headline]="headline" [description]="description" (done)="done($event)"></description>
   <button class="info-button btn-lg" (click)="showInfo()" md-raised-button><i class="material-icons">info</i> Click Here for Help</button>
+  <img class="paypal-pixel" src="https://secure.ifcj.org/site/PixelServer" />
   <form [formGroup]="donate.master" (ngSubmit)="onSubmit(donate.master)" novalidate>
     <md-card formGroupName="details">
       <h2>Your Details</h2>
@@ -108,7 +109,7 @@
         <p class="no-total">Please click on at least one of the grid squares to donate.</p>
         <button class="info-button btn-lg" (click)="showInfo()" md-raised-button color="info"><i class="material-icons">info</i> Click Here for Help</button>
       </div>
-      <button type="submit" class="donate-button btn-lg" md-raised-button color="accent">Donate Now!</button>
+      <button type="submit" class="donate-button btn-lg" id="donate" md-raised-button color="accent">Donate Now!</button>
 
     </md-card>
     
@@ -233,8 +234,7 @@
               <button class="info-donate-button btn-lg" (click)="showInfo()" md-raised-button><i class="material-icons">info</i> Click Here for Help</button>
             </div>
             <total [finish]="finish" [totalState]="totalState" [total]="total"></total>
-            <button type="submit" class="donate-button btn-lg" md-raised-button color="accent">Donate</button>
-
+            <button type="submit" class="donate-button btn-lg" id="mobile-donate" md-raised-button color="accent">Donate</button>
           </md-card>
         </form>
       </div>

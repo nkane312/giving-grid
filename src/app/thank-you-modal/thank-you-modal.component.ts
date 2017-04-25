@@ -31,7 +31,7 @@ import {ShareButtonsModule} from "ng2-sharebuttons";
 })
 export class ThankYouModalComponent implements OnInit {
   @Input() total; 
-  private url = window.location.href;
+  private url = this.trimPayPal(window.location.href);
   private title = 'Give Together to Provide Prophetic Rescue!';
   private tags = 'TheFellowship, www.ifcj.org/rescue';
   private description = 'Bring Jews home to Israel and Give Together around the world.';
@@ -51,7 +51,13 @@ export class ThankYouModalComponent implements OnInit {
     this.show = false;
     this.closed.emit(this.state);
   }
-
+  private trimPayPal(url) {
+    if (location.search === '?paypal=complete') {
+      return url.split('?')[0];
+    } else {
+      return url;
+    }
+  }
 
   constructor() {
    }

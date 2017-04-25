@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import * as io from 'socket.io-client';
 
 
+
 @Injectable()
 export class SocketService {
   private socket;
@@ -11,14 +12,14 @@ export class SocketService {
   }
 
   openConnection(){
-    this.socket = io.connect(`http://${window.location.hostname}:5001`);
+    this.socket = io.connect(`//${window.location.hostname}:5001`, {secure: true});
     this.socket.on('confirmConnection', function(data){
-      io.connect(`http://${window.location.hostname}:5001`);
+      io.connect(`//${window.location.hostname}:5001`);
       console.log(data);
     });
     this.socket.on('revealSquares', function(data){
       console.log(data);
-      //this.revealSquares(data)
+      
     });
   }
 }

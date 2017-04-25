@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
 
@@ -19,6 +19,8 @@ import { DonateComponent } from '../donate/donate.component';
     styleUrls: ['./grid.component.css']
 })
 export class GridComponent {
+    @Output() closed = new EventEmitter();
+
     private grid = {
         svg : undefined,
         image : {
@@ -71,12 +73,21 @@ export class GridComponent {
         headline: undefined,
         description: undefined,
         selectTotal: 0,
+        selections: undefined,
     };
 
+    private saveSelections() {
+        this.grid.selections = this.selectedIndexes();
+        localStorage.setItem('selections', this.grid.selections);
+    }
+
+    private infoState = true;
     private modalState = false;
     private showModal(){
+        this.infoState = false;
         this.modalState = true;
     }
+
     private modalClosed(e){
         this.modalState = e;
         var self = this;
@@ -87,7 +98,7 @@ export class GridComponent {
     }
 
     private totalState = false;
-
+    
 
     constructor(private http: Http, private el: ElementRef, private apiService: ApiService, private socketService: SocketService, private route: ActivatedRoute) {
         var params;
@@ -133,6 +144,11 @@ export class GridComponent {
                             spacerCount += 1;
                         }
                     });
+                    if (location.search === '?paypal=complete' && localStorage.getItem('selections')) {
+                            this.closed.emit();
+                            this.setSelections();
+                            this.showModal();                       
+                    }
                 }
             });
     }
@@ -158,6 +174,9 @@ export class GridComponent {
             .append('rect')
                 .attr('id', function(d, i) {
                     return 'rect' + (i + 1);
+                })
+                .attr('index', function(d, i) {
+                    return i;
                 })
                 .style('filter', `url(${window.location.href}#drop-shadow)`)
                 .classed('available', true)
@@ -372,12 +391,14 @@ export class GridComponent {
         }
     }
     private revealSquares(grid) {
+        var self = this;
         var x = document.getElementsByClassName('selected');
         var y = document.getElementsByClassName('selectedText');
         var z = document.getElementsByClassName('selectedTspan');
         var selectedArray = Array.prototype.slice.call(x);
         var selectedTextArray = Array.prototype.slice.call(y);
         var selectedTspanArray = Array.prototype.slice.call(z);
+        var selectedIndexes = [];
         selectedArray.forEach (function(s, i){
             setTimeout(() => {
                 selectedArray[i].classList.remove('selected');
@@ -387,9 +408,50 @@ export class GridComponent {
                 selectedTspanArray[i].classList.remove('selectedTspan');
                 selectedTspanArray[i].classList.add('revealed');
             }, i * 100);
+        selectedIndexes.push(selectedArray[i].attributes.index.value);
         });
+        this.apiService.updateGrid(grid._id, selectedIndexes);
         grid.selectTotal = 0;
     }
+    private selectedIndexes() {
+        var x = document.getElementsByClassName('selected');
+        var selectedArray = Array.prototype.slice.call(x);
+        var selectedIndexes = [];
+        selectedArray.forEach (function(s, i){
+            selectedIndexes.push(selectedArray[i].attributes.index.value);
+        });
+        return selectedIndexes;
+    }
+    private setSelections() {
+        var x = localStorage.getItem('selections');
+        var selections = x.split(',');
+        selections.forEach((id, i) => {
+            var index = parseInt(selections[i]) + 1;
+            index.toString();
+            var rect = document.getElementById('rect' + index);
+            var text = document.getElementById('text' + index);
+            var z = text.getElementsByTagName('tspan');
+            var tspan = Array.prototype.slice.call(z);
+            rect.classList.remove('available');
+            rect.classList.add('selected');
+            text.classList.remove('available');
+            text.classList.add('selectedText');
+            tspan.forEach((s, v) => {
+                tspan[v].classList.remove('available');
+                tspan[v].classList.add('selectedTspan');
+                this.grid.selectTotal += +(parseInt(tspan[v].textContent));
+            });
+        });
+    }
+    /*private getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }*/
     private revealByIndex(indexes, timing) {
         if (!timing){
             indexes.forEach((index, i) => {

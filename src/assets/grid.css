@@ -94,6 +94,10 @@ button.btn-lg.orange:hover {
     bottom: 0;
     left: 0;
 }
+.paypal-pixel {
+    position: absolute;
+    left: -10000px;
+}
 .total {
     background: #00529c;
 }
@@ -129,7 +133,11 @@ button.btn-lg.orange:hover {
     .total {
         display: none;
     }
-    .total-mobile {
+    #mobile-donate-wrapper > total > .total-mobile {
+        position: absolute;
+        height: 100%;
+        margin-bottom: 0px;
+        left: 40%;
         background: #00529c;
         display: inline-block;
         width: 40%;
@@ -137,15 +145,9 @@ button.btn-lg.orange:hover {
         margin-bottom: 10px;
         z-index: 10;
     }
-    #mobile-donate-wrapper > total > .total-mobile {
-        position: absolute;
-        height: 100%;
-        margin-bottom: 0px;
-        left: 40%;
-    }
     .total-mobile h2 {
-        font-size: 2.5em;
-        line-height: 20px;
+        font-size: 2em;
+        line-height: 10px;
         color: white;
     }
     .mobile-donate {
@@ -155,6 +157,7 @@ button.btn-lg.orange:hover {
         width: 40%;
         padding: 0;
         font-size: 25px !important;
+        line-height: 0px !important;
     }
     .donate-button {
         margin: auto !important;
@@ -167,9 +170,32 @@ button.btn-lg.orange:hover {
         font-size: 36px !important;
     }
 }
-@media screen and (max-width: 615px) {
+@media (max-width: 615px) and (orientation: landscape) {
     .total-mobile h2 {
-        font-size: 1.4em;
+        font-size: 2em;
+        line-height: 0px;
+    }
+    .material-icons {
+        font-size: 29px !important;
+    }
+}
+@media (max-width: 615px) and (orientation: portrait) and (max-height: 750px) {
+    .total-mobile h2 {
+        font-size: 1.25em;
+        line-height: 25px;
+    }
+}
+
+@media (min-width: 750px) and (max-width: 800px) and (min-height: 750px) and (orientation: portrait) {
+    .total-mobile h2 {
+        font-size: 3em;
+        line-height: 60px;
+    }
+    .material-icons {
+        font-size: 75px !important;
+    }
+    .mobile-donate {
+        font-size: 65px !important;
     }
 }
 
@@ -201,8 +227,8 @@ md-card {
     text-align: center;
     width: 90%;
 }
-.modal-header {
-    margin-top: 30px;
+.modal-header > h4 {
+    line-height: 50px;
 }
 .modal-content {
     background-color: #fefefe;
@@ -228,6 +254,8 @@ md-card {
     text-decoration: none;
     background-color: transparent;
     border: none;
+    z-index: 10000;
+    position: relative;
 }
 .close:hover,
 .close:focus {

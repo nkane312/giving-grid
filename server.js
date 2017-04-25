@@ -1,10 +1,12 @@
+var fs = require('fs');
+var options = {
+    key: fs.readFileSync('/etc/pki/tls/private/giving_ifcj_org.key'),
+    cert: fs.readFileSync('/etc/pki/tls/certs/giving_ifcj_org.crt')
+};
 var express = require('express');
 var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
 var http = require('http');
 var path = require('path');
-var fs = require('fs');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var helmet = require('helmet');
@@ -97,14 +99,20 @@ app.get('*', function(req, res){
     res.sendFile(path.join(__dirname, '/dist/index.html'));
 });
 
-app.listen(3001, function(){
-    console.log('Listening on port 3001');
+var httpServer = require('http').Server(app);
+var httpsServer = require('https').Server(options, app);
+var socketServer = require('https').Server(options, app);
+var io = require('socket.io')(socketServer);
+
+httpsServer.listen(8443, function(){
+    console.log('Listening on port 8443');
 });
 
 io.on('connection', function(socket){
     socket.emit('confirmConnection', 'Connected');
 });
-server.listen(5001, () => {
+
+socketServer.listen(5001, () => {
     console.log('Listening on port 5001');
 });
 
