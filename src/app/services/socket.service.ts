@@ -8,9 +8,9 @@ import * as io from 'socket.io-client';
 export class SocketService {
   private socket;
   constructor() {
-    this.openConnection();
+    //this.openConnection();
   }
-
+  /*
   openConnection(){
     this.socket = io.connect(`//${window.location.hostname}:5001`, {secure: true});
     this.socket.on('confirmConnection', function(data){
@@ -22,4 +22,5 @@ export class SocketService {
       
     });
   }
+  */
 }

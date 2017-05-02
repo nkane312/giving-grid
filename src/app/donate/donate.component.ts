@@ -458,7 +458,6 @@ export class DonateComponent implements OnInit {
     this.formSub = true;
     if (valid && this.total >= 5){
       this.sessionRequest = this.luminateApi.getLuminateSession();
-      console.log(this.sessionRequest);
       this.sessionRequest.subscribe(
       data => {
           console.log('success');
@@ -489,23 +488,25 @@ export class DonateComponent implements OnInit {
           data => {
             console.log('success');
             this.disableSubmit();
-            //console.log(JSON.parse(data._body));
+            
             var body = JSON.parse(data._body);
-
+            
             if (body.donationResponse.redirect) {
               window.location.href = body.donationResponse.redirect.url;
-              //console.log(body.donationResponse);
+              
             }
 
             if (body.donationResponse.donation) {
               this.donating.emit();
               this.showMobile(false);
             }
-
           },
           err => {
             console.log('error');
             console.log(err);
+            if(err._body.includes('CARD_DECLINED')) {
+              alert('Error: The credit card entered was declined. \nPlease check the information that you entered.');
+            }
           },
           complete => {
             console.log('complete');

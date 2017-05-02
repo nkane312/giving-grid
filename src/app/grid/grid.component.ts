@@ -13,6 +13,8 @@ import { SocketService } from '../services/socket.service';
 import { ThankYouModalComponent } from '../thank-you-modal/thank-you-modal.component';
 import { DonateComponent } from '../donate/donate.component';
 
+import { Cookie } from 'ng2-cookies/ng2-cookies';
+
 @Component({
     selector: 'app-grid',
     templateUrl: './grid.component.html',
@@ -78,10 +80,12 @@ export class GridComponent {
 
     private saveSelections() {
         this.grid.selections = this.selectedIndexes();
-        localStorage.setItem('selections', this.grid.selections);
+        Cookie.set('selections', this.grid.selections);
     }
 
-    private infoState = true;
+    private infoState;
+    
+
     private modalState = false;
     private showModal(){
         this.infoState = false;
@@ -144,7 +148,7 @@ export class GridComponent {
                             spacerCount += 1;
                         }
                     });
-                    if (location.search === '?paypal=complete' && localStorage.getItem('selections')) {
+                    if (window.location.search.indexOf("paypal=") > -1 && Cookie.get('selections')) {
                             this.closed.emit();
                             this.setSelections();
                             this.showModal();                       
@@ -307,6 +311,11 @@ export class GridComponent {
         d3.selectAll('tspan')
             .style('position', 'absolute')
             .style('font-size', `${(grid.rectSize.width / 2)}px`);
+        if(window.innerWidth >= 800){
+            this.infoState = false;
+        } else {
+            this.infoState = false;
+        }
     }
     private adjustImage(grid){
         var natSize, xOffset, yOffset;
@@ -412,6 +421,7 @@ export class GridComponent {
         });
         this.apiService.updateGrid(grid._id, selectedIndexes);
         grid.selectTotal = 0;
+        Cookie.delete('selections');
     }
     private selectedIndexes() {
         var x = document.getElementsByClassName('selected');
@@ -423,7 +433,7 @@ export class GridComponent {
         return selectedIndexes;
     }
     private setSelections() {
-        var x = localStorage.getItem('selections');
+        var x = Cookie.get('selections');
         var selections = x.split(',');
         selections.forEach((id, i) => {
             var index = parseInt(selections[i]) + 1;

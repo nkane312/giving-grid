@@ -90,7 +90,7 @@ var grid = new GridSchema({
     lvlId: 19329,
     headline: '25 Years of Prophecy Fulfilled!',
     description: 'Freedom Flight now boarding! Click on one or more giving amounts and fill out your donation details below to join hundreds of Christians and Jews in prophetic rescue of 350 Jews from areas of distress around the world. As the worldwide <em>Fellowship</em> community bands together to send the next Freedom Flight home to Israel, giving squares will begin to reveal a special image to show the lifesaving impact of your support of the <em>On Wings of Eagles</em> ministry. <a href="https://secure.ifcj.org/site/Donation2?df_id=13044&13044.donation=form1&mfc_pref=T&subsrc=EA41702XXEWXD">You can also give using our standard donation form here</a>.',
-    campaign: 'WOE',
+    campaign: 'woe',
     version: 4,
     cells: generateCells(spread)
 });

@@ -120,6 +120,7 @@
   <button class="btn-lg mobile-donate" color="accent" md-raised-button (click)="showMobile(true)">Donate</button>
   <total [finish]="finish" [totalState]="totalState" [total]="total" ></total>
   <button class="info-button-mobile btn-lg" (click)="showInfo()" md-raised-button><i class="material-icons">info</i></button>
+  <img class="paypal-pixel" src="https://secure.ifcj.org/site/PixelServer" />
 </div>
 <div class="overlay" *ngIf="_isMobile"></div>
 <div class="modal" *ngIf="_isMobile">

@@ -108,12 +108,4 @@ httpsServer.listen(8443, function(){
     console.log('Listening on port 8443');
 });
 
-io.on('connection', function(socket){
-    socket.emit('confirmConnection', 'Connected');
-});
-
-socketServer.listen(5001, () => {
-    console.log('Listening on port 5001');
-});
-
 module.exports = app;

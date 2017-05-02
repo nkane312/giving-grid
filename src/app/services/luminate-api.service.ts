@@ -42,8 +42,8 @@ export class LuminateApi {
   private paypalFields = {
     method: 'startDonation',
     extproc: 'paypal',
-    finish_success_redirect: window.location.href + '?paypal=complete',
-    finish_error_redirect: window.location.href + '?error=true',
+    finish_success_redirect: this.createRedirectParamater(window.location.href, 'paypal=complete'),
+    finish_error_redirect: this.createRedirectParamater(window.location.href, 'error=true')
   }
   private standardFields = {
     api_key: this.apiKey,
@@ -142,6 +142,13 @@ export class LuminateApi {
     var body;
     body = Object.assign(this.sessionFields);
     return this.http.post(this.sessionApiEndpoint, this.serialize(body), this.options);
+  }
+  createRedirectParamater(url, parameter) {
+    if (url.includes('?')) {
+      return url + '&' + parameter;
+    } else {
+      return url + '?' + parameter;
+    }
   }
 }
 
