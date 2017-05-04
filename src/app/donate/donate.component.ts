@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Rx';
 import { DonateForm } from './donate-form.controller';
 import { LuminateApi } from '../services/luminate-api.service';
 
-//declare var dataLayer: any;
 declare var ga: any;
 
 @Component({
@@ -490,13 +489,14 @@ export class DonateComponent implements OnInit {
             this.disableSubmit();
             
             var body = JSON.parse(data._body);
-            
+            console.log(body);
             if (body.donationResponse.redirect) {
               window.location.href = body.donationResponse.redirect.url;
-              
             }
 
             if (body.donationResponse.donation) {
+              //this.gaData(body.donationResponse.donation.transaction_id);
+              console.log(body);
               this.donating.emit();
               this.showMobile(false);
             }
@@ -508,7 +508,7 @@ export class DonateComponent implements OnInit {
               alert('Error: The credit card entered was declined. \nPlease check the information that you entered.');
             }
           },
-          complete => {
+          complete => {           
             console.log('complete');
             console.log(complete);
           }
@@ -527,6 +527,30 @@ export class DonateComponent implements OnInit {
       }, 1500);
     }
   }
+
+  public gaData(transactionId) {
+    var ga = new EcommerceTransaction({
+      transactionId: transactionId,
+      dfId: 13044,
+      campaign: 'WOE',
+      version: 1
+    }, [{
+      id: 25,
+      name: 'Rect6',
+      price: 25,
+      quantity: 1,
+      category: 'Grid Square'
+    },
+    {
+      id: 50,
+      name: 'Rect7',
+      price: 50,
+      quantity: 1,
+      category: 'Grid Square'
+    }]);
+    ga.pushGAData();
+  }
+
   ngOnInit() {
     this.donate.setPaymentMethod('credit');
   }
@@ -570,7 +594,6 @@ class EcommerceTransaction {
     this.total = products.reduce(function(acc, product) {
       return acc + product.price;
     }, 0);
-    
   }
 }
 interface Transaction {
