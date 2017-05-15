@@ -32,6 +32,10 @@ export class DonateComponent implements OnInit {
   @Input() headline;
   @Input() description;
   @Input() infoState;
+  @Input() campaign;
+  @Input() version;
+  @Input() selections;
+  @Input() selectedValues;
   @Output() donating = new EventEmitter();
   @Output() paypal = new EventEmitter();
 
@@ -454,6 +458,7 @@ export class DonateComponent implements OnInit {
   private onSubmit({value, valid}: {value: DonateForm, valid: boolean}){
     this.paypal.emit();
     this.donate.validate();
+    var self = this;
     this.formSub = true;
     if (valid && this.total >= 5){
       this.sessionRequest = this.luminateApi.getLuminateSession();
@@ -476,11 +481,11 @@ export class DonateComponent implements OnInit {
           console.log(complete);
         }
       );
-      this.sendDonationRequest(value)     
+      this.sendDonationRequest(value, self)    
     }
   }
 
-  private sendDonationRequest(value){
+  private sendDonationRequest(value, self){
     this.donateRequest = this.luminateApi.sendRequest(value, {type: this.donate.getPaymentMethod(), amount: this.total, dfId: this.dfId, lvlId: this.lvlId});
         console.log(this.donateRequest);
         this.donateRequest.subscribe(
@@ -495,8 +500,7 @@ export class DonateComponent implements OnInit {
             }
 
             if (body.donationResponse.donation) {
-              //this.gaData(body.donationResponse.donation.transaction_id);
-              console.log(body);
+              this.gaData(body.donationResponse.donation.transaction_id, this.dfId, self.campaign, self.version, self.selections, self.selectedValues);
               this.donating.emit();
               this.showMobile(false);
             }
@@ -528,26 +532,24 @@ export class DonateComponent implements OnInit {
     }
   }
 
-  public gaData(transactionId) {
+  public gaData(transactionId, dfId, campaign, version, selections, selectedValues) {
+    var purchasedSquares = [];
+    for (var i = 0; i < selections.length; i++) {
+      purchasedSquares.push({
+        id: 'Rect' + (parseInt(selections[i]) + 1),
+        name: 'Rect - $' + selectedValues[i],
+        price: selectedValues[i],
+        quantity: 1,
+        category: 'Grid Square'
+      });
+    }
+    console.log(purchasedSquares);
     var ga = new EcommerceTransaction({
-      transactionId: transactionId,
-      dfId: 13044,
-      campaign: 'WOE',
-      version: 1
-    }, [{
-      id: 25,
-      name: 'Rect6',
-      price: 25,
-      quantity: 1,
-      category: 'Grid Square'
-    },
-    {
-      id: 50,
-      name: 'Rect7',
-      price: 50,
-      quantity: 1,
-      category: 'Grid Square'
-    }]);
+        transactionId: transactionId,
+        dfId: dfId,
+        campaign: campaign,
+        version: version
+      }, purchasedSquares);
     ga.pushGAData();
   }
 

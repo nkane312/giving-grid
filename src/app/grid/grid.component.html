@@ -1,3 +1,3 @@
 <div id="grid"></div>
-<donate (infoState)="infoState" [totalState]="totalState" [total]="grid.selectTotal" [description]="grid.description" [headline]="grid.headline" [lvlId]="grid.lvlId" [dfId]="grid.dfId" (donating)="showModal()" (paypal)="saveSelections()" [infoState]="infoState"></donate>
+<donate (infoState)="infoState" [totalState]="totalState" [total]="grid.selectTotal" [description]="grid.description" [headline]="grid.headline" [lvlId]="grid.lvlId" [dfId]="grid.dfId" (donating)="showModal()" (paypal)="saveSelections()" [infoState]="infoState" [campaign]="grid.campaign" [version]="grid.version" [selections]="grid.selections" [selectedValues]="grid.selectedValues"></donate>
 <thank-you-modal [show]="modalState" [total]="grid.selectTotal" (closed)="modalClosed($event)"></thank-you-modal>

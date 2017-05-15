@@ -76,11 +76,15 @@ export class GridComponent {
         description: undefined,
         selectTotal: 0,
         selections: undefined,
+        selectedValues: undefined,
+        campaign: undefined,
+        version: undefined
     };
 
     private saveSelections() {
         this.grid.selections = this.selectedIndexes();
         Cookie.set('selections', this.grid.selections);
+        this.grid.selectedValues = this.selectedValues();
     }
 
     private infoState;
@@ -126,6 +130,8 @@ export class GridComponent {
                     this.grid.lvlId = data.lvlId;
                     this.grid.description = data.description;
                     this.grid.headline = data.headline;
+                    this.grid.campaign = params.campaign;
+                    this.grid.version = params.version;
                     this.grid.setSize();
                     this.grid.rectSize = this.setRectSize(this.grid);
                     this.grid = this.initGrid(this.grid);
@@ -432,6 +438,15 @@ export class GridComponent {
         });
         return selectedIndexes;
     }
+    private selectedValues() {
+        var x = document.getElementsByClassName('selectedText');
+        var selectedArray = Array.prototype.slice.call(x);
+        var selectedValues = [];
+        selectedArray.forEach (function(s, i){
+            selectedValues.push(selectedArray[i].lastChild.textContent);
+        });
+        return selectedValues;
+    }
     private setSelections() {
         var x = Cookie.get('selections');
         var selections = x.split(',');
@@ -453,15 +468,6 @@ export class GridComponent {
             });
         });
     }
-    /*private getParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }*/
     private revealByIndex(indexes, timing) {
         if (!timing){
             indexes.forEach((index, i) => {

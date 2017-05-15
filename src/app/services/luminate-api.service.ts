@@ -84,7 +84,7 @@ export class LuminateApi {
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
       results = regex.exec(url);
     if (!results) return null;
-    if (!results[2]) return '';
+    if (!results[2]) return 'EA11702XXEWXX';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
   public sendRequest(data, payment){
@@ -102,9 +102,7 @@ export class LuminateApi {
     this.standardFields.form_id = payment.dfId;
     this.standardFields.level_id = payment.lvlId;
     this.standardFields.other_amount = payment.amount;
-    //this.standardFields.JSESSIONID = session.id;
-    //this.standardFields.token = session.token
-    if (this.getSubsource('s_subsrc', window.location.href) === null || this.getSubsource('s_subsrc', window.location.href) === "") {
+    if (this.getSubsource('s_subsrc', window.location.href) === null || this.getSubsource('s_subsrc', window.location.href) === "" || window.location.href.indexOf('s_subsrc') < 1) {
       this.standardFields.sub_source = 'EA11702XXEWXX';
     } else {
       this.standardFields.sub_source = this.getSubsource('s_subsrc', window.location.href);
