@@ -28,8 +28,8 @@ require('./express-routes/api/grid')(app);
 db.on('error', console.error.bind(console, 'connection error:'));
 
 // Routes to webpack bundles
-app.get('/styles.bundle.css', function(req, res){
-    res.sendFile(path.join(__dirname, '/dist/styles.bundle.css'));
+app.get('/styles.bundle.js', function(req, res){
+    res.sendFile(path.join(__dirname, '/dist/styles.bundle.js'));
 });
 app.get('/inline.bundle.js', function(req, res){
     res.sendFile(path.join(__dirname, '/dist/inline.bundle.js'));
@@ -106,6 +106,14 @@ var io = require('socket.io')(socketServer);
 
 httpsServer.listen(8443, function(){
     console.log('Listening on port 8443');
+});
+
+io.on('connection', function(socket){
+    socket.emit('confirmConnection', 'Connected');
+});
+
+socketServer.listen(5001, () => {
+    console.log('Listening on port 5001');
 });
 
 module.exports = app;

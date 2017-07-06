@@ -316,7 +316,7 @@ export class GridComponent {
             .style('font-size', `${(grid.rectSize.width / 3.5)}px`);
         d3.selectAll('tspan')
             .style('position', 'absolute')
-            .style('font-size', `${(grid.rectSize.width / 2)}px`);
+            .style('font-size', `${(grid.rectSize.width / 2.5)}px`);
         if(window.innerWidth >= 800){
             this.infoState = false;
         } else {

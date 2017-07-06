@@ -21,15 +21,7 @@ function setChances(spread, total){
 }
 
 const spread = [
-    {value: 25, quantity: 79, chance: undefined},
-    {value: 35, quantity: 41, chance: undefined},
-    {value: 50, quantity: 20, chance: undefined},
-    {value: 75, quantity: 20, chance: undefined},
-    {value: 100, quantity: 16, chance: undefined},
-    {value: 250, quantity: 4, chance: undefined},
-    {value: 350, quantity: 16, chance: undefined},
-    {value: 700, quantity: 2, chance: undefined},
-    {value: 995, quantity: 2, chance: undefined},
+    {value: 1000, quantity: 125, chance: undefined},
 ];
 
 function pickIndex(spread){
@@ -85,13 +77,13 @@ function generateCells(spread){
 
 
 var grid = new GridSchema({
-    image: './assets/freedom-flight.jpg',
-    dfId: 13044,
-    lvlId: 19329,
-    headline: '25 Years of Prophecy Fulfilled!',
-    description: 'Freedom Flight now boarding! Click on one or more giving amounts and fill out your donation details below to join hundreds of Christians and Jews in prophetic rescue of 350 Jews from areas of distress around the world. As the worldwide <em>Fellowship</em> community bands together to send the next Freedom Flight home to Israel, giving squares will begin to reveal a special image to show the lifesaving impact of your support of the <em>On Wings of Eagles</em> ministry. <a href="https://secure.ifcj.org/site/Donation2?df_id=13044&13044.donation=form1&mfc_pref=T&subsrc=EA41702XXEWXD">You can also give using our standard donation form here</a>.',
-    campaign: 'woe',
-    version: 4,
+    image: './assets/rambam-14508714.jpg',
+    dfId: 13304,
+    lvlId: 19671,
+    headline: 'A Lifesaving Opportunity!',
+    description: '<em>The Fellowship</em> is blessed to extend an <u>exclusive invitation</u> to take part in a truly lifesaving project to help build the command center of Rambam Hospital, a fortified underground emergency center in Israel!  Because of your support, Rambam Hospital will sustain critical medical services and save lives in the wake of a terrorist attack, war, or natural disaster.<br><br>Click on one or more squares and fill out your donation details below to support this critical project. As the worldwide <em>Fellowship</em> community bands together to, giving blocks will begin to reveal a special image to show the impact of your support. To thank you for your gift of $1000 or more, your name will be featured on a plaque at Rambam to honor you for your sacrifice to save lives. <a href="https://secure.ifcj.org/site/Donation2?df_id=13044&13044.donation=form1&mfc_pref=T&subsrc=EA11707XXEXXM">You can also give using our standard donation form here</a>.',
+    campaign: 'goi',
+    version: 1,
     cells: generateCells(spread)
 });
 
