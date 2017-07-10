@@ -77,13 +77,13 @@ function generateCells(spread){
 
 
 var grid = new GridSchema({
-    image: './assets/rambam-14508714.jpg',
-    dfId: 13304,
-    lvlId: 19671,
-    headline: 'A Lifesaving Opportunity!',
-    description: '<em>The Fellowship</em> is blessed to extend an <u>exclusive invitation</u> to take part in a truly lifesaving project to help build the command center of Rambam Hospital, a fortified underground emergency center in Israel!  Because of your support, Rambam Hospital will sustain critical medical services and save lives in the wake of a terrorist attack, war, or natural disaster.<br><br>Click on one or more squares and fill out your donation details below to support this critical project. As the worldwide <em>Fellowship</em> community bands together to, giving blocks will begin to reveal a special image to show the impact of your support. To thank you for your gift of $1000 or more, your name will be featured on a plaque at Rambam to honor you for your sacrifice to save lives. <a href="https://secure.ifcj.org/site/Donation2?df_id=13044&13044.donation=form1&mfc_pref=T&subsrc=EA11707XXEXXM">You can also give using our standard donation form here</a>.',
+    image: './assets/rambam-14526348.jpg',
+    dfId: 12603,
+    lvlId: 18747,
+    headline: 'Save a Life!',
+    description: 'Be the first to help build a fortified underground emergency facility in Israel! Select a square and fill out your donation details to support this critical project. As the <em>Fellowship<\/em> community bands together, a special image will be revealed to show your impact.<br><br> <strong>With your gift of $1,000, we will include your name on the Wall of Honor at Rambam Hospital. <a href=\"https://secure.ifcj.org/site/Donation2?df_id=12603&12603.donation=form1&mfc_pref=T&subsrc=EA11707XXEXXM\">You can also give using our standard donation form here<\/a>.<\/strong>',
     campaign: 'goi',
-    version: 1,
+    version: 2,
     cells: generateCells(spread)
 });
 

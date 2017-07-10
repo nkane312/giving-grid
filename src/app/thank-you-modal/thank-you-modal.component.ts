@@ -32,10 +32,10 @@ import {ShareButtonsModule} from "ng2-sharebuttons";
 export class ThankYouModalComponent implements OnInit {
   @Input() total; 
   private url = this.trimPayPal(window.location.href);
-  private title = 'Give Together to Provide Prophetic Rescue!';
-  private tags = 'TheFellowship, www.ifcj.org/rescue';
-  private description = 'Bring Jews home to Israel and Give Together around the world.';
-  private shareTitle = 'Share the Give Together Ministry Effort with Others!';
+  private title = 'Give Together to Save a Life!';
+  private tags = 'TheFellowship';
+  private description = 'As the Fellowship community bands together, a special image will be revealed to show your impact';
+  private shareTitle = 'Share Your Ministry Effort With Others!';
   private fbInner = "<img src='../assets/facebook.svg'>";
   private twitterInner = "<img src='../assets/twitter.svg'>";
   private state;

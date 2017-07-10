@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Grid = require('../../src/schemas/grid');
 module.exports = function(app){
-    const activeCampaign = 'woe';
+    const activeCampaign = 'goi';
     var activeGrid = undefined;
     app.get('/api/grid', function(req, res){
         var id = req.query.id;
